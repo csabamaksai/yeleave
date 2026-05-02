@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'users',
     'timesheet',
     'leaves',
+    'clients',
+    'projects',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

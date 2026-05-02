@@ -93,7 +93,7 @@ DATABASES = {
 }
 
 # Felülírjuk az adatbázist, ha a Heroku ad nekünk DATABASE_URL-t:
-if dj_database_url.config(default=''):
+if 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.config(
         conn_max_age=600,
         conn_health_checks=True,

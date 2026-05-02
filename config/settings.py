@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     
     # Saját appok
     'users',
+    'timesheet',
+    'leaves',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

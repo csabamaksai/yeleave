@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Timesheet - YeLeave{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow sm:rounded-lg mb-6">
+    <!-- Header: Month Selector -->
+    <div class="px-4 py-4 border-b border-gray-200 sm:px-6 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="?year={{ prev_month.year }}&month={{ prev_month.month }}" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 transition">
+                <!-- Left Arrow -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </a>
+            <h2 class="text-lg font-bold leading-6 text-gray-900 w-48 text-center">
+                {{ current_date|date:"Y F" }}
+            </h2>
+            <a href="?year={{ next_month.year }}&month={{ next_month.month }}" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 transition">
+                <!-- Right Arrow -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+        </div>
+        <div class="text-sm text-gray-500">
+            JIRA Tempo stílusú nézet
+        </div>
+    </div>
+
+    <!-- Timesheet Table Wrapper -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border-b border-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="sticky left-0 z-10 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] w-64 min-w-[200px]">
+                        Projekt
+                    </th>
+                    {% for day in days_in_month %}
+                        <th scope="col" class="px-2 py-2 text-center text-xs font-medium uppercase tracking-wider border-r border-gray-200 w-[58px] min-w-[58px] max-w-[58px] {% if day.is_weekend %}bg-gray-200 text-gray-600{% else %}text-gray-500{% endif %}">
+                            <div class="opacity-60">{{ day.weekday_name }}</div>
+                            <div class="font-bold text-sm mt-1">{{ day.day }}</div>
+                        </th>
+                    {% endfor %}
+                    <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">Total</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for row in project_rows %}
+                    <tr class="hover:bg-blue-50/30 transition-colors">
+                        <td class="sticky left-0 z-10 bg-white px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)]">
+                            <div class="font-medium text-brand">{{ row.client_name }}</div>
+                            <div class="text-gray-500 text-xs">{{ row.project.name }}</div>
+                        </td>
+                        {% for day in row.days %}
+                            <td class="border-r border-gray-200 p-0 relative {% if day.is_weekend %}bg-gray-100{% endif %} hover:bg-yellow-50 focus-within:bg-yellow-100 transition-colors">
+                                <!-- A cellába írhat a felhasználó, az input kitölti az egészet -->
+                                <input 
+                                    type="text" 
+                                    class="ts-input w-full h-full min-h-[48px] text-center text-sm bg-transparent border-0 focus:ring-2 focus:ring-inset focus:ring-brand outline-none"
+                                    value="{{ day.hours_formatted }}" 
+                                    data-project="{{ row.project.id }}" 
+                                    data-date="{{ day.date_str }}"
+                                    data-original="{{ day.hours_formatted }}"
+                                    data-decimal="{{ day.hours_decimal }}"
+                                    placeholder=""
+                                >
+                                <!-- Zöld pipa animáció sikeres mentéskor -->
+                                <div class="save-indicator absolute top-1 right-1 hidden text-green-500">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                            </td>
+                        {% endfor %}
+                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-bold text-gray-700 row-total">
+                            <!-- Ide jöhet egy kis JS logika, ami összesíti a sort -->
+                            0.0
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="{{ days_in_month|length|add:2 }}" class="px-6 py-8 text-center text-gray-500">
+                            Még nincsenek projektek hozzád rendelve.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // JS Parser to calculate total in decimals
+    const parseHoursJS = (str) => {
+        if (!str) return 0;
+        str = str.trim().toLowerCase();
+        
+        let m = str.match(/^(\d+)\s*(?:ó|o|h)\s*(?:(\d+)\s*(?:p|m)?)?$/);
+        if (m) {
+            let h = parseInt(m[1]) || 0;
+            let m_val = parseInt(m[2]) || 0;
+            return h + (m_val / 60.0);
+        }
+        
+        let m_only = str.match(/^(\d+)\s*(?:p|m)$/);
+        if (m_only) {
+            return parseInt(m_only[1]) / 60.0;
+        }
+
+        str = str.replace(',', '.');
+        if (str.includes(':')) {
+            let parts = str.split(':');
+            let h = parseFloat(parts[0]) || 0;
+            let m_val = parts.length > 1 ? parseFloat(parts[1]) : 0;
+            return h + (m_val / 60.0);
+        }
+
+        let val = parseFloat(str);
+        return isNaN(val) ? 0 : val;
+    };
+
+    // JS Formatter to display decimals as "Xó Yp" in the JS code if needed, but we use it for total
+    const formatHoursJS = (dec) => {
+        if (!dec || dec === 0) return '0.0';
+        let h = Math.floor(dec);
+        let m = Math.round((dec - h) * 60);
+        if (m === 0) return `${h}ó`;
+        if (h === 0) return `${m}p`;
+        return `${h}ó ${m}p`;
+    };
+
+    // Total sorok kiszámítása az oldal betöltésekor
+    const calculateTotals = () => {
+        document.querySelectorAll('tbody tr').forEach(row => {
+            let total = 0;
+            row.querySelectorAll('.ts-input').forEach(input => {
+                total += parseHoursJS(input.value);
+            });
+            const totalCell = row.querySelector('.row-total');
+            if (totalCell) totalCell.innerText = total > 0 ? formatHoursJS(total) : '0.0';
+        });
+    };
+
+    calculateTotals();
+
+    // Input események (Enter + Blur)
+    document.querySelectorAll('.ts-input').forEach(input => {
+        
+        const saveEntry = async (el) => {
+            const val = el.value.trim();
+            const originalVal = el.getAttribute('data-original');
+            
+            // Ha nem változott, ne spammeljük a szervert
+            if (val === originalVal) return;
+            
+            const projectId = el.getAttribute('data-project');
+            const dateStr = el.getAttribute('data-date');
+            const csrfToken = '{{ csrf_token }}';
+
+            el.classList.add('opacity-50'); // Töltés jelzése
+
+            try {
+                const response = await fetch('{% url "timesheet:api_save" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        project_id: projectId,
+                        date: dateStr,
+                        hours: val
+                    })
+                });
+
+                const data = await response.json();
+                el.classList.remove('opacity-50');
+
+                if (response.ok && data.status === 'success') {
+                    // Mentés sikeres
+                    el.setAttribute('data-original', data.formatted_hours);
+                    el.value = data.formatted_hours;
+                    calculateTotals();
+                    
+                    // Kis zöld pipa felvillanása
+                    const indicator = el.parentElement.querySelector('.save-indicator');
+                    if (indicator) {
+                        indicator.classList.remove('hidden');
+                        setTimeout(() => indicator.classList.add('hidden'), 1500);
+                    }
+                } else {
+                    alert('Hiba történt a mentés során: ' + (data.message || 'Ismeretlen hiba'));
+                    el.value = originalVal; // Visszaállítjuk
+                    calculateTotals();
+                }
+            } catch (err) {
+                console.error(err);
+                el.classList.remove('opacity-50');
+                alert('Hálózati hiba történt!');
+                el.value = originalVal;
+                calculateTotals();
+            }
+        };
+
+        // Mentés amint ellép a celláról
+        input.addEventListener('blur', function() {
+            saveEntry(this);
+        });
+
+        // Mentés Enter esetén
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Ne ugorjon új sorba véletlenül
+                saveEntry(this);
+                this.blur(); // Kilép a cellából, ami ráadásul a focus elvesztését is elintézi
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

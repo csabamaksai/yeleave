@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - YeLeave{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded shadow max-w-4xl mx-auto mt-10">
+    <h1 class="text-2xl font-bold mb-4">Üdvözlünk a yeleave rendszerben!</h1>
+    
+    {% if user.is_authenticated %}
+        <p class="text-gray-700">Be vagy jelentkezve: <strong>{{ user.username }}</strong></p>
+        <p class="text-gray-600 mt-2">Válaszd ki a fenti menüből, hogy a jelenléti íveket vagy a szabadságokat szeretnéd kezelni.</p>
+    {% else %}
+        <p class="text-gray-700">Kérjük, jelentkezz be a folytatáshoz.</p>
+        <div class="mt-6">
+            <a href="{% url 'login' %}" class="bg-brand text-white px-4 py-2 rounded shadow hover:bg-blue-700">Bejelentkezés</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

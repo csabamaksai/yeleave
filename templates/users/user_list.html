@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Dolgozók - yeleave{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-900">Dolgozók (Felhasználók)</h1>
+    <a href="{% url 'users:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+        Új dolgozó hozzáadása
+    </a>
+</div>
+
+{% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+            <div class="p-4 mb-2 text-sm {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} rounded-md">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Név
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Felhasználónév
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    E-mail
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Státusz
+                </th>
+                <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">Műveletek</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for u in users %}
+            <tr class="{% if not u.is_active %}bg-gray-50 opacity-60{% else %}hover:bg-gray-50{% endif %} transition cursor-pointer" data-url="{% url 'users:update' u.pk %}" onclick="window.location.href=this.dataset.url">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {{ u.last_name|default:"-" }} {{ u.first_name|default:"-" }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ u.username }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ u.email }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    {% if u.is_active %}
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Aktív
+                        </span>
+                    {% else %}
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Inaktív
+                        </span>
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="{% url 'users:update' u.pk %}" class="text-brand hover:text-blue-900">Szerkesztés</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                    Nincs megjeleníthető dolgozó.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

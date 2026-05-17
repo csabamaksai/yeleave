@@ -29,6 +29,33 @@ class UserForm(forms.ModelForm):
             'is_active': _('Active'),
             'is_staff': _('Administrator (Staff)')
         }
+        widgets = {
+            'email': forms.EmailInput(attrs={'type': 'email'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
+        
+        # Ha új felhasználót hozunk létre, a jelszó mezők kötelezők
+        if not self.instance.pk:
+            self.fields['password'].required = True
+            self.fields['password_confirm'].required = True
+
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+        if password:
+            if len(password) < 8:
+                raise ValidationError(_("A jelszónak legalább 8 karakter hosszúnak kell lennie."))
+            if not any(char.isalpha() for char in password):
+                raise ValidationError(_("A jelszónak tartalmaznia kell legalább egy betűt."))
+            if not any(char.isdigit() for char in password):
+                raise ValidationError(_("A jelszónak tartalmaznia kell legalább egy számot."))
+            if not any(not char.isalnum() for char in password):
+                raise ValidationError(_("A jelszónak tartalmaznia kell legalább egy speciális karaktert."))
+        return password
 
     def clean(self):
         cleaned_data = super().clean()

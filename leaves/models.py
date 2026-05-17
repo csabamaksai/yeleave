@@ -48,8 +48,24 @@ class Leave(models.Model):
             if self.start_date > self.end_date:
                 raise ValidationError({'end_date': 'A befejező dátum nem lehet korábbi a kezdő dátumnál.'})
             
+            # Ellenőrizzük, hogy a kezdő vagy a végdátum esik-e hétvégére/ünnepnapra
+            def is_day_off(d):
+                is_weekend = d.weekday() >= 5
+                h = Holiday.objects.filter(date=d).first()
+                if h:
+                    if h.is_working_day:
+                        return False
+                    else:
+                        return True
+                return is_weekend
+
+            if is_day_off(self.start_date):
+                raise ValidationError({'start_date': 'A kezdő dátum nem eshet hétvégére vagy ünnepnapra.'})
+            if is_day_off(self.end_date):
+                raise ValidationError({'end_date': 'A befejező dátum nem eshet hétvégére vagy ünnepnapra.'})
+
             if self.get_working_days() == 0:
-                raise ValidationError({'start_date': 'A megadott intervallum nem tartalmaz munkanapot (csak hétvége vagy ünnepnap).'})
+                raise ValidationError({'start_date': 'A megadott intervallum nem tartalmaz munkanapot.'})
 
     def save(self, *args, **kwargs):
         """Felülírjuk a save metódust, hogy a validáció minden mentésnél lefusson."""

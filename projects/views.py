@@ -41,29 +41,14 @@ class ProjectUpdateView(StaffRequiredMixin, UpdateView):
         messages.success(self.request, "Projekt adatai sikeresen frissítve.")
         return super().form_valid(form)
 
-class ProjectCloseView(StaffRequiredMixin, View):
-    def post(self, request, pk):
-        project = get_object_or_404(Project, pk=pk)
-        end_date_str = request.POST.get('end_date')
-        
-        if not end_date_str:
-            messages.error(request, "A lezárás dátuma kötelező!")
-            return redirect('projects:list')
-            
-        end_date = parse_date(end_date_str)
-        if not end_date:
-            messages.error(request, "Érvénytelen dátum formátum!")
-            return redirect('projects:list')
-            
-        # Ellenőrizzük, hogy van-e időkódolás a lezárás után
-        future_entries = TimeEntry.objects.filter(project=project, date__gt=end_date)
-        if future_entries.exists():
-            messages.error(request, f"Nem zárhatod le a projektet {end_date} dátummal, mert van a projektnek későbbi jelenléti ív bejegyzése!")
-            return redirect('projects:list')
-            
-        project.end_date = end_date
+class ProjectDeleteView(StaffRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, pk=self.kwargs['pk'])
+        return render(request, 'projects/project_confirm_delete.html', {'target_project': project})
+
+    def post(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, pk=self.kwargs['pk'])
         project.is_active = False
         project.save()
-        
-        messages.success(request, f"A '{project.name}' projekt sikeresen lezárva ({end_date}).")
+        messages.success(request, f"A(z) '{project.name}' projekt sikeresen lezárva.")
         return redirect('projects:list')

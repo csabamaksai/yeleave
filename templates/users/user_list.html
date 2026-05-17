@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Dolgozók - yeleave{% endblock %}
+{% block title %}{% trans "Dolgozók" %} - yeleave{% endblock %}
 
 {% block content %}
 <div class="mb-6 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-gray-900">Dolgozók (Felhasználók)</h1>
+    <h1 class="text-xl font-bold text-gray-900">{% trans "Dolgozók" %} ({% trans "Felhasználók" %})</h1>
     <a href="{% url 'users:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-        Új dolgozó hozzáadása
+        {% trans "Új dolgozó hozzáadása" %}
     </a>
 </div>
 
@@ -25,16 +26,16 @@
         <thead class="bg-gray-50">
             <tr>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Név
+                    {% trans "Név" %}
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Felhasználónév
+                    {% trans "Felhasználónév" %}
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    E-mail
+                    {% trans "E-mail" %}
                 </th>
                 <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Műveletek</span>
+                    <span class="sr-only">{% trans "Műveletek" %}</span>
                 </th>
             </tr>
         </thead>
@@ -51,13 +52,13 @@
                     {{ u.email }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="{% url 'users:update' u.pk %}" class="text-brand hover:text-blue-900">Szerkesztés</a>
+                    <a href="{% url 'users:update' u.pk %}" class="text-brand hover:text-blue-900">{% trans "Szerkesztés" %}</a>
                 </td>
             </tr>
             {% empty %}
             <tr>
                 <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
-                    Nincs megjeleníthető dolgozó.
+                    {% trans "Nincs megjeleníthető dolgozó." %}
                 </td>
             </tr>
             {% endfor %}

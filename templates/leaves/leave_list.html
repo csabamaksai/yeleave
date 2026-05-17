@@ -50,8 +50,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 truncate max-w-xs" title="{{ leave.notes }}">{{ leave.notes|default:"-" }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="{% url 'leaves:update' leave.pk %}" class="text-brand hover:text-blue-900 mr-3">{% trans "Szerkesztés" %}</a>
-                    <a href="{% url 'leaves:delete' leave.pk %}" class="text-red-500 hover:text-red-900">{% trans "Törlés" %}</a>
+                    <a href="{% url 'leaves:update' leave.pk %}" class="text-brand hover:text-blue-900">{% trans "Szerkesztés" %}</a>
                 </td>
             </tr>
             {% empty %}

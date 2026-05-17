@@ -50,15 +50,20 @@ class UserDeleteView(StaffRequiredMixin, TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
+        from projects.models import Project # Importáljuk a projekt modellt a kapcsolat törléséhez
         user_to_delete = get_object_or_404(User, pk=self.kwargs['pk'])
         
         # Admin megakadályozása, hogy önmagát törölje
         if user_to_delete == request.user:
-            messages.error(request, "Saját magadat nem deaktiválhatod!")
+            messages.error(request, _("Saját magadat nem deaktiválhatod!"))
             return redirect('users:update', pk=user_to_delete.pk)
         
+        # Eltávolítjuk a felhasználót az összes hozzárendelt projektből
+        for project in user_to_delete.assigned_projects.all():
+            project.assigned_users.remove(user_to_delete)
+            
         user_to_delete.is_active = False
         user_to_delete.save()
-        messages.success(request, f"{user_to_delete.username} fiókja deaktiválva lett.")
+        messages.success(request, _("%(username)s fiókja deaktiválva lett és lekerült az aktív projektekről.") % {'username': user_to_delete.username})
         return redirect('users:list')
 

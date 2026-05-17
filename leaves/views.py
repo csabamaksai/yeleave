@@ -132,6 +132,34 @@ def api_check_ts_collision(request):
     except ValueError:
         return JsonResponse({'collision': False})
         
+    # 1. Validáció: start > end
+    if start_date > end_date:
+        return JsonResponse({'error_type': 'invalid_date_order'})
+
+    # Segédfüggvény egy adott nap validálására (hétvége vagy ünnep-e)
+    from holidays.models import Holiday
+    def is_day_off(d):
+        is_weekend = d.weekday() >= 5
+        h = Holiday.objects.filter(date=d).first()
+        if h:
+            if h.is_working_day:
+                return False  # Áthelyezett munkanap, tehát nem szabadnap
+            else:
+                return True   # Ünnepnap, tehát szabadnap
+        return is_weekend
+        
+    # 2. Validáció: Kezdés vagy Befejezés ne legyen hétvége / ünnepnap
+    if is_day_off(start_date):
+        return JsonResponse({'error_type': 'start_on_holiday'})
+    if is_day_off(end_date):
+        return JsonResponse({'error_type': 'end_on_holiday'})
+        
+    # 3. Validáció: Munkanapok száma
+    dummy_leave = Leave(start_date=start_date, end_date=end_date)
+    if dummy_leave.get_working_days() == 0:
+        return JsonResponse({'error_type': 'no_working_days'})
+        
+    # 3. TS Ütközés
     count = TimeEntry.objects.filter(
         user=request.user,
         date__gte=start_date,

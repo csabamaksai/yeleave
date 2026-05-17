@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}Ügyfelek/Partnerek - yeleave{% endblock %}
 
 {% block content %}
 <div class="mb-6 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-gray-900">Partnerek (Ügyfelek)</h1>
+    <h1 class="text-xl font-bold text-gray-900">{% trans "Partnerek" %} ({% trans "Ügyfelek" %})</h1>
     <a href="{% url 'clients:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-        Új partner hozzáadása
+        {% trans "Új partner hozzáadása" %}
     </a>
 </div>
 
@@ -29,16 +30,19 @@
         <thead class="bg-gray-50">
             <tr>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Név
+                    {% trans "Név" %}
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Cím
+                    {% trans "Szerződés szám" %}
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Kapcsolattartó
+                    {% trans "Cím" %}
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {% trans "Kapcsolattartó" %}
                 </th>
                 <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Műveletek</span>
+                    <span class="sr-only">{% trans "Műveletek" %}</span>
                 </th>
             </tr>
         </thead>
@@ -48,8 +52,15 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 client-name">
                     {{ client.name }}
                 </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 client-contract-number">
+                    {{ client.contract_number|default:"-" }}
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 client-address">
-                    {{ client.address|default:"-"|truncatechars:50 }}
+                    {% if client.zip_code or client.city or client.address %}
+                        {{ client.zip_code|default:"" }} {{ client.city|default:"" }}{% if client.city and client.address %}, {% endif %}{{ client.address|default:"" }}
+                    {% else %}
+                        -
+                    {% endif %}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {% if client.contact_name or client.contact_phone %}
@@ -64,20 +75,20 @@
                     {% endif %}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="{% url 'clients:update' client.pk %}" class="text-brand hover:text-blue-900">Szerkesztés</a>
+                    <a href="{% url 'clients:update' client.pk %}" class="text-brand hover:text-blue-900">{% trans "Szerkesztés" %}</a>
                 </td>
             </tr>
             {% empty %}
             <tr id="emptyRow">
-                <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
-                    Nincs még rögzítve partner.
+                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                    {% trans "Nincs még rögzítve partner." %}
                 </td>
             </tr>
             {% endfor %}
             
             <tr id="noResultsRow" style="display: none;">
-                <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
-                    Nincs a keresésnek megfelelő partner.
+                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                    {% trans "Nincs a keresésnek megfelelő partner." %}
                 </td>
             </tr>
         </tbody>
@@ -98,9 +109,10 @@
 
                 rows.forEach(row => {
                     const name = row.querySelector('.client-name').textContent.toLowerCase();
+                    const contractStr = row.querySelector('.client-contract-number').textContent.toLowerCase();
                     const address = row.querySelector('.client-address').textContent.toLowerCase();
                     
-                    if (name.includes(filterValue) || address.includes(filterValue)) {
+                    if (name.includes(filterValue) || address.includes(filterValue) || contractStr.includes(filterValue)) {
                         row.style.display = '';
                         visibleCount++;
                     } else {

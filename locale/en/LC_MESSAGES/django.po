@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-17 07:20+0000\n"
+"POT-Creation-Date: 2026-05-17 08:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,70 +18,129 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: config/settings.py:132
+#: clients/forms.py:17
+msgid "A névnek legalább 5 karakter hosszúnak kell lennie."
+msgstr ""
+
+#: clients/views.py:35
+msgid "Új ügyfél sikeresen hozzáadva."
+msgstr ""
+
+#: clients/views.py:50
+msgid "Ügyfél adatai sikeresen frissítve."
+msgstr ""
+
+#: clients/views.py:68
+#, python-format
+msgid "%(name)s ügyfél és a hozzá tartozó projektek deaktiválva lettek."
+msgstr ""
+
+#: config/settings.py:133
 msgid "Magyar"
 msgstr "Hungarian"
 
-#: config/settings.py:133
+#: config/settings.py:134
 msgid "English"
 msgstr "English"
 
-#: leaves/forms.py:10 leaves/models.py:14
+#: holidays/models.py:5
+msgid "Date"
+msgstr ""
+
+#: holidays/models.py:6
+msgid "Description"
+msgstr ""
+
+#: holidays/models.py:9
+msgid "Working Day Exception"
+msgstr ""
+
+#: holidays/models.py:10
+msgid "Check if this is a relocated working day (e.g. a working Saturday)."
+msgstr ""
+
+#: holidays/models.py:14
+msgid "Holiday"
+msgstr ""
+
+#: holidays/models.py:15
+msgid "Holidays"
+msgstr ""
+
+#: leaves/forms.py:10
 msgid "Kezdés dátuma"
 msgstr "Start Date"
 
-#: leaves/forms.py:11 leaves/models.py:15
+#: leaves/forms.py:11
 msgid "Befejezés dátuma"
 msgstr "End Date"
 
-#: leaves/forms.py:12 leaves/models.py:16 templates/leaves/leave_list.html:32
+#: leaves/forms.py:12 templates/leaves/leave_list.html:32
 msgid "Típus"
 msgstr ""
 
-#: leaves/forms.py:13 leaves/models.py:17 templates/leaves/leave_list.html:33
+#: leaves/forms.py:13 templates/leaves/leave_list.html:34
 msgid "Megjegyzés"
 msgstr ""
 
-#: leaves/models.py:8
-msgid "Fizetett szabadság (PTO)"
-msgstr "Paid Time Off (PTO)"
-
-#: leaves/models.py:9
-msgid "Betegszabadság (Táppénz)"
-msgstr "Sick Leave"
-
 #: leaves/models.py:10
-msgid "Fizetés nélküli szabadság"
-msgstr "Unpaid Leave"
+msgid "Paid Time Off (PTO)"
+msgstr ""
 
-#: leaves/models.py:13
-#, fuzzy
-#| msgid "Felhasználónév vagy Email"
-msgid "Felhasználó"
-msgstr "Username or Email"
+#: leaves/models.py:11
+msgid "Sick Leave"
+msgstr ""
 
-#: leaves/views.py:67
+#: leaves/models.py:12
+msgid "Unpaid Leave"
+msgstr ""
+
+#: leaves/models.py:15
+msgid "User"
+msgstr ""
+
+#: leaves/models.py:16
+msgid "Start Date"
+msgstr ""
+
+#: leaves/models.py:17
+msgid "End Date"
+msgstr ""
+
+#: leaves/models.py:18
+msgid "Type"
+msgstr ""
+
+#: leaves/models.py:19
+msgid "Notes"
+msgstr ""
+
+#: leaves/views.py:75
 msgid ""
 "A szabadság mentve, a rajta lévő korábbi munkaidő bejegyzések törlésre "
 "kerültek."
 msgstr ""
 
-#: leaves/views.py:69
+#: leaves/views.py:77
 msgid "A szabadság sikeresen létrehozva."
 msgstr ""
 
-#: leaves/views.py:93
+#: leaves/views.py:101
 msgid ""
 "A szabadság módosítva, a rajta lévő korábbi munkaidő bejegyzések törlésre "
 "kerültek."
 msgstr ""
 
-#: leaves/views.py:95
+#: leaves/views.py:103
 msgid "A szabadság sikeresen frissítve."
 msgstr ""
 
-#: leaves/views.py:109
+#: leaves/views.py:117
 msgid "A szabadság bejegyzést töröltük."
+msgstr ""
+
+#: projects/forms.py:20
+msgid "A projekt nevének legalább 5 karakter hosszúnak kell lennie."
 msgstr ""
 
 #: templates/base.html:36
@@ -92,11 +151,12 @@ msgstr "Timesheet"
 msgid "Szabadságok"
 msgstr "Leaves"
 
-#: templates/base.html:39
+#: templates/base.html:39 templates/users/user_list.html:4
+#: templates/users/user_list.html:8
 msgid "Dolgozók"
 msgstr "Users"
 
-#: templates/base.html:40
+#: templates/base.html:40 templates/clients/client_list.html:8
 msgid "Partnerek"
 msgstr "Clients"
 
@@ -116,6 +176,120 @@ msgstr "Login"
 #: templates/base.html:87
 msgid "Nyelv"
 msgstr "Language"
+
+#: templates/clients/client_confirm_delete.html:4
+#, fuzzy
+#| msgid "Partnerek"
+msgid "Partner törlése"
+msgstr "Clients"
+
+#: templates/clients/client_confirm_delete.html:14
+#, python-format
+msgid "Biztosan deaktiválod a(z) %(name)s partnert?"
+msgstr "Are you sure you want to deactivate the client %(name)s?"
+
+#: templates/clients/client_confirm_delete.html:18
+msgid ""
+"Az adatbázisból <strong>nem</strong> törlődik a partner, de a jövőben "
+"inaktív státuszba kerül. Ezt később visszaállíthatod, ha szükséges."
+msgstr ""
+
+#: templates/clients/client_confirm_delete.html:21
+msgid ""
+"Figyelem: Ha törlöd a partnert, akkor az összes hozzá tartozó projekt is "
+"deaktiválódik! Így a projektek eltűnnek a TS oldalakról és a felhasználók "
+"nem fognak tudni a jövőben TS-elni ezekre a projektekre."
+msgstr ""
+
+#: templates/clients/client_confirm_delete.html:28
+#: templates/clients/client_form.html:64
+#: templates/leaves/leave_confirm_delete.html:32
+#: templates/leaves/leave_form.html:50 templates/leaves/leave_form.html:93
+#: templates/projects/project_confirm_delete.html:28
+#: templates/projects/project_form.html:76
+#: templates/users/user_confirm_delete.html:28
+msgid "Mégse"
+msgstr "Cancel"
+
+#: templates/clients/client_confirm_delete.html:31
+#: templates/leaves/leave_confirm_delete.html:29
+#: templates/leaves/leave_form.html:90
+#: templates/projects/project_confirm_delete.html:31
+#: templates/users/user_confirm_delete.html:31
+#: templates/users/user_form.html:42
+msgid "Igen"
+msgstr "Yes"
+
+#: templates/clients/client_form.html:4
+#, fuzzy
+#| msgid "szerkesztése"
+msgid "Partner szerkesztése"
+msgstr "edit"
+
+#: templates/clients/client_form.html:4
+#, fuzzy
+#| msgid "Partnerek"
+msgid "Új partner"
+msgstr "Clients"
+
+#: templates/clients/client_form.html:11
+#: templates/projects/project_form.html:27 templates/users/user_form.html:11
+msgid "szerkesztése"
+msgstr "edit"
+
+#: templates/clients/client_form.html:13 templates/clients/client_list.html:10
+msgid "Új partner hozzáadása"
+msgstr "Add New Client"
+
+#: templates/clients/client_form.html:68 templates/users/user_form.html:83
+msgid "Deaktiválás"
+msgstr "Deactivate"
+
+#: templates/clients/client_form.html:73 templates/leaves/leave_form.html:59
+#: templates/leaves/leave_form.html:181 templates/leaves/leave_form.html:206
+#: templates/projects/project_form.html:85 templates/users/user_form.html:89
+msgid "Mentés"
+msgstr "Save"
+
+#: templates/clients/client_list.html:8
+msgid "Ügyfelek"
+msgstr "Clients"
+
+#: templates/clients/client_list.html:33 templates/users/user_list.html:29
+msgid "Név"
+msgstr "Name"
+
+#: templates/clients/client_list.html:36
+#, fuzzy
+#| msgid "Kezdés dátuma"
+msgid "Szerződés szám"
+msgstr "Start Date"
+
+#: templates/clients/client_list.html:39
+msgid "Cím"
+msgstr "Address"
+
+#: templates/clients/client_list.html:42
+msgid "Kapcsolattartó"
+msgstr "Contact Person"
+
+#: templates/clients/client_list.html:45 templates/leaves/leave_list.html:35
+#: templates/projects/project_list.html:42 templates/users/user_list.html:38
+msgid "Műveletek"
+msgstr "Actions"
+
+#: templates/clients/client_list.html:78 templates/leaves/leave_list.html:53
+#: templates/projects/project_list.html:59 templates/users/user_list.html:55
+msgid "Szerkesztés"
+msgstr "Edit"
+
+#: templates/clients/client_list.html:84
+msgid "Nincs még rögzítve partner."
+msgstr "No clients recorded yet."
+
+#: templates/clients/client_list.html:91
+msgid "Nincs a keresésnek megfelelő partner."
+msgstr "No clients match your search."
 
 #: templates/home.html:4
 msgid "Irányítópult"
@@ -154,15 +328,6 @@ msgstr "Leaves"
 msgid "Biztosan törölni szeretnéd ezt a szabadság bejegyzést?"
 msgstr ""
 
-#: templates/leaves/leave_confirm_delete.html:29
-msgid "Igen, törlés"
-msgstr ""
-
-#: templates/leaves/leave_confirm_delete.html:32
-#: templates/leaves/leave_form.html:86
-msgid "Mégsem"
-msgstr ""
-
 #: templates/leaves/leave_form.html:6 templates/leaves/leave_form.html:18
 #, fuzzy
 #| msgid "Szabadságok"
@@ -179,33 +344,48 @@ msgstr "Leaves"
 msgid "Új Szabadság rögzítése"
 msgstr ""
 
-#: templates/leaves/leave_form.html:49
-msgid "Mégse"
-msgstr ""
+#: templates/leaves/leave_form.html:54
+msgid "Törlés"
+msgstr "Delete"
 
-#: templates/leaves/leave_form.html:52 templates/leaves/leave_form.html:142
-#: templates/leaves/leave_form.html:155
-msgid "Mentés"
-msgstr ""
-
-#: templates/leaves/leave_form.html:73
+#: templates/leaves/leave_form.html:80
 #, fuzzy
 #| msgid "Jelenléti ív"
 msgid "Ütközés a Jelenléti ívvel"
 msgstr "Timesheet"
 
-#: templates/leaves/leave_form.html:76
+#: templates/leaves/leave_form.html:83
 msgid "A megadott időszakra már rögzítettél munkaórákat a Timesheet-ben!"
 msgstr ""
 
-#: templates/leaves/leave_form.html:77
+#: templates/leaves/leave_form.html:84
 msgid ""
 "Ha most mented a szabadságot, a korábbi jelenléti bejegyzések erre az "
 "időszakra VÉGLEGESEN TÖRLŐDNEK. Biztosan folytatod?"
 msgstr ""
 
-#: templates/leaves/leave_form.html:83
-msgid "Igen, törölve mentem"
+#: templates/leaves/leave_form.html:114
+msgid "Figyelmeztetés"
+msgstr ""
+
+#: templates/leaves/leave_form.html:123
+msgid "OK"
+msgstr ""
+
+#: templates/leaves/leave_form.html:184
+msgid "A befejezés dátuma nem lehet korábbi, mint a kezdés dátuma."
+msgstr ""
+
+#: templates/leaves/leave_form.html:187
+msgid "A szabadság kezdő napja nem eshet hétvégére vagy ünnepnapra!"
+msgstr ""
+
+#: templates/leaves/leave_form.html:190
+msgid "A szabadság befejező napja nem eshet hétvégére vagy ünnepnapra!"
+msgstr ""
+
+#: templates/leaves/leave_form.html:193
+msgid "A megadott intervallum nem tartalmaz munkanapot."
 msgstr ""
 
 #: templates/leaves/leave_list.html:21
@@ -222,29 +402,95 @@ msgstr ""
 msgid "Befejezés"
 msgstr "Login"
 
-#: templates/leaves/leave_list.html:34
-msgid "Műveletek"
+#: templates/leaves/leave_list.html:33
+msgid "Kivett napok"
 msgstr ""
 
-#: templates/leaves/leave_list.html:49
-msgid "Szerkesztés"
+#: templates/leaves/leave_list.html:49 templates/leaves/leave_list.html:68
+msgid "nap"
 msgstr ""
 
-#: templates/leaves/leave_list.html:50
-msgid "Törlés"
-msgstr ""
-
-#: templates/leaves/leave_list.html:56
+#: templates/leaves/leave_list.html:59
 msgid "Nincs rögzített szabadság ebben az évben."
 msgstr ""
 
-#: templates/leaves/leave_list.html:64
-msgid "Összesen kivett napok (naptári):"
+#: templates/leaves/leave_list.html:67
+msgid "Összesen kivett munkanapok:"
 msgstr ""
 
-#: templates/leaves/leave_list.html:65
-msgid "nap"
+#: templates/projects/project_confirm_delete.html:4
+msgid "Projekt lezárása"
 msgstr ""
+
+#: templates/projects/project_confirm_delete.html:14
+#, python-format
+msgid "Biztosan lezárod a(z) %(name)s projektet?"
+msgstr "Are you sure you want to close the project %(name)s?"
+
+#: templates/projects/project_confirm_delete.html:18
+msgid ""
+"Az adatbázisból <strong>nem</strong> törlődik a projekt, de a jövőben "
+"inaktív státuszba kerül. Ezt később visszaállíthatod, ha szükséges."
+msgstr ""
+
+#: templates/projects/project_confirm_delete.html:21
+msgid ""
+"Figyelem: Ha lezárod a projektet, akkor erre a sorra nem lehet a "
+"későbbiekben TS-elni!"
+msgstr ""
+
+#: templates/projects/project_form.html:4
+#, fuzzy
+#| msgid "szerkesztése"
+msgid "Projekt szerkesztése"
+msgstr "edit"
+
+#: templates/projects/project_form.html:4
+#, fuzzy
+#| msgid "Új projekt hozzáadása"
+msgid "Új projekt"
+msgstr "Add New Project"
+
+#: templates/projects/project_form.html:29
+#: templates/projects/project_list.html:10
+msgid "Új projekt hozzáadása"
+msgstr "Add New Project"
+
+#: templates/projects/project_form.html:80
+msgid "Lezárás"
+msgstr "Close"
+
+#: templates/projects/project_list.html:8
+#, fuzzy
+#| msgid "Projektek"
+msgid "Aktív Projektek"
+msgstr "Projects"
+
+#: templates/projects/project_list.html:33
+#, fuzzy
+#| msgid "Projektek"
+msgid "Projekt Név"
+msgstr "Projects"
+
+#: templates/projects/project_list.html:36
+#, fuzzy
+#| msgid "Partnerek"
+msgid "Partner"
+msgstr "Clients"
+
+#: templates/projects/project_list.html:39
+msgid "Létrehozva"
+msgstr "Created"
+
+#: templates/projects/project_list.html:66
+#, fuzzy
+#| msgid "Projektek"
+msgid "Nincs aktív projekt."
+msgstr "Projects"
+
+#: templates/projects/project_list.html:72
+msgid "Nincs a keresésnek megfelelő projekt."
+msgstr "No projects match your search."
 
 #: templates/registration/login.html:13
 msgid "Jelentkezz be a fiókodba"
@@ -261,3 +507,141 @@ msgstr "Username or Email"
 #: templates/registration/login.html:33
 msgid "Jelszó"
 msgstr "Password"
+
+#: templates/users/user_confirm_delete.html:4
+#, fuzzy
+#| msgid "Szabadságok"
+msgid "Dolgozó törlése"
+msgstr "Leaves"
+
+#: templates/users/user_confirm_delete.html:14
+#, python-format
+msgid "Biztosan deaktiválod %(username)s fiókját?"
+msgstr "Are you sure you want to deactivate %(username)s account?"
+
+#: templates/users/user_confirm_delete.html:18
+msgid ""
+"Az adatbázisból <strong>nem</strong> törlődik a felhasználó, de a jövőben "
+"nem fog tudni bejelentkezni a rendszerbe. Ezt később visszaállíthatod, ha "
+"szükséges."
+msgstr ""
+
+#: templates/users/user_confirm_delete.html:21
+msgid ""
+"Figyelem: A deaktiválással a dolgozó automatikusan lekerül az összes olyan "
+"projektről, amihez hozzá van rendelve!"
+msgstr ""
+
+#: templates/users/user_form.html:4
+msgid "Dolgozó szerkesztése"
+msgstr "Edit User"
+
+#: templates/users/user_form.html:4
+#, fuzzy
+#| msgid "Dolgozók"
+msgid "Új dolgozó"
+msgstr "Users"
+
+#: templates/users/user_form.html:13 templates/users/user_list.html:10
+msgid "Új dolgozó hozzáadása"
+msgstr "Add New User"
+
+#: templates/users/user_form.html:71
+msgid "Jelszó módosításához írj be egy újat, különben hagyd üresen."
+msgstr "To change password, enter a new one, otherwise leave blank."
+
+#: templates/users/user_form.html:78
+msgid "Mégsem"
+msgstr "Cancel"
+
+#: templates/users/user_list.html:8
+#, fuzzy
+#| msgid "Felhasználónév vagy Email"
+msgid "Felhasználók"
+msgstr "Username or Email"
+
+#: templates/users/user_list.html:32
+#, fuzzy
+#| msgid "Felhasználónév vagy Email"
+msgid "Felhasználónév"
+msgstr "Username or Email"
+
+#: templates/users/user_list.html:35
+msgid "E-mail"
+msgstr "Email"
+
+#: templates/users/user_list.html:61
+msgid "Nincs megjeleníthető dolgozó."
+msgstr "No users to display."
+
+#: users/forms.py:13
+msgid "Password"
+msgstr ""
+
+#: users/forms.py:18
+msgid "Confirm Password"
+msgstr ""
+
+#: users/forms.py:25
+msgid "Username"
+msgstr ""
+
+#: users/forms.py:26
+msgid "Email Address"
+msgstr ""
+
+#: users/forms.py:27
+msgid "First Name"
+msgstr ""
+
+#: users/forms.py:28
+msgid "Last Name"
+msgstr ""
+
+#: users/forms.py:29
+msgid "Active"
+msgstr ""
+
+#: users/forms.py:30
+msgid "Administrator (Staff)"
+msgstr ""
+
+#: users/forms.py:51
+msgid "A jelszónak legalább 8 karakter hosszúnak kell lennie."
+msgstr ""
+
+#: users/forms.py:53
+msgid "A jelszónak tartalmaznia kell legalább egy betűt."
+msgstr ""
+
+#: users/forms.py:55
+msgid "A jelszónak tartalmaznia kell legalább egy számot."
+msgstr ""
+
+#: users/forms.py:57
+msgid "A jelszónak tartalmaznia kell legalább egy speciális karaktert."
+msgstr ""
+
+#: users/forms.py:67
+#, fuzzy
+#| msgid "Helytelen felhasználónév vagy jelszó. Kérjük, próbáld újra."
+msgid "A két jelszó nem egyezik meg! Kérlek, próbáld újra."
+msgstr "Incorrect username or password. Please try again."
+
+#: users/views.py:58
+msgid "Saját magadat nem deaktiválhatod!"
+msgstr ""
+
+#: users/views.py:67
+#, python-format
+msgid "%(username)s fiókja deaktiválva lett és lekerült az aktív projektekről."
+msgstr ""
+
+#~ msgid "Fizetett szabadság (PTO)"
+#~ msgstr "Paid Time Off (PTO)"
+
+#~ msgid "Betegszabadság (Táppénz)"
+#~ msgstr "Sick Leave"
+
+#~ msgid "Fizetés nélküli szabadság"
+#~ msgstr "Unpaid Leave"

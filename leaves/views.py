@@ -41,7 +41,8 @@ class LeaveListView(LoginRequiredMixin, ListView):
         # Bonyolultabb esetben munkanapokat kéne számolni, de egyelőre simán sumoljuk
         total_days = 0
         for leave in context['leaves']:
-            total_days += (leave.end_date - leave.start_date).days + 1
+            # Használjuk a modell get_working_days() metódusát a tényleges munkanapok számításához
+            total_days += leave.get_working_days()
         context['total_days'] = total_days
 
         return context

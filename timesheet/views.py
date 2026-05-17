@@ -3,11 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 import json
-import re
 from calendar import monthrange
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from .models import TimeEntry
 from projects.models import Project
+from leaves.models import Leave
+from holidays.models import Holiday
 
 def format_hours(decimal_hours):
     if not decimal_hours:
@@ -75,13 +76,57 @@ def timesheet_view(request):
     # Naptári napok kiszámítása az adott hónapban
     _, num_days = monthrange(year, month)
     days_in_month = []
+    
+    # Keresünk szabadságot a felhasználónak, ami érinti ezt a hónapot
+    leaves = Leave.objects.filter(
+        user=request.user,
+        start_date__lte=date(year, month, num_days),
+        end_date__gte=date(year, month, 1)
+    )
+    # Keresünk ünnepeket erre a hónapra
+    holidays = Holiday.objects.filter(
+        date__year=year,
+        date__month=month
+    )
+    holiday_dict = {h.date: h for h in holidays}
+    
+    # Létrehozunk egy set-et a gyors dátum kereséshez
+    leave_dates = set()
+    for l in leaves:
+        curr = l.start_date
+        while curr <= l.end_date:
+            # Csak akkor számít szabadságnak vizuálisan a Jelenléti íven, ha ez nem hétvége/ünnep, 
+            # de ezt a logikát lejjebb oldjuk meg, vagy csak nem rakjuk be a leave_dates be.
+            leave_dates.add(curr)
+            curr += timedelta(days=1)
+            
     for day in range(1, num_days + 1):
         day_date = date(year, month, day)
+        date_str = str(day_date)
+        
+        # Alapértelmezetten hétvége-e
+        is_calendar_weekend = day_date.weekday() >= 5
+        
+        is_weekend_behavior = is_calendar_weekend
+        # Ha ünnepnap, akkor
+        if day_date in holiday_dict:
+            holiday_obj = holiday_dict[day_date]
+            if holiday_obj.is_working_day:
+                # Áthelyezett munkanap (pl szombat)
+                is_weekend_behavior = False
+            else:
+                # Normál ünnepnap (hétköznap is lehet)
+                is_weekend_behavior = True
+        
+        # Olyan nap ami igazi szabadság (nem esik hétvégére vagy ünnepnapra)
+        is_leave_behavior = (day_date in leave_dates) and not is_weekend_behavior
+        
         days_in_month.append({
             'date': day_date,
             'day': day,
-            'is_weekend': day_date.weekday() >= 5, # 5=Sat, 6=Sun
-            'weekday_name': day_date.strftime('%a')[:2] # Rövidített nap név, pl. Mo, Tu
+            'is_weekend': is_weekend_behavior, 
+            'weekday_name': day_date.strftime('%a')[:2], 
+            'is_leave': is_leave_behavior 
         })
 
     # Felhasználóhoz rendelt projektek lekérdezése
@@ -110,7 +155,8 @@ def timesheet_view(request):
                 'date_str': date_str,
                 'hours_formatted': hours_formatted,
                 'hours_decimal': hours_decimal,
-                'is_weekend': d['is_weekend']
+                'is_weekend': d['is_weekend'],
+                'is_leave': d['is_leave']
             })
         project_rows.append({
             'project': project,

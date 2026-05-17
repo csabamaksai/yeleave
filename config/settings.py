@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'leaves',
     'clients',
     'projects',
+    'holidays',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

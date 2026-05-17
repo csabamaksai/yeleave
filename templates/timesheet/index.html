@@ -49,17 +49,17 @@
                             <div class="text-gray-500 text-xs">{{ row.project.name }}</div>
                         </td>
                         {% for day in row.days %}
-                            <td class="border-r border-gray-200 p-0 relative {% if day.is_weekend %}bg-gray-100{% endif %} hover:bg-yellow-50 focus-within:bg-yellow-100 transition-colors">
+                            <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} hover:bg-yellow-50 focus-within:bg-yellow-100 transition-colors">
                                 <!-- A cellába írhat a felhasználó, az input kitölti az egészet -->
                                 <input 
                                     type="text" 
-                                    class="ts-input w-full h-full min-h-[48px] text-center text-sm bg-transparent border-0 focus:ring-2 focus:ring-inset focus:ring-brand outline-none"
+                                    class="ts-input w-full h-full min-h-[48px] text-center text-sm bg-transparent border-0 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave %}cursor-not-allowed placeholder-red-300 text-red-500{% endif %}"
                                     value="{{ day.hours_formatted }}" 
                                     data-project="{{ row.project.id }}" 
                                     data-date="{{ day.date_str }}"
                                     data-original="{{ day.hours_formatted }}"
                                     data-decimal="{{ day.hours_decimal }}"
-                                    placeholder=""
+                                    {% if day.is_leave %}disabled placeholder="L"{% else %}placeholder=""{% endif %}
                                 >
                                 <!-- Zöld pipa animáció sikeres mentéskor -->
                                 <div class="save-indicator absolute top-1 right-1 hidden text-green-500">

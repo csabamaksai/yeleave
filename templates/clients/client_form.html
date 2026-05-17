@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Partner szerkesztése{% else %}Új partner{% endif %} - yeleave{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if object %}
+                {{ object.name }} szerkesztése
+            {% else %}
+                Új partner hozzáadása
+            {% endif %}
+        </h1>
+    </div>
+
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="p-4 mb-2 text-sm {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} rounded-md">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="bg-white shadow sm:rounded-lg border border-gray-200 p-6">
+        <form method="post" action="">
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                {% for field in form %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ field.label }}
+                        </label>
+                        {% if field.name == 'country' %}
+                            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2 bg-gray-100 text-gray-500 cursor-not-allowed" value="{{ field.value|default:'Magyarország' }}" readonly>
+                        {% elif field.name == 'city' %}
+                            <div class="relative">
+                                <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" class="mt-1 focus:ring-brand focus:border-brand block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2" value="{{ field.value|default:'' }}" autocomplete="off">
+                                <ul id="city-suggestions" class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm hidden">
+                                    <!-- JavaScript tölti fel -->
+                                </ul>
+                            </div>
+                        {% else %}
+                            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" class="mt-1 focus:ring-brand focus:border-brand block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2" value="{{ field.value|default:'' }}">
+                        {% endif %}
+                        
+                        {% if field.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <p class="mt-2 text-sm text-gray-500" id="{{ field.id_for_label }}_help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-6 flex items-center justify-end space-x-3">
+                <a href="{% url 'clients:list' %}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
+                    Mégse
+                </a>
+                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brand hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand">
+                    Mentés
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cityInput = document.getElementById('id_city');
+        const suggestionsBox = document.getElementById('city-suggestions');
+        
+        // Előkészítjük az ismert városokat JSON-szerű tömbbe
+        const cities = [
+            {% for city in cities %}
+                "{{ city|escapejs }}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        if (cityInput && suggestionsBox) {
+            function updateSuggestions() {
+                const val = cityInput.value.trim().toLowerCase();
+                suggestionsBox.innerHTML = '';
+                
+                if (!val) {
+                    suggestionsBox.classList.add('hidden');
+                    return;
+                }
+                
+                // Keresés beírt szöveg alapján
+                const matches = cities.filter(city => city.toLowerCase().includes(val));
+                
+                if (matches.length > 0) {
+                    matches.forEach(match => {
+                        const li = document.createElement('li');
+                        li.className = 'cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-brand hover:text-white text-gray-900';
+                        li.textContent = match;
+                        
+                        // Kattintásra beírja a formba
+                        li.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            cityInput.value = match;
+                            suggestionsBox.classList.add('hidden');
+                        });
+                        
+                        suggestionsBox.appendChild(li);
+                    });
+                    suggestionsBox.classList.remove('hidden');
+                } else {
+                    suggestionsBox.classList.add('hidden');
+                }
+            }
+
+            // Gépelés és fókusz esetén is feljövő javaslatok
+            cityInput.addEventListener('input', updateSuggestions);
+            cityInput.addEventListener('focus', updateSuggestions);
+
+            // Ha valahova máshova kattint a felhasználó, rejtse el a listát
+            document.addEventListener('click', function(e) {
+                if (e.target !== cityInput && e.target !== suggestionsBox && !suggestionsBox.contains(e.target)) {
+                    suggestionsBox.classList.add('hidden');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

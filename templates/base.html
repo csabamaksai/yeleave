@@ -37,6 +37,7 @@
                         <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Szabadságok" %}</a>
                         {% if user.is_staff %}
                             <a href="{% url 'users:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Dolgozók" %}</a>
+                            <a href="{% url 'clients:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Partnerek" %}</a>
                         {% endif %}
                     </div>
                 </div>
@@ -104,5 +105,37 @@
     </footer>
 
     {% block scripts %}{% endblock %}
+    
+    <!-- Auto-hide Django messages after 5 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Megkeressük az összes olyan div-et, ami üzenetet tartalmazhat (és aminek a szülőjében van a mb-4)
+            const messageBoxes = document.querySelectorAll('.mb-4 > .p-4.rounded-md');
+            
+            messageBoxes.forEach(function(box) {
+                // Hogy szépen eltűnjön, beállítunk egy transition-t
+                box.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                
+                setTimeout(function() {
+                    box.style.opacity = '0';
+                    box.style.transform = 'translateY(-10px)';
+                    
+                    // Miután lefutott a CSS animáció (0.5s), teljesen eltüntetjük a DOM-ból
+                    setTimeout(function() {
+                        if (box.parentElement) {
+                            // Ellenőrizzük, hogy volt-e még üzenet mellette
+                            const parent = box.parentElement;
+                            box.remove();
+                            // Ha a szülő (mb-4) már üres, azt is eltávolítjuk a térköz megszüntetése végett
+                            if (parent.children.length === 0) {
+                                parent.remove();
+                            }
+                        }
+                    }, 500);
+                    
+                }, 5000); // 5000ms = 5 másodperc
+            });
+        });
+    </script>
 </body>
 </html>

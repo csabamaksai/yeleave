@@ -24,5 +24,6 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('timesheet/', include('timesheet.urls')),
     path('users/', include('users.urls')),
+    path('clients/', include('clients.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

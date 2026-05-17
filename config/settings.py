@@ -157,4 +157,8 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
-} 
+}
+
+# Session settings (10 perc inaktivitás után kiléptetés)
+SESSION_COOKIE_AGE = 600  # 10 * 60 másodperc
+SESSION_SAVE_EVERY_REQUEST = True 

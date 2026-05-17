@@ -645,3 +645,10 @@ msgstr ""
 
 #~ msgid "Fizetés nélküli szabadság"
 #~ msgstr "Unpaid Leave"
+
+
+msgid "Üdvözlünk a"
+msgstr "Welcome to the"
+
+msgid "rendszerben!"
+msgstr "system!"

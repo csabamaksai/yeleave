@@ -18,8 +18,8 @@ class UserListView(StaffRequiredMixin, ListView):
     context_object_name = 'users'
 
     def get_queryset(self):
-        # We can list everyone, and indicate inactive.
-        return User.objects.all().order_by('-is_active', 'last_name', 'first_name')
+        # Csak az aktív felhasználókat listázzuk
+        return User.objects.filter(is_active=True).order_by('last_name', 'first_name')
 
 class UserCreateView(StaffRequiredMixin, CreateView):
     model = User

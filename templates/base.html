@@ -32,12 +32,14 @@
                         yeleave
                     </a>
                     <div class="hidden sm:ml-8 sm:flex sm:space-x-4">
-                        <a href="/" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Irányítópult" %}</a>
-                        <a href="{% url 'timesheet:index' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Jelenléti ív" %}</a>
-                        <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Szabadságok" %}</a>
-                        {% if user.is_staff %}
-                            <a href="{% url 'users:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Dolgozók" %}</a>
-                            <a href="{% url 'clients:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Partnerek" %}</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'timesheet:index' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Jelenléti ív" %}</a>
+                            <a href="{% url 'leaves:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Szabadságok" %}</a>
+                            {% if user.is_staff %}
+                                <a href="{% url 'users:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Dolgozók" %}</a>
+                                <a href="{% url 'clients:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Partnerek" %}</a>
+                                <a href="{% url 'projects:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Projektek" %}</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -104,37 +106,176 @@
         </div>
     </footer>
 
+    <!-- Globális mentetlen változtatások Modal -->
+    <div id="unsavedChangesModal" class="hidden fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Mentetlen változtatások!
+                        </h3>
+                        <div class="mt-2 text-sm text-gray-500">
+                            <p>Módosítottál egy vagy több mezőt az űrlapon.</p>
+                            <p class="mt-2 font-semibold">El szeretnéd menteni a változtatásokat kilépés előtt?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="ucSaveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:ml-3 sm:w-auto sm:text-sm">
+                        Igen
+                    </button>
+                    <button type="button" id="ucDiscardBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-50 text-base font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Nem
+                    </button>
+                    <button type="button" id="ucCancelBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:mt-0 sm:w-auto sm:text-sm">
+                        Mégse
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% block scripts %}{% endblock %}
     
     <!-- Auto-hide Django messages after 5 seconds -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Megkeressük az összes olyan div-et, ami üzenetet tartalmazhat (és aminek a szülőjében van a mb-4)
+            // -- Rendszerüzenetek eltüntetése --
             const messageBoxes = document.querySelectorAll('.mb-4 > .p-4.rounded-md');
             
             messageBoxes.forEach(function(box) {
-                // Hogy szépen eltűnjön, beállítunk egy transition-t
                 box.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                
                 setTimeout(function() {
                     box.style.opacity = '0';
                     box.style.transform = 'translateY(-10px)';
-                    
-                    // Miután lefutott a CSS animáció (0.5s), teljesen eltüntetjük a DOM-ból
                     setTimeout(function() {
                         if (box.parentElement) {
-                            // Ellenőrizzük, hogy volt-e még üzenet mellette
                             const parent = box.parentElement;
                             box.remove();
-                            // Ha a szülő (mb-4) már üres, azt is eltávolítjuk a térköz megszüntetése végett
                             if (parent.children.length === 0) {
                                 parent.remove();
                             }
                         }
                     }, 500);
-                    
-                }, 5000); // 5000ms = 5 másodperc
+                }, 5000);
             });
+
+            // -- Mentetlen módosítások logika (Unsaved Changes) --
+            let isFormDirty = false;
+            // Csak a main tartalomrészben lévő űrlapot figyeljük!
+            const mainForm = document.querySelector('main form');
+            const cancelButtons = document.querySelectorAll('.form-cancel-btn');
+            
+            if (mainForm && cancelButtons.length > 0) {
+                // Kezdeti állapotok elmentése és ikonok (ceruzák) előkészítése a címkék mellé
+                const formElements = Array.from(mainForm.elements);
+                
+                formElements.forEach(el => {
+                    if (!el.name || el.type === 'hidden' || el.type === 'submit' || el.type === 'button') return;
+                    
+                    // Elmentjük az induló állapotot
+                    if (el.type === 'checkbox' || el.type === 'radio') {
+                        el.dataset.initialChecked = el.checked;
+                    } else if (el.tagName === 'SELECT' && el.multiple) {
+                        const selectedOptions = Array.from(el.options).filter(o => o.selected).map(o => o.value);
+                        el.dataset.initialValue = JSON.stringify(selectedOptions);
+                    } else {
+                        el.dataset.initialValue = el.value || '';
+                    }
+
+                    // Megkeressük a hozzá tartozó labelt, hogy beszúrjuk a rejtett ikont
+                    const label = document.querySelector(`label[for="${el.id}"]`);
+                    if (label) {
+                        const iconSpan = document.createElement('span');
+                        iconSpan.innerHTML = '<svg class="w-3.5 h-3.5 inline-block ml-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Módosított mező"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>';
+                        iconSpan.className = 'field-dirty-badge hidden transition-opacity duration-300';
+                        // Eltároljuk a referenciát az inputra mutatva
+                        el.dirtyBadge = iconSpan;
+                        label.appendChild(iconSpan);
+                    }
+                });
+
+                function updateFieldDirtiness(el) {
+                    if (!el.name || el.type === 'hidden' || el.type === 'submit' || el.type === 'button') return false;
+                    
+                    let isChanged = false;
+                    if (el.type === 'checkbox' || el.type === 'radio') {
+                        isChanged = el.checked.toString() !== el.dataset.initialChecked;
+                    } else if (el.tagName === 'SELECT' && el.multiple) {
+                        const selectedOptions = Array.from(el.options).filter(o => o.selected).map(o => o.value);
+                        isChanged = JSON.stringify(selectedOptions) !== el.dataset.initialValue;
+                    } else {
+                        isChanged = (el.value || '') !== el.dataset.initialValue;
+                    }
+
+                    if (el.dirtyBadge) {
+                        if (isChanged) {
+                            el.dirtyBadge.classList.remove('hidden');
+                        } else {
+                            el.dirtyBadge.classList.add('hidden');
+                        }
+                    }
+                    return isChanged;
+                }
+
+                function checkOverallDirtiness() {
+                    let anyDirty = false;
+                    formElements.forEach(el => {
+                        if (updateFieldDirtiness(el)) {
+                            anyDirty = true;
+                        }
+                    });
+                    isFormDirty = anyDirty;
+                }
+
+                // Változás figyelése
+                mainForm.addEventListener('change', function(e) {
+                    checkOverallDirtiness();
+                });
+                // Szöveges mezőkbe gépelés is dirty!
+                mainForm.addEventListener('input', function(e) {
+                    checkOverallDirtiness();
+                });
+                
+                // Mégse gomb elfogása
+                let targetHref = '';
+                cancelButtons.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        if (isFormDirty) {
+                            e.preventDefault(); // Megállítjuk a linket
+                            targetHref = this.href || this.getAttribute('href');
+                            document.getElementById('unsavedChangesModal').classList.remove('hidden');
+                        }
+                    });
+                });
+
+                // Modal gombok kezelése
+                const ucModal = document.getElementById('unsavedChangesModal');
+                
+                // 1. "Igen, mentem" -> Form submit
+                document.getElementById('ucSaveBtn')?.addEventListener('click', function() {
+                    ucModal.classList.add('hidden');
+                    mainForm.submit();
+                });
+                
+                // 2. "Nem, elvetem" -> Tovább a megadott listára
+                document.getElementById('ucDiscardBtn')?.addEventListener('click', function() {
+                    if (targetHref) window.location.href = targetHref;
+                });
+                
+                // 3. "Mégse lépek ki" -> Modal bezár és szerkeszt tovább
+                document.getElementById('ucCancelBtn')?.addEventListener('click', function() {
+                    ucModal.classList.add('hidden');
+                });
+            }
         });
     </script>
 </body>

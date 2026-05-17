@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-16 09:21+0000\n"
+"POT-Creation-Date: 2026-05-17 07:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,78 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: config/settings.py:131
+
+#: config/settings.py:132
 msgid "Magyar"
 msgstr "Hungarian"
 
-#: config/settings.py:132
+#: config/settings.py:133
 msgid "English"
 msgstr "English"
 
-#: templates/base.html:35 templates/home.html:4
-msgid "Irányítópult"
-msgstr "Dashboard"
+#: leaves/forms.py:10 leaves/models.py:14
+msgid "Kezdés dátuma"
+msgstr "Start Date"
+
+#: leaves/forms.py:11 leaves/models.py:15
+msgid "Befejezés dátuma"
+msgstr "End Date"
+
+#: leaves/forms.py:12 leaves/models.py:16 templates/leaves/leave_list.html:32
+msgid "Típus"
+msgstr ""
+
+#: leaves/forms.py:13 leaves/models.py:17 templates/leaves/leave_list.html:33
+msgid "Megjegyzés"
+msgstr ""
+
+#: leaves/models.py:8
+msgid "Fizetett szabadság (PTO)"
+msgstr "Paid Time Off (PTO)"
+
+#: leaves/models.py:9
+msgid "Betegszabadság (Táppénz)"
+msgstr "Sick Leave"
+
+#: leaves/models.py:10
+msgid "Fizetés nélküli szabadság"
+msgstr "Unpaid Leave"
+
+#: leaves/models.py:13
+#, fuzzy
+#| msgid "Felhasználónév vagy Email"
+msgid "Felhasználó"
+msgstr "Username or Email"
+
+#: leaves/views.py:67
+msgid ""
+"A szabadság mentve, a rajta lévő korábbi munkaidő bejegyzések törlésre "
+"kerültek."
+msgstr ""
+
+#: leaves/views.py:69
+msgid "A szabadság sikeresen létrehozva."
+msgstr ""
+
+#: leaves/views.py:93
+msgid ""
+"A szabadság módosítva, a rajta lévő korábbi munkaidő bejegyzések törlésre "
+"kerültek."
+msgstr ""
+
+#: leaves/views.py:95
+msgid "A szabadság sikeresen frissítve."
+msgstr ""
+
+#: leaves/views.py:109
+msgid "A szabadság bejegyzést töröltük."
+msgstr ""
 
 #: templates/base.html:36
 msgid "Jelenléti ív"
 msgstr "Timesheet"
 
-#: templates/base.html:37
+#: templates/base.html:37 templates/leaves/leave_list.html:4
 msgid "Szabadságok"
 msgstr "Leaves"
 
@@ -41,17 +96,30 @@ msgstr "Leaves"
 msgid "Dolgozók"
 msgstr "Users"
 
-#: templates/base.html:48
+#: templates/base.html:40
+msgid "Partnerek"
+msgstr "Clients"
+
+#: templates/base.html:41
+msgid "Projektek"
+msgstr "Projects"
+
+#: templates/base.html:51
 msgid "Kijelentkezés"
 msgstr "Logout"
 
-#: templates/base.html:51 templates/home.html:16
+#: templates/base.html:54 templates/home.html:16
+#: templates/registration/login.html:4 templates/registration/login.html:40
 msgid "Bejelentkezés"
 msgstr "Login"
 
-#: templates/base.html:84
+#: templates/base.html:87
 msgid "Nyelv"
 msgstr "Language"
+
+#: templates/home.html:4
+msgid "Irányítópult"
+msgstr "Dashboard"
 
 #: templates/home.html:8
 msgid "Üdvözlünk a yeleave rendszerben!"
@@ -65,8 +133,131 @@ msgstr "You are logged in:"
 msgid ""
 "Válaszd ki a fenti menüből, hogy a jelenléti íveket vagy a szabadságokat "
 "szeretnéd kezelni."
-msgstr "Please choose from the navigation menu above to manage timesheets or leaves."
+msgstr ""
+"Please choose from the navigation menu above to manage timesheets or leaves."
 
 #: templates/home.html:14
 msgid "Kérjük, jelentkezz be a folytatáshoz."
 msgstr "Please sign in to continue."
+
+#: templates/leaves/leave_confirm_delete.html:4
+msgid "Törlés megerősítése"
+msgstr ""
+
+#: templates/leaves/leave_confirm_delete.html:16
+#, fuzzy
+#| msgid "Szabadságok"
+msgid "Szabadság törlése"
+msgstr "Leaves"
+
+#: templates/leaves/leave_confirm_delete.html:19
+msgid "Biztosan törölni szeretnéd ezt a szabadság bejegyzést?"
+msgstr ""
+
+#: templates/leaves/leave_confirm_delete.html:29
+msgid "Igen, törlés"
+msgstr ""
+
+#: templates/leaves/leave_confirm_delete.html:32
+#: templates/leaves/leave_form.html:86
+msgid "Mégsem"
+msgstr ""
+
+#: templates/leaves/leave_form.html:6 templates/leaves/leave_form.html:18
+#, fuzzy
+#| msgid "Szabadságok"
+msgid "Szabadság Módosítása"
+msgstr "Leaves"
+
+#: templates/leaves/leave_form.html:8
+#, fuzzy
+#| msgid "Szabadságok"
+msgid "Új Szabadság"
+msgstr "Leaves"
+
+#: templates/leaves/leave_form.html:20
+msgid "Új Szabadság rögzítése"
+msgstr ""
+
+#: templates/leaves/leave_form.html:49
+msgid "Mégse"
+msgstr ""
+
+#: templates/leaves/leave_form.html:52 templates/leaves/leave_form.html:142
+#: templates/leaves/leave_form.html:155
+msgid "Mentés"
+msgstr ""
+
+#: templates/leaves/leave_form.html:73
+#, fuzzy
+#| msgid "Jelenléti ív"
+msgid "Ütközés a Jelenléti ívvel"
+msgstr "Timesheet"
+
+#: templates/leaves/leave_form.html:76
+msgid "A megadott időszakra már rögzítettél munkaórákat a Timesheet-ben!"
+msgstr ""
+
+#: templates/leaves/leave_form.html:77
+msgid ""
+"Ha most mented a szabadságot, a korábbi jelenléti bejegyzések erre az "
+"időszakra VÉGLEGESEN TÖRLŐDNEK. Biztosan folytatod?"
+msgstr ""
+
+#: templates/leaves/leave_form.html:83
+msgid "Igen, törölve mentem"
+msgstr ""
+
+#: templates/leaves/leave_list.html:21
+msgid "Új szabadság rögzítése"
+msgstr ""
+
+#: templates/leaves/leave_list.html:30
+msgid "Kezdés"
+msgstr ""
+
+#: templates/leaves/leave_list.html:31
+#, fuzzy
+#| msgid "Bejelentkezés"
+msgid "Befejezés"
+msgstr "Login"
+
+#: templates/leaves/leave_list.html:34
+msgid "Műveletek"
+msgstr ""
+
+#: templates/leaves/leave_list.html:49
+msgid "Szerkesztés"
+msgstr ""
+
+#: templates/leaves/leave_list.html:50
+msgid "Törlés"
+msgstr ""
+
+#: templates/leaves/leave_list.html:56
+msgid "Nincs rögzített szabadság ebben az évben."
+msgstr ""
+
+#: templates/leaves/leave_list.html:64
+msgid "Összesen kivett napok (naptári):"
+msgstr ""
+
+#: templates/leaves/leave_list.html:65
+msgid "nap"
+msgstr ""
+
+#: templates/registration/login.html:13
+msgid "Jelentkezz be a fiókodba"
+msgstr "Sign in to your account"
+
+#: templates/registration/login.html:18
+msgid "Helytelen felhasználónév vagy jelszó. Kérjük, próbáld újra."
+msgstr "Incorrect username or password. Please try again."
+
+#: templates/registration/login.html:26
+msgid "Felhasználónév vagy Email"
+msgstr "Username or Email"
+
+#: templates/registration/login.html:33
+msgid "Jelszó"
+msgstr "Password"

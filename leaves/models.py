@@ -1,19 +1,20 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 class Leave(models.Model):
     LEAVE_TYPES = [
-        ('PTO', 'Paid Time Off'),
-        ('SIC', 'Sick Leave'),
-        ('UNP', 'Unpaid Leave'),
+        ('PTO', _('Fizetett szabadság (PTO)')),
+        ('SIC', _('Betegszabadság (Táppénz)')),
+        ('UNP', _('Fizetés nélküli szabadság')),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leaves', verbose_name='User')
-    start_date = models.DateField(verbose_name='Start Date')
-    end_date = models.DateField(verbose_name='End Date')
-    leave_type = models.CharField(max_length=3, choices=LEAVE_TYPES, default='PTO', verbose_name='Type')
-    notes = models.TextField(blank=True, null=True, verbose_name='Notes')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leaves', verbose_name=_('Felhasználó'))
+    start_date = models.DateField(verbose_name=_('Kezdés dátuma'))
+    end_date = models.DateField(verbose_name=_('Befejezés dátuma'))
+    leave_type = models.CharField(max_length=3, choices=LEAVE_TYPES, default='PTO', verbose_name=_('Típus'))
+    notes = models.TextField(blank=True, null=True, verbose_name=_('Megjegyzés'))
 
     def __str__(self):
         return f"{self.user.username} - {self.get_leave_type_display()} ({self.start_date} -> {self.end_date})"

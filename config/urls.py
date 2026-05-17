@@ -25,5 +25,7 @@ urlpatterns = [
     path('timesheet/', include('timesheet.urls')),
     path('users/', include('users.urls')),
     path('clients/', include('clients.urls')),
+    path('projects/', include('projects.urls')),
+    path('leaves/', include('leaves.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

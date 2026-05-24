@@ -294,7 +294,7 @@ def reports_index(request):
 
 
 def get_filtered_report_entries(request):
-    users = CustomUser.objects.filter(is_active=True).order_last_first()
+    users = CustomUser.objects.filter(is_active=True).order_by('last_name', 'first_name')
     
     user_ids = request.GET.getlist('user_id')
     if user_ids:

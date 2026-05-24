@@ -132,7 +132,7 @@ def timesheet_view(request):
         })
 
     # Felhasználóhoz rendelt projektek lekérdezése
-    projects = request.user.assigned_projects.filter(is_active=True).select_related('client')
+    projects = request.user.assigned_projects.filter(is_active=True, client__is_active=True).select_related('client')
     
     # E havi mentett bejegyzések
     entries = TimeEntry.objects.filter(
@@ -257,10 +257,9 @@ def reports_index(request):
     client_id = request.GET.get('client_id')
     project_id = request.GET.get('project_id')
     
-    clients = Client.objects.filter(is_active=True)
-    projects = Project.objects.filter(is_active=True)
-    if client_id:
-        projects = projects.filter(client_id=client_id)
+    clients = Client.objects.filter(is_active=True).order_by('name')
+    projects = Project.objects.filter(is_active=True, client__is_active=True).order_by('name')
+    # Removed the projects filtering here so the template gets all projects for the JS filter
         
     total_hours = sum(float(e['hours']) for e in entries if not e['is_leave'])
     
@@ -270,7 +269,22 @@ def reports_index(request):
         active_project_ids = list(TimeEntry.objects.filter(user__in=selected_users).values_list('project_id', flat=True).distinct())
         active_client_ids = list(Project.objects.filter(id__in=active_project_ids).values_list('client_id', flat=True).distinct())
 
+    # Get users that are assigned to the currently selected project/client
+    # If project selected -> users assigned to this project
+    # If only client selected -> users assigned to ANY project belonging to this client
+    # If neither -> all users are "assigned_user_ids" conceptually (or we just don't fade any)
+    assigned_user_ids = []
+    if project_id:
+        p = Project.objects.filter(id=project_id).first()
+        if p:
+            assigned_user_ids = list(p.assigned_users.values_list('id', flat=True))
+    elif client_id:
+        assigned_user_ids = list(User.objects.filter(assigned_projects__client_id=client_id).values_list('id', flat=True).distinct())
+    else:
+        assigned_user_ids = list(users.values_list('id', flat=True))
+
     context = {
+        'assigned_user_ids': assigned_user_ids,
         'users': users,
         'valid_user_ids': valid_user_ids,
         'user_query_params': user_query_params,
@@ -501,3 +515,46 @@ def reports_export(request):
         return response
         
     return HttpResponse("Invalid format")
+
+@login_required
+@require_POST
+def bulk_save_time_entries(request):
+    try:
+        data = json.loads(request.body)
+        entries = data.get('entries', [])
+        
+        # Lehetőségek: validálni a projekt jogosultságot bulkosan
+        updated_count = 0
+        deleted_count = 0
+        for entry in entries:
+            project_id = entry.get('project_id')
+            entry_date_str = entry.get('date')
+            hours_str = entry.get('hours')
+            
+            project = Project.objects.filter(id=project_id, assigned_users=request.user).first()
+            if not project:
+                continue
+                
+            entry_date = datetime.strptime(entry_date_str, '%Y-%m-%d').date()
+            parsed_hours = parse_hours(hours_str) if hours_str else 0.0
+            
+            if parsed_hours <= 0:
+                # Törölni kell, ha 0
+                deleted = TimeEntry.objects.filter(user=request.user, project=project, date=entry_date).delete()
+                if deleted[0] > 0:
+                    deleted_count += deleted[0]
+            else:
+                hours = round(parsed_hours, 2)
+                obj, created = TimeEntry.objects.update_or_create(
+                    user=request.user,
+                    project=project,
+                    date=entry_date,
+                    defaults={'hours': hours}
+                )
+                updated_count += 1
+                
+        return JsonResponse({'status': 'success', 'message': f'Sikeresen beküldve: {updated_count} módosítva/létrehozva, {deleted_count} törölve.'})
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

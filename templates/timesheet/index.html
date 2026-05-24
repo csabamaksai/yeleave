@@ -3,6 +3,11 @@
 {% block title %}Timesheet - YeLeave{% endblock %}
 
 {% block content %}
+<!-- Címsor (Page Title) -->
+<div class="mb-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-gray-900">Jelenléti ív</h1>
+</div>
+
 <div class="bg-white shadow sm:rounded-lg mb-6">
     <!-- Header: Month Selector -->
     <div class="px-4 py-4 border-b border-gray-200 sm:px-6 flex items-center justify-between">
@@ -20,7 +25,7 @@
             </a>
         </div>
         <div class="text-sm text-gray-500">
-            JIRA Tempo stílusú nézet
+            <!-- Reserved for right side header items -->
         </div>
     </div>
 
@@ -82,6 +87,14 @@
             </tbody>
         </table>
     </div>
+    
+    <!-- Submit Button row -->
+    <div class="px-4 py-4 sm:px-6 bg-gray-50 flex justify-end">
+        <button id="submitTimesheetBtn" class="bg-brand text-white hover:bg-blue-700 px-6 py-2 rounded-md font-medium transition shadow-sm flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            Beküldés (Mentés)
+        </button>
+    </div>
 </div>
 {% endblock %}
 
@@ -142,79 +155,110 @@ document.addEventListener("DOMContentLoaded", function() {
 
     calculateTotals();
 
-    // Input események (Enter + Blur)
+    // Kiszínezés és totál frissítése változáskor
     document.querySelectorAll('.ts-input').forEach(input => {
-        
-        const saveEntry = async (el) => {
-            const val = el.value.trim();
-            const originalVal = el.getAttribute('data-original');
-            
-            // Ha nem változott, ne spammeljük a szervert
-            if (val === originalVal) return;
-            
-            const projectId = el.getAttribute('data-project');
-            const dateStr = el.getAttribute('data-date');
+        // Amikor elhagyja a mezőt
+        input.addEventListener('blur', function() {
+            const val = this.value.trim();
+            const originalVal = this.getAttribute('data-original');
+            if (val !== originalVal) {
+                // Csak vizuális jelleg
+                this.parentElement.classList.add('bg-yellow-200');
+            } else {
+                this.parentElement.classList.remove('bg-yellow-200');
+            }
+            calculateTotals();
+        });
+
+        // Enter esetén formázzon és ugorjon ki
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.blur();
+            }
+        });
+    });
+
+    // Beküldés gomb működése
+    const submitBtn = document.getElementById('submitTimesheetBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', async function() {
             const csrfToken = '{{ csrf_token }}';
-
-            el.classList.add('opacity-50'); // Töltés jelzése
-
+            
+            // Csak azokat küldjük be (spórolásképp), ami megváltozott
+            // vagy akár küldhetjük mindet is ami ki van töltve.
+            // MOST: Azokat küldjük be, amelyek tartalma nem egyezik a data-original val, 
+            // de az is lehet, hogy töröltek belőle (üres lett).
+            
+            let entriesToSave = [];
+            
+            document.querySelectorAll('.ts-input').forEach(input => {
+                const val = input.value.trim();
+                const originalVal = input.getAttribute('data-original');
+                
+                if (val !== originalVal) {
+                    entriesToSave.push({
+                        project_id: input.getAttribute('data-project'),
+                        date: input.getAttribute('data-date'),
+                        hours: val
+                    });
+                }
+            });
+            
+            if (entriesToSave.length === 0) {
+                alert('Nincs módosított bejegyzés, amit be lehetne küldeni!');
+                return;
+            }
+            
+            // Gomb tiltása töltés alatt
+            submitBtn.disabled = true;
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Beküldés folyamatban...';
+            
             try {
-                const response = await fetch('{% url "timesheet:api_save" %}', {
+                const response = await fetch('{% url "timesheet:api_bulk_save" %}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': csrfToken
                     },
-                    body: JSON.stringify({
-                        project_id: projectId,
-                        date: dateStr,
-                        hours: val
-                    })
+                    body: JSON.stringify({ entries: entriesToSave })
                 });
 
                 const data = await response.json();
-                el.classList.remove('opacity-50');
-
+                
                 if (response.ok && data.status === 'success') {
                     // Mentés sikeres
-                    el.setAttribute('data-original', data.formatted_hours);
-                    el.value = data.formatted_hours;
+                    // Frissítjük a data-original attribútumokat
+                    document.querySelectorAll('.ts-input').forEach(input => {
+                        const val = input.value.trim();
+                        const originalVal = input.getAttribute('data-original');
+                        if (val !== originalVal) {
+                            input.setAttribute('data-original', val);
+                            input.parentElement.classList.remove('bg-yellow-200');
+                            
+                            // Kis zöld pipa felvillanása
+                            const indicator = input.parentElement.querySelector('.save-indicator');
+                            if (indicator) {
+                                indicator.classList.remove('hidden');
+                                setTimeout(() => indicator.classList.add('hidden'), 2000);
+                            }
+                        }
+                    });
                     calculateTotals();
-                    
-                    // Kis zöld pipa felvillanása
-                    const indicator = el.parentElement.querySelector('.save-indicator');
-                    if (indicator) {
-                        indicator.classList.remove('hidden');
-                        setTimeout(() => indicator.classList.add('hidden'), 1500);
-                    }
+                    alert(data.message || 'Sikeresen beküldve!');
                 } else {
                     alert('Hiba történt a mentés során: ' + (data.message || 'Ismeretlen hiba'));
-                    el.value = originalVal; // Visszaállítjuk
-                    calculateTotals();
                 }
             } catch (err) {
                 console.error(err);
-                el.classList.remove('opacity-50');
-                alert('Hálózati hiba történt!');
-                el.value = originalVal;
-                calculateTotals();
-            }
-        };
-
-        // Mentés amint ellép a celláról
-        input.addEventListener('blur', function() {
-            saveEntry(this);
-        });
-
-        // Mentés Enter esetén
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Ne ugorjon új sorba véletlenül
-                saveEntry(this);
-                this.blur(); // Kilép a cellából, ami ráadásul a focus elvesztését is elintézi
+                alert('Hálózati hiba történt a beküldés során!');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
             }
         });
-    });
+    }
 });
 </script>
 {% endblock %}

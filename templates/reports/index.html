@@ -48,16 +48,19 @@
         
                 <div class="flex items-center gap-2">
                     <label for="project_id" class="text-xs font-medium text-gray-500 whitespace-nowrap">{% trans "Projekt" %}:</label>
-                    <select name="project_id" id="project_id" title="{% trans 'Válassz projektet' %}" class="w-full sm:w-56 text-sm border border-gray-300 rounded-md focus:ring-brand focus:border-brand px-3 py-1.5 bg-white shadow-sm">
-                        <option value="">{% trans "Minden Projekt" %}</option>
-                        {% for p in projects %}
-                            <option value="{{ p.id }}" data-client-id="{{ p.client_id }}"
-                                {% if selected_project_id == p.id|stringformat:"s" %}selected{% endif %}
-                                class="{% if valid_user_ids and p.id not in active_project_ids %}text-gray-300{% else %}text-gray-900 font-medium{% endif %}">
-                                {{ p.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                    <div class="relative w-full sm:w-56">
+                        <select name="project_id" id="project_id" title="{% trans 'Válassz projektet' %}" class="w-full text-sm border border-gray-300 rounded-md focus:ring-brand focus:border-brand px-3 py-1.5 bg-white shadow-sm">
+                            <option value="">{% trans "Minden Projekt" %}</option>
+                            {% for p in projects %}
+                                <option value="{{ p.id }}" data-client-id="{{ p.client_id }}"
+                                    {% if selected_project_id == p.id|stringformat:"s" %}selected{% endif %}
+                                    class="{% if valid_user_ids and p.id not in active_project_ids %}text-gray-300{% else %}text-gray-900 font-medium{% endif %}">
+                                    {{ p.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <div id="project_empty_msg" class="hidden absolute top-full left-0 w-full text-left text-xs text-gray-500 mt-1">{% trans "Nincs találat" %}</div>
+                    </div>
                 </div>
                 
                 <button type="submit" class="bg-brand text-white hover:bg-blue-700 px-6 py-2 border border-gray-300 rounded-md text-sm font-medium transition shadow-sm h-full self-stretch">
@@ -259,12 +262,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Project UI Disable Check
+        const projectEmptyMsg = document.getElementById('project_empty_msg');
         if (projectSelect.options.length <= 1) {
             projectSelect.disabled = true;
             projectSelect.classList.add('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
+            if (projectEmptyMsg) projectEmptyMsg.classList.remove('hidden');
         } else {
             projectSelect.disabled = false;
             projectSelect.classList.remove('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
+            if (projectEmptyMsg) projectEmptyMsg.classList.add('hidden');
         }
         
         // Filter Users
@@ -294,6 +300,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (showUser) {
                 userSelect.appendChild(uOpt.cloneNode(true));
             }
+        }
+        
+        // User UI Disable Check
+        const userEmptyMsg = document.getElementById('user_empty_msg');
+        if (userSelect.options.length === 0) {
+            userSelect.disabled = true;
+            userSelect.classList.add('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
+            if (userEmptyMsg) userEmptyMsg.classList.remove('hidden');
+        } else {
+            userSelect.disabled = false;
+            userSelect.classList.remove('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
+            if (userEmptyMsg) userEmptyMsg.classList.add('hidden');
         }
     }
 

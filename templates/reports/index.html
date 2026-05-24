@@ -25,8 +25,8 @@
                     <!-- multiselect with standard select -->
                     <select name="user_id" id="user_id" multiple size="1" title="{% trans 'Válassz dolgozókat (CMD/CTRL gombbal többet is lehet)' %}" class="w-full sm:w-64 text-sm border border-gray-300 rounded-md focus:ring-brand focus:border-brand px-3 py-1.5 bg-white shadow-sm overflow-y-auto max-h-[80px]">
                         {% for u in users %}
-                            <option value="{{ u.id }}" {% if u.id in valid_user_ids %}selected{% endif %} class="py-1 px-1 {% if u.id not in assigned_user_ids %}text-gray-300 italic opacity-60{% else %}text-gray-900 font-medium{% endif %}">
-                                {{ u.last_name }} {{ u.first_name }}
+                            <option value="{{ u.id }}" {% if u.id in valid_user_ids %}selected{% endif %} class="py-1 px-1 {% if u.id not in assigned_user_ids %}text-gray-400 opacity-50{% else %}text-gray-900 font-bold{% endif %}" {% if u.id not in assigned_user_ids %}disabled{% endif %}>
+                                {{ u.last_name }} {{ u.first_name }} {% if u.id not in assigned_user_ids %}(Nem beosztott){% endif %}
                             </option>
                         {% endfor %}
                     </select>
@@ -255,6 +255,15 @@ document.addEventListener('DOMContentLoaded', function() {
             projectSelect.value = '';
         } else {
             projectSelect.value = currentProjectVal;
+        }
+        
+        // Disable project select if it only contains the default "Minden Projekt" option
+        if (projectSelect.options.length <= 1) {
+            projectSelect.disabled = true;
+            projectSelect.classList.add('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
+        } else {
+            projectSelect.disabled = false;
+            projectSelect.classList.remove('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
         }
     }
 

@@ -28,4 +28,7 @@ urlpatterns = [
     path('projects/', include('projects.urls')),
     path('leaves/', include('leaves.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
+    path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),
+    path('contact/', TemplateView.as_view(template_name='pages/contact.html'), name='contact'),
 ]

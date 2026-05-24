@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Kapcsolat" %} | yeleave{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto py-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">{% trans "Kapcsolat" %}</h1>
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">{% trans "Elérhetőségek" %}</h2>
+        <div class="space-y-4 text-gray-700">
+            <p class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                <a href="mailto:csmaksai@gmail.com" class="hover:text-brand hover:underline">csmaksai@gmail.com</a>
+            </p>
+            <p class="text-sm text-gray-500 mt-6">
+                <em>{% trans "Ide egy űrlapot is tehetünk majd, ha szeretnél közvetlen üzenetküldési lehetőséget." %}</em>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

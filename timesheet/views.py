@@ -9,6 +9,8 @@ from .models import TimeEntry
 from projects.models import Project
 from leaves.models import Leave
 from holidays.models import Holiday
+from users.models import CustomUser
+import re
 
 def format_hours(decimal_hours):
     if not decimal_hours:

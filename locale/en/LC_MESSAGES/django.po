@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 07:59+0000\n"
+"POT-Creation-Date: 2026-05-24 08:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,12 +74,12 @@ msgstr "Start Date"
 msgid "Befejezés dátuma"
 msgstr "End Date"
 
-#: leaves/forms.py:12 templates/leaves/leave_list.html:32
+#: leaves/forms.py:12 templates/leaves/leave_list.html:37
 msgid "Típus"
 msgstr ""
 
-#: leaves/forms.py:13 templates/leaves/leave_list.html:34
-#: templates/reports/index.html:109 timesheet/views.py:409
+#: leaves/forms.py:13 templates/leaves/leave_list.html:39
+#: templates/reports/index.html:112 timesheet/views.py:429
 msgid "Megjegyzés"
 msgstr "Notes"
 
@@ -148,6 +148,7 @@ msgid "Jelenléti ív"
 msgstr "Timesheet"
 
 #: templates/base.html:37 templates/leaves/leave_list.html:4
+#: templates/leaves/leave_list.html:9
 msgid "Szabadságok"
 msgstr "Leaves"
 
@@ -283,12 +284,12 @@ msgstr "Address"
 msgid "Kapcsolattartó"
 msgstr "Contact Person"
 
-#: templates/clients/client_list.html:45 templates/leaves/leave_list.html:35
+#: templates/clients/client_list.html:45 templates/leaves/leave_list.html:40
 #: templates/projects/project_list.html:42 templates/users/user_list.html:41
 msgid "Műveletek"
 msgstr "Actions"
 
-#: templates/clients/client_list.html:78 templates/leaves/leave_list.html:53
+#: templates/clients/client_list.html:78 templates/leaves/leave_list.html:58
 #: templates/projects/project_list.html:59 templates/users/user_list.html:73
 msgid "Szerkesztés"
 msgstr "Edit"
@@ -394,31 +395,31 @@ msgstr ""
 msgid "A megadott intervallum nem tartalmaz munkanapot."
 msgstr ""
 
-#: templates/leaves/leave_list.html:21
+#: templates/leaves/leave_list.html:26
 msgid "Új szabadság rögzítése"
 msgstr ""
 
-#: templates/leaves/leave_list.html:30
+#: templates/leaves/leave_list.html:35
 msgid "Kezdés"
 msgstr ""
 
-#: templates/leaves/leave_list.html:31
+#: templates/leaves/leave_list.html:36
 msgid "Befejezés"
 msgstr "Login"
 
-#: templates/leaves/leave_list.html:33
+#: templates/leaves/leave_list.html:38
 msgid "Kivett napok"
 msgstr ""
 
-#: templates/leaves/leave_list.html:49 templates/leaves/leave_list.html:68
+#: templates/leaves/leave_list.html:54 templates/leaves/leave_list.html:73
 msgid "nap"
 msgstr ""
 
-#: templates/leaves/leave_list.html:59
+#: templates/leaves/leave_list.html:64
 msgid "Nincs rögzített szabadság ebben az évben."
 msgstr ""
 
-#: templates/leaves/leave_list.html:67
+#: templates/leaves/leave_list.html:72
 msgid "Összesen kivett munkanapok:"
 msgstr ""
 
@@ -512,7 +513,7 @@ msgid "Projekt Név"
 msgstr "Projects"
 
 #: templates/projects/project_list.html:36 templates/reports/index.html:36
-#: templates/reports/index.html:106 timesheet/views.py:409
+#: templates/reports/index.html:109 timesheet/views.py:429
 msgid "Partner"
 msgstr "Client"
 
@@ -556,103 +557,109 @@ msgstr "Select client"
 msgid "Minden Partner"
 msgstr "All Clients"
 
-#: templates/reports/index.html:50 templates/reports/index.html:107
-#: timesheet/views.py:409
+#: templates/reports/index.html:50 templates/reports/index.html:110
+#: timesheet/views.py:429
 msgid "Projekt"
 msgstr "Project"
 
-#: templates/reports/index.html:51
+#: templates/reports/index.html:52
 msgid "Válassz projektet"
 msgstr "Select project"
 
-#: templates/reports/index.html:52
+#: templates/reports/index.html:53
 msgid "Minden Projekt"
 msgstr "All Projects"
 
-#: templates/reports/index.html:64
-msgid "Szűrés"
-msgstr "Filter"
+#: templates/reports/index.html:62
+msgid "Nincs találat"
+msgstr "No results found"
 
-#: templates/reports/index.html:76
+#: templates/reports/index.html:67
+msgid "Alkalmaz"
+msgstr "Apply"
+
+#: templates/reports/index.html:79
 msgid "Előző"
 msgstr "Previous"
 
-#: templates/reports/index.html:85
+#: templates/reports/index.html:88
 msgid "Következő"
 msgstr "Next"
 
-#: templates/reports/index.html:92
+#: templates/reports/index.html:95
 msgid "Összesített munkaóra"
 msgstr "Total logged hours"
 
-#: templates/reports/index.html:94
+#: templates/reports/index.html:97
 msgid "munkanap"
 msgstr "workdays"
 
-#: templates/reports/index.html:96
+#: templates/reports/index.html:99
 msgid "óra"
 msgstr "hours"
 
-#: templates/reports/index.html:104 timesheet/views.py:409
+#: templates/reports/index.html:107 timesheet/views.py:429
 msgid "Dolgozó"
 msgstr "Employee"
 
-#: templates/reports/index.html:105 timesheet/views.py:409
+#: templates/reports/index.html:108 timesheet/views.py:429
 msgid "Dátum"
 msgstr "Date"
 
-#: templates/reports/index.html:108 timesheet/views.py:409
+#: templates/reports/index.html:111 timesheet/views.py:429
 msgid "Óra"
 msgstr "Hours"
 
-#: templates/reports/index.html:129
+#: templates/reports/index.html:132
 msgid "Nincs adat"
 msgstr "No data"
 
-#: templates/reports/index.html:143
+#: templates/reports/index.html:146
 msgid "Szabadságok mutatása"
 msgstr "Show leaves"
 
-#: templates/reports/index.html:147
+#: templates/reports/index.html:150
 #, fuzzy
 #| msgid "Exportálás (Hamarosan)"
 msgid "Exportálás"
 msgstr "Export"
 
-#: templates/reports/index.html:186
+#: templates/reports/index.html:189
 msgid "Táblázat Exportálása"
 msgstr "Export Table"
 
-#: templates/reports/index.html:191
+#: templates/reports/index.html:194
 msgid "Fájlformátum"
 msgstr "File Format"
 
-#: templates/reports/index.html:193
+#: templates/reports/index.html:196
 msgid "Egyszerű szöveges állomány, vesszővel tagolva"
 msgstr "Simple text file, separated by commas"
 
-#: templates/reports/index.html:194
+#: templates/reports/index.html:197
 msgid "Modern Excel formátum"
 msgstr "Modern Excel format"
 
-#: templates/reports/index.html:195
+#: templates/reports/index.html:198
 msgid "Régebbi Excel formátum (97-2003)"
 msgstr "Older Excel format (97-2003)"
 
-#: templates/reports/index.html:205
+#: templates/reports/index.html:208
 msgid "Munkalapokra bontás dolgozónként"
 msgstr "Split to worksheets by employee"
 
-#: templates/reports/index.html:206
+#: templates/reports/index.html:209
 msgid ""
 "Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel fájlban."
 msgstr ""
+"Each selected employee will be on a separate worksheet (tab) in the Excel "
+"file."
 
-#: templates/reports/index.html:215
+#: templates/reports/index.html:218
 msgid "Letöltés"
 msgstr "Download"
 
-#: templates/reports/index.html:218 templates/users/user_form.html:84
+#: templates/reports/index.html:221 templates/users/user_form.html:84
 msgid "Mégsem"
 msgstr "Cancel"
 
@@ -722,11 +729,11 @@ msgstr "Normal user"
 msgid "Nincs megjeleníthető dolgozó."
 msgstr "No users to display."
 
-#: timesheet/views.py:376
+#: timesheet/views.py:396
 msgid "Szabadság"
 msgstr "Leaves"
 
-#: timesheet/views.py:393
+#: timesheet/views.py:413
 msgid "Nincs jogosultságod ehhez a felülethez."
 msgstr ""
 
@@ -799,6 +806,9 @@ msgstr ""
 msgid "%(username)s fiókja deaktiválva lett és lekerült az aktív projektekről."
 msgstr ""
 
+#~ msgid "Szűrés"
+#~ msgstr "Filter"
+
 #~ msgid "Riportok (Fejlesztés alatt)"
 #~ msgstr "Reports (Under Development)"
 
@@ -821,6 +831,3 @@ msgstr ""
 #~ msgid ""
 #~ "Nincsenek munkaóra rögzítések a megadott feltételekkel ebben a hónapban."
 #~ msgstr "No time entries found for the selected conditions this month."
-
-msgid "Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel fájlban."
-msgstr "Each selected employee will be on a separate worksheet (tab) in the Excel file."

@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from timesheet import views as timesheet_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +28,7 @@ urlpatterns = [
     path('clients/', include('clients.urls')),
     path('projects/', include('projects.urls')),
     path('leaves/', include('leaves.urls')),
+    path('reports/', timesheet_views.reports_index, name='reports'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
     path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),

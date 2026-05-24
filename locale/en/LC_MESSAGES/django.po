@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-17 08:48+0000\n"
+"POT-Creation-Date: 2026-05-24 07:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,8 +79,9 @@ msgid "Típus"
 msgstr ""
 
 #: leaves/forms.py:13 templates/leaves/leave_list.html:34
+#: templates/reports/index.html:109
 msgid "Megjegyzés"
-msgstr ""
+msgstr "Notes"
 
 #: leaves/models.py:10
 msgid "Paid Time Off (PTO)"
@@ -151,10 +151,10 @@ msgstr "Timesheet"
 msgid "Szabadságok"
 msgstr "Leaves"
 
-#: templates/base.html:39 templates/users/user_list.html:4
-#: templates/users/user_list.html:8
+#: templates/base.html:39 templates/reports/index.html:24
+#: templates/users/user_list.html:4 templates/users/user_list.html:8
 msgid "Dolgozók"
-msgstr "Users"
+msgstr "Employees"
 
 #: templates/base.html:40 templates/clients/client_list.html:8
 msgid "Partnerek"
@@ -164,22 +164,38 @@ msgstr "Clients"
 msgid "Projektek"
 msgstr "Projects"
 
-#: templates/base.html:51
+#: templates/base.html:44 templates/reports/index.html:4
+#: templates/reports/index.html:8
+msgid "Riportok"
+msgstr "Reports"
+
+#: templates/base.html:54
 msgid "Kijelentkezés"
 msgstr "Logout"
 
-#: templates/base.html:54 templates/home.html:16
+#: templates/base.html:57 templates/home.html:18
 #: templates/registration/login.html:4 templates/registration/login.html:40
 msgid "Bejelentkezés"
 msgstr "Login"
 
-#: templates/base.html:87
+#: templates/base.html:82 templates/pages/contact.html:4
+#: templates/pages/contact.html:8
+msgid "Kapcsolat"
+msgstr "Contact"
+
+#: templates/base.html:83
+msgid "Adatvédelem"
+msgstr "Privacy"
+
+#: templates/base.html:84 templates/pages/terms.html:4
+msgid "Felhasználási feltételek"
+msgstr "Terms of Service"
+
+#: templates/base.html:92
 msgid "Nyelv"
 msgstr "Language"
 
 #: templates/clients/client_confirm_delete.html:4
-#, fuzzy
-#| msgid "Partnerek"
 msgid "Partner törlése"
 msgstr "Clients"
 
@@ -221,14 +237,10 @@ msgid "Igen"
 msgstr "Yes"
 
 #: templates/clients/client_form.html:4
-#, fuzzy
-#| msgid "szerkesztése"
 msgid "Partner szerkesztése"
 msgstr "edit"
 
 #: templates/clients/client_form.html:4
-#, fuzzy
-#| msgid "Partnerek"
 msgid "Új partner"
 msgstr "Clients"
 
@@ -241,13 +253,13 @@ msgstr "edit"
 msgid "Új partner hozzáadása"
 msgstr "Add New Client"
 
-#: templates/clients/client_form.html:68 templates/users/user_form.html:83
+#: templates/clients/client_form.html:68 templates/users/user_form.html:89
 msgid "Deaktiválás"
 msgstr "Deactivate"
 
 #: templates/clients/client_form.html:73 templates/leaves/leave_form.html:59
 #: templates/leaves/leave_form.html:181 templates/leaves/leave_form.html:206
-#: templates/projects/project_form.html:85 templates/users/user_form.html:89
+#: templates/projects/project_form.html:85 templates/users/user_form.html:95
 msgid "Mentés"
 msgstr "Save"
 
@@ -260,8 +272,6 @@ msgid "Név"
 msgstr "Name"
 
 #: templates/clients/client_list.html:36
-#, fuzzy
-#| msgid "Kezdés dátuma"
 msgid "Szerződés szám"
 msgstr "Start Date"
 
@@ -274,12 +284,12 @@ msgid "Kapcsolattartó"
 msgstr "Contact Person"
 
 #: templates/clients/client_list.html:45 templates/leaves/leave_list.html:35
-#: templates/projects/project_list.html:42 templates/users/user_list.html:38
+#: templates/projects/project_list.html:42 templates/users/user_list.html:41
 msgid "Műveletek"
 msgstr "Actions"
 
 #: templates/clients/client_list.html:78 templates/leaves/leave_list.html:53
-#: templates/projects/project_list.html:59 templates/users/user_list.html:55
+#: templates/projects/project_list.html:59 templates/users/user_list.html:73
 msgid "Szerkesztés"
 msgstr "Edit"
 
@@ -295,22 +305,26 @@ msgstr "No clients match your search."
 msgid "Irányítópult"
 msgstr "Dashboard"
 
-#: templates/home.html:8
-msgid "Üdvözlünk a yeleave rendszerben!"
-msgstr "Welcome to the YeLeave system!"
+#: templates/home.html:9
+msgid "Üdvözlünk a"
+msgstr "Welcome to the"
 
-#: templates/home.html:11
+#: templates/home.html:9
+msgid "rendszerben!"
+msgstr "system!"
+
+#: templates/home.html:13
 msgid "Be vagy jelentkezve:"
 msgstr "You are logged in:"
 
-#: templates/home.html:12
+#: templates/home.html:14
 msgid ""
 "Válaszd ki a fenti menüből, hogy a jelenléti íveket vagy a szabadságokat "
 "szeretnéd kezelni."
 msgstr ""
 "Please choose from the navigation menu above to manage timesheets or leaves."
 
-#: templates/home.html:14
+#: templates/home.html:16
 msgid "Kérjük, jelentkezz be a folytatáshoz."
 msgstr "Please sign in to continue."
 
@@ -319,8 +333,6 @@ msgid "Törlés megerősítése"
 msgstr ""
 
 #: templates/leaves/leave_confirm_delete.html:16
-#, fuzzy
-#| msgid "Szabadságok"
 msgid "Szabadság törlése"
 msgstr "Leaves"
 
@@ -329,14 +341,10 @@ msgid "Biztosan törölni szeretnéd ezt a szabadság bejegyzést?"
 msgstr ""
 
 #: templates/leaves/leave_form.html:6 templates/leaves/leave_form.html:18
-#, fuzzy
-#| msgid "Szabadságok"
 msgid "Szabadság Módosítása"
 msgstr "Leaves"
 
 #: templates/leaves/leave_form.html:8
-#, fuzzy
-#| msgid "Szabadságok"
 msgid "Új Szabadság"
 msgstr "Leaves"
 
@@ -349,8 +357,6 @@ msgid "Törlés"
 msgstr "Delete"
 
 #: templates/leaves/leave_form.html:80
-#, fuzzy
-#| msgid "Jelenléti ív"
 msgid "Ütközés a Jelenléti ívvel"
 msgstr "Timesheet"
 
@@ -397,8 +403,6 @@ msgid "Kezdés"
 msgstr ""
 
 #: templates/leaves/leave_list.html:31
-#, fuzzy
-#| msgid "Bejelentkezés"
 msgid "Befejezés"
 msgstr "Login"
 
@@ -416,6 +420,49 @@ msgstr ""
 
 #: templates/leaves/leave_list.html:67
 msgid "Összesen kivett munkanapok:"
+msgstr ""
+
+#: templates/pages/contact.html:10
+msgid "Elérhetőségek"
+msgstr "Contact Information"
+
+#: templates/pages/contact.html:19
+msgid ""
+"Ide egy űrlapot is tehetünk majd, ha szeretnél közvetlen üzenetküldési "
+"lehetőséget."
+msgstr ""
+
+#: templates/pages/privacy.html:4 templates/pages/privacy.html:8
+msgid "Adatvédelmi tájékoztató"
+msgstr "Privacy Policy"
+
+#: templates/pages/privacy.html:10
+msgid ""
+"(Jogi tartalom helye. Itt kell leírni, hogy milyen adatokat gyűjt a "
+"rendszer, mire használja, és milyen jogai vannak a felhasználóknak.)"
+msgstr ""
+
+#: templates/pages/privacy.html:11
+msgid ""
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui "
+"mauris. Vivamus hendrerit arcu sed erat molestie vehicula."
+msgstr ""
+
+#: templates/pages/terms.html:8
+msgid "Felhasználási feltételek (ÁSZF)"
+msgstr "Terms and Conditions (T&C)"
+
+#: templates/pages/terms.html:10
+msgid ""
+"(Jogi tartalom helye. Itt kell részletezni a szolgáltatás használatának "
+"szabályait.)"
+msgstr ""
+
+#: templates/pages/terms.html:11
+msgid ""
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel mattis "
+"nisi, a rhoncus lacus. Vestibulum tristique sapien ex, et malesuada nunc "
+"facilisis sed."
 msgstr ""
 
 #: templates/projects/project_confirm_delete.html:4
@@ -440,14 +487,10 @@ msgid ""
 msgstr ""
 
 #: templates/projects/project_form.html:4
-#, fuzzy
-#| msgid "szerkesztése"
 msgid "Projekt szerkesztése"
 msgstr "edit"
 
 #: templates/projects/project_form.html:4
-#, fuzzy
-#| msgid "Új projekt hozzáadása"
 msgid "Új projekt"
 msgstr "Add New Project"
 
@@ -461,30 +504,23 @@ msgid "Lezárás"
 msgstr "Close"
 
 #: templates/projects/project_list.html:8
-#, fuzzy
-#| msgid "Projektek"
 msgid "Aktív Projektek"
 msgstr "Projects"
 
 #: templates/projects/project_list.html:33
-#, fuzzy
-#| msgid "Projektek"
 msgid "Projekt Név"
 msgstr "Projects"
 
-#: templates/projects/project_list.html:36
-#, fuzzy
-#| msgid "Partnerek"
+#: templates/projects/project_list.html:36 templates/reports/index.html:36
+#: templates/reports/index.html:106
 msgid "Partner"
-msgstr "Clients"
+msgstr "Client"
 
 #: templates/projects/project_list.html:39
 msgid "Létrehozva"
 msgstr "Created"
 
 #: templates/projects/project_list.html:66
-#, fuzzy
-#| msgid "Projektek"
 msgid "Nincs aktív projekt."
 msgstr "Projects"
 
@@ -508,9 +544,79 @@ msgstr "Username or Email"
 msgid "Jelszó"
 msgstr "Password"
 
+#: templates/reports/index.html:26
+msgid "Válassz dolgozókat (CMD/CTRL gombbal többet is lehet)"
+msgstr "Select employees (CMD/CTRL to select multiple)"
+
+#: templates/reports/index.html:37
+msgid "Válassz partnert"
+msgstr "Select client"
+
+#: templates/reports/index.html:38
+msgid "Minden Partner"
+msgstr "All Clients"
+
+#: templates/reports/index.html:50 templates/reports/index.html:107
+msgid "Projekt"
+msgstr "Project"
+
+#: templates/reports/index.html:51
+msgid "Válassz projektet"
+msgstr "Select project"
+
+#: templates/reports/index.html:52
+msgid "Minden Projekt"
+msgstr "All Projects"
+
+#: templates/reports/index.html:64
+msgid "Szűrés"
+msgstr "Filter"
+
+#: templates/reports/index.html:76
+msgid "Előző"
+msgstr "Previous"
+
+#: templates/reports/index.html:85
+msgid "Következő"
+msgstr "Next"
+
+#: templates/reports/index.html:92
+msgid "Összesített munkaóra"
+msgstr "Total logged hours"
+
+#: templates/reports/index.html:94
+msgid "munkanap"
+msgstr "workdays"
+
+#: templates/reports/index.html:96
+msgid "óra"
+msgstr "hours"
+
+#: templates/reports/index.html:104
+msgid "Dolgozó"
+msgstr "Employee"
+
+#: templates/reports/index.html:105
+msgid "Dátum"
+msgstr "Date"
+
+#: templates/reports/index.html:108
+msgid "Óra"
+msgstr "Hours"
+
+#: templates/reports/index.html:129
+msgid "Nincs adat"
+msgstr "No data"
+
+#: templates/reports/index.html:143
+msgid "Szabadságok mutatása"
+msgstr "Show leaves"
+
+#: templates/reports/index.html:147
+msgid "Exportálás (Hamarosan)"
+msgstr "Export (Coming soon)"
+
 #: templates/users/user_confirm_delete.html:4
-#, fuzzy
-#| msgid "Szabadságok"
 msgid "Dolgozó törlése"
 msgstr "Leaves"
 
@@ -537,8 +643,6 @@ msgid "Dolgozó szerkesztése"
 msgstr "Edit User"
 
 #: templates/users/user_form.html:4
-#, fuzzy
-#| msgid "Dolgozók"
 msgid "Új dolgozó"
 msgstr "Users"
 
@@ -546,23 +650,15 @@ msgstr "Users"
 msgid "Új dolgozó hozzáadása"
 msgstr "Add New User"
 
-#: templates/users/user_form.html:71
+#: templates/users/user_form.html:77
 msgid "Jelszó módosításához írj be egy újat, különben hagyd üresen."
 msgstr "To change password, enter a new one, otherwise leave blank."
 
-#: templates/users/user_form.html:78
+#: templates/users/user_form.html:84
 msgid "Mégsem"
 msgstr "Cancel"
 
-#: templates/users/user_list.html:8
-#, fuzzy
-#| msgid "Felhasználónév vagy Email"
-msgid "Felhasználók"
-msgstr "Username or Email"
-
 #: templates/users/user_list.html:32
-#, fuzzy
-#| msgid "Felhasználónév vagy Email"
 msgid "Felhasználónév"
 msgstr "Username or Email"
 
@@ -570,63 +666,89 @@ msgstr "Username or Email"
 msgid "E-mail"
 msgstr "Email"
 
-#: templates/users/user_list.html:61
+#: templates/users/user_list.html:38
+msgid "Jogosultság"
+msgstr "Role"
+
+#: templates/users/user_list.html:60 users/forms.py:12
+msgid "Adminisztrátor"
+msgstr "Administrator"
+
+#: templates/users/user_list.html:64 users/models.py:7
+msgid "Lekérdező"
+msgstr "Reporter"
+
+#: templates/users/user_list.html:68 users/forms.py:10
+msgid "Normál felhasználó"
+msgstr "Normal user"
+
+#: templates/users/user_list.html:79
 msgid "Nincs megjeleníthető dolgozó."
 msgstr "No users to display."
 
-#: users/forms.py:13
+#: timesheet/views.py:331
+msgid "Szabadság"
+msgstr "Leaves"
+
+#: users/forms.py:11
+msgid "Lekérdező (Könyvelő/Asszisztens)"
+msgstr "Reporter (Accountant/Assistant)"
+
+#: users/forms.py:16
+msgid "Felhasználói jogosultság"
+msgstr "Username or Email"
+
+#: users/forms.py:25
 msgid "Password"
 msgstr ""
 
-#: users/forms.py:18
+#: users/forms.py:30
 msgid "Confirm Password"
 msgstr ""
 
-#: users/forms.py:25
+#: users/forms.py:37
 msgid "Username"
 msgstr ""
 
-#: users/forms.py:26
+#: users/forms.py:38
 msgid "Email Address"
 msgstr ""
 
-#: users/forms.py:27
+#: users/forms.py:39
 msgid "First Name"
 msgstr ""
 
-#: users/forms.py:28
+#: users/forms.py:40
 msgid "Last Name"
 msgstr ""
 
-#: users/forms.py:29
+#: users/forms.py:41
 msgid "Active"
 msgstr ""
 
-#: users/forms.py:30
-msgid "Administrator (Staff)"
-msgstr ""
-
-#: users/forms.py:51
+#: users/forms.py:70
 msgid "A jelszónak legalább 8 karakter hosszúnak kell lennie."
 msgstr ""
 
-#: users/forms.py:53
+#: users/forms.py:72
 msgid "A jelszónak tartalmaznia kell legalább egy betűt."
 msgstr ""
 
-#: users/forms.py:55
+#: users/forms.py:74
 msgid "A jelszónak tartalmaznia kell legalább egy számot."
 msgstr ""
 
-#: users/forms.py:57
+#: users/forms.py:76
 msgid "A jelszónak tartalmaznia kell legalább egy speciális karaktert."
 msgstr ""
 
-#: users/forms.py:67
-#, fuzzy
-#| msgid "Helytelen felhasználónév vagy jelszó. Kérjük, próbáld újra."
+#: users/forms.py:86
 msgid "A két jelszó nem egyezik meg! Kérlek, próbáld újra."
 msgstr "Incorrect username or password. Please try again."
+
+#: users/models.py:9
+msgid "Designates whether the user can access reports but not admin features."
+msgstr ""
 
 #: users/views.py:58
 msgid "Saját magadat nem deaktiválhatod!"
@@ -637,6 +759,16 @@ msgstr ""
 msgid "%(username)s fiókja deaktiválva lett és lekerült az aktív projektekről."
 msgstr ""
 
+#~ msgid "Riportok (Fejlesztés alatt)"
+#~ msgstr "Reports (Under Development)"
+
+#~| msgid "Felhasználónév vagy Email"
+#~ msgid "Felhasználók"
+#~ msgstr "Username or Email"
+
+#~ msgid "Üdvözlünk a yeleave rendszerben!"
+#~ msgstr "Welcome to the YeLeave system!"
+
 #~ msgid "Fizetett szabadság (PTO)"
 #~ msgstr "Paid Time Off (PTO)"
 
@@ -646,9 +778,5 @@ msgstr ""
 #~ msgid "Fizetés nélküli szabadság"
 #~ msgstr "Unpaid Leave"
 
-
-msgid "Üdvözlünk a"
-msgstr "Welcome to the"
-
-msgid "rendszerben!"
-msgstr "system!"
+msgid "Nincsenek munkaóra rögzítések a megadott feltételekkel ebben a hónapban."
+msgstr "No time entries found for the selected conditions this month."

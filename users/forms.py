@@ -6,6 +6,18 @@ from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
 class UserForm(forms.ModelForm):
+    ROLE_CHOICES = (
+        ('user', _('Normál felhasználó')),
+        ('reporter', _('Lekérdező (Könyvelő/Asszisztens)')),
+        ('admin', _('Adminisztrátor')),
+    )
+    role = forms.ChoiceField(
+        choices=ROLE_CHOICES,
+        label=_('Felhasználói jogosultság'),
+        initial='user',
+        required=True
+    )
+
     # Optional explicitly typed password field for new users
     password = forms.CharField(
         widget=forms.PasswordInput(), 
@@ -20,14 +32,13 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff']
+        fields = ['username', 'email', 'first_name', 'last_name', 'is_active']
         labels = {
             'username': _('Username'),
             'email': _('Email Address'),
             'first_name': _('First Name'),
             'last_name': _('Last Name'),
             'is_active': _('Active'),
-            'is_staff': _('Administrator (Staff)')
         }
         widgets = {
             'email': forms.EmailInput(attrs={'type': 'email'}),
@@ -39,8 +50,16 @@ class UserForm(forms.ModelForm):
         self.fields['last_name'].required = True
         self.fields['email'].required = True
         
-        # Ha új felhasználót hozunk létre, a jelszó mezők kötelezők
-        if not self.instance.pk:
+        # Ha a felhasználó létezik, beállítjuk a role mező kezdőértékét
+        if self.instance.pk:
+            if self.instance.is_superuser or self.instance.is_staff:
+                self.fields['role'].initial = 'admin'
+            elif getattr(self.instance, 'is_reporter', False):
+                self.fields['role'].initial = 'reporter'
+            else:
+                self.fields['role'].initial = 'user'
+        else:
+            # Ha új felhasználót hozunk létre, a jelszó mezők kötelezők
             self.fields['password'].required = True
             self.fields['password_confirm'].required = True
 
@@ -74,6 +93,20 @@ class UserForm(forms.ModelForm):
         password = self.cleaned_data.get('password')
         if password:
             user.set_password(password)
+        
+        role = self.cleaned_data.get('role')
+        if role == 'admin':
+            user.is_staff = True
+            user.is_reporter = False
+        elif role == 'reporter':
+            user.is_staff = False
+            user.is_superuser = False
+            user.is_reporter = True
+        else:
+            user.is_staff = False
+            user.is_superuser = False
+            user.is_reporter = False
+            
         if commit:
             user.save()
         return user

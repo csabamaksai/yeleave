@@ -40,6 +40,9 @@
                                 <a href="{% url 'clients:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Partnerek" %}</a>
                                 <a href="{% url 'projects:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Projektek" %}</a>
                             {% endif %}
+                            {% if user.is_staff or user.is_reporter %}
+                                <a href="{% url 'reports' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Riportok" %}</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>

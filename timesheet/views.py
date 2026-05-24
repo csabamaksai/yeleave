@@ -210,3 +210,148 @@ def save_time_entry(request):
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
 
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import get_object_or_404
+from clients.models import Client
+from leaves.models import Leave
+from holidays.models import Holiday
+import calendar
+from django.utils.translation import gettext as _
+
+User = get_user_model()
+
+def is_reporter_or_staff(user):
+    return user.is_authenticated and (user.is_staff or getattr(user, 'is_reporter', False))
+
+@user_passes_test(is_reporter_or_staff)
+def reports_index(request):
+    users = User.objects.filter(is_active=True).order_by('last_name', 'first_name')
+    
+    user_ids = request.GET.getlist('user_id')
+    if user_ids:
+        valid_user_ids = [int(u) for u in user_ids if u.isdigit()]
+        selected_users = users.filter(id__in=valid_user_ids)
+    else:
+        selected_users = users.none()
+        valid_user_ids = []
+        
+    user_query_params = "".join([f"&user_id={uid}" for uid in valid_user_ids])
+
+    try:
+        year = int(request.GET.get('year', date.today().year))
+        month = int(request.GET.get('month', date.today().month))
+    except ValueError:
+        year, month = date.today().year, date.today().month
+        
+    prev_month_date, next_month_date = get_prev_and_next_month(year, month)
+    
+    client_id = request.GET.get('client_id')
+    project_id = request.GET.get('project_id')
+    
+    clients = Client.objects.filter(is_active=True)
+    projects = Project.objects.filter(is_active=True)
+    if client_id:
+        projects = projects.filter(client_id=client_id)
+    
+    entries = []
+    total_hours = 0.0
+    active_project_ids = []
+    active_client_ids = []
+    
+    if selected_users.exists():
+        active_project_ids = list(TimeEntry.objects.filter(user__in=selected_users).values_list('project_id', flat=True).distinct())
+        active_client_ids = list(Project.objects.filter(id__in=active_project_ids).values_list('client_id', flat=True).distinct())
+
+        qs = TimeEntry.objects.filter(
+            user__in=selected_users,
+            date__year=year,
+            date__month=month
+        ).select_related('project', 'project__client', 'user')
+        
+        if client_id:
+            qs = qs.filter(project__client_id=client_id)
+        if project_id:
+            qs = qs.filter(project_id=project_id)
+            
+        total_hours = sum(float(e.hours) for e in qs)
+        
+        # Build mixed list of time entries
+        entries = []
+        for e in qs:
+            entries.append({
+                'is_leave': False,
+                'user_name': f"{e.user.last_name} {e.user.first_name}",
+                'date': e.date,
+                'client_name': e.project.client.name,
+                'project_name': e.project.name,
+                'hours': e.hours,
+                'description': e.description,
+            })
+            
+        # Get leaves
+        first_weekday, num_days = calendar.monthrange(year, month)
+        start_of_month = date(year, month, 1)
+        end_of_month = date(year, month, num_days)
+        
+        leaves = Leave.objects.filter(
+            user__in=selected_users,
+            start_date__lte=end_of_month,
+            end_date__gte=start_of_month
+        ).select_related('user')
+        
+        holidays = Holiday.objects.filter(
+            date__year=year,
+            date__month=month
+        )
+        holiday_dict = {h.date: h for h in holidays}
+        
+        for l in leaves:
+            curr = l.start_date
+            while curr <= l.end_date:
+                if curr >= start_of_month and curr <= end_of_month:
+                    is_calendar_weekend = curr.weekday() >= 5
+                    is_weekend_behavior = is_calendar_weekend
+                    if curr in holiday_dict:
+                        holiday_obj = holiday_dict[curr]
+                        if holiday_obj.is_working_day:
+                            is_weekend_behavior = False
+                        else:
+                            is_weekend_behavior = True
+                            
+                    if not is_weekend_behavior:
+                        entries.append({
+                            'is_leave': True,
+                            'user_name': f"{l.user.last_name} {l.user.first_name}",
+                            'date': curr,
+                            'client_name': '-',
+                            'project_name': str(l.get_leave_type_display()),
+                            'hours': 0,
+                            'description': l.notes if l.notes else _("Szabadság"),
+                        })
+                curr += timedelta(days=1)
+                
+        # Sort combined entries by date descending
+        entries.sort(key=lambda x: x['date'], reverse=True)
+
+    context = {
+        'users': users,
+        'valid_user_ids': valid_user_ids,
+        'user_query_params': user_query_params,
+        'entries': entries,
+        'total_hours': total_hours,
+        'total_days': total_hours / 8 if total_hours else 0,
+        'year': year,
+        'month': month,
+        'prev_month': prev_month_date,
+        'next_month': next_month_date,
+        'clients': clients,
+        'projects': projects,
+        'selected_client_id': client_id,
+        'selected_project_id': project_id,
+        'current_date': date(year, month, 1),
+        'active_project_ids': active_project_ids,
+        'active_client_ids': active_client_ids,
+    }
+    return render(request, 'reports/index.html', context)

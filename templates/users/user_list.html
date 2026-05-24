@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="mb-6 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-gray-900">{% trans "Dolgozók" %} ({% trans "Felhasználók" %})</h1>
+    <h1 class="text-xl font-bold text-gray-900">{% trans "Dolgozók" %}</h1>
     <a href="{% url 'users:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
         {% trans "Új dolgozó hozzáadása" %}
     </a>
@@ -34,6 +34,9 @@
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {% trans "E-mail" %}
                 </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {% trans "Jogosultság" %}
+                </th>
                 <th scope="col" class="relative px-6 py-3">
                     <span class="sr-only">{% trans "Műveletek" %}</span>
                 </th>
@@ -51,13 +54,28 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {{ u.email }}
                 </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {% if u.is_superuser or u.is_staff %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            {% trans "Adminisztrátor" %}
+                        </span>
+                    {% elif u.is_reporter %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {% trans "Lekérdező" %}
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            {% trans "Normál felhasználó" %}
+                        </span>
+                    {% endif %}
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a href="{% url 'users:update' u.pk %}" class="text-brand hover:text-blue-900">{% trans "Szerkesztés" %}</a>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
                     {% trans "Nincs megjeleníthető dolgozó." %}
                 </td>
             </tr>

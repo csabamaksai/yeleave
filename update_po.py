@@ -9,7 +9,16 @@ translations = {
     'Partner szerkesztése': 'Edit Client',
     'Új partner': 'New Client',
     'Projekt szerkesztése': 'Edit Project',
-    'Új projekt': 'New Project'
+    'Új projekt': 'New Project',
+    'Lekérdező': 'Reporter',
+    'Normál felhasználó': 'User',
+    'Lekérdező (Könyvelő/Asszisztens)': 'Reporter (Accountant/Assistant)',
+    'Adminisztrátor': 'Administrator',
+    'Jogosultság': 'Role',
+    'Felhasználói jogosultság': 'User Role',
+    'Riportok': 'Reports',
+    'Riportok (Fejlesztés alatt)': 'Reports (Under Development)',
+    'Ez az oldal a jövőben különféle lekérdezési és riportálási lehetőségeket fog biztosítani a könyvelők és asszisztensek számára (például jelenléti ívek összesítése, szabadság statisztikák).': 'This page will provide various querying and reporting options for accountants and assistants in the future (e.g., timesheet summaries, leave statistics).'
 }
 
 for i, line in enumerate(lines):
@@ -21,4 +30,3 @@ for i, line in enumerate(lines):
 
 with open(po_file, 'w', encoding='utf-8') as f:
     f.writelines(lines)
-

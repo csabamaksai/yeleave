@@ -28,6 +28,7 @@ urlpatterns = [
     path('clients/', include('clients.urls')),
     path('projects/', include('projects.urls')),
     path('leaves/', include('leaves.urls')),
+    path('reports/export/', timesheet_views.reports_export, name='reports_export'),
     path('reports/', timesheet_views.reports_index, name='reports'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),

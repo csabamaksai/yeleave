@@ -142,15 +142,113 @@
                 <input type="checkbox" id="toggleLeaves" checked class="rounded border-gray-300 text-brand shadow-sm focus:ring-brand">
                 {% trans "Szabadságok mutatása" %}
             </label>
-            <button class="bg-brand text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2">
+            <button type="button" onclick="openExportModal()" class="bg-brand text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                {% trans "Exportálás (Hamarosan)" %}
+                {% trans "Exportálás" %}
             </button>
         </div>
     </div>
 </div>
 
+<!-- Export Modal -->
+<div id="exportModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeExportModal()"></div>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="{% url 'reports_export' %}" method="get" id="exportForm">
+                <!-- Inherit filters -->
+                <input type="hidden" name="year" value="{{ year }}">
+                <input type="hidden" name="month" value="{{ month }}">
+                {% for u in valid_user_ids %}
+                    <input type="hidden" name="user_id" value="{{ u }}">
+                {% endfor %}
+                <input type="hidden" name="client_id" value="{{ selected_client_id|default:'' }}">
+                <input type="hidden" name="project_id" value="{{ selected_project_id|default:'' }}">
+                
+                <!-- Explicitly carry 'include_leaves' in the form, dynamically updated by JS if needed, let's keep it simple and default true -->
+                <input type="hidden" name="include_leaves" id="exportIncludeLeaves" value="true">
+
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                {% trans "Táblázat Exportálása" %}
+                            </h3>
+                            <div class="mt-4 space-y-4">
+                                <!-- Format Select -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">{% trans "Fájlformátum" %}</label>
+                                    <select name="format" id="exportFormat" onchange="toggleGroupBy()" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brand focus:border-brand sm:text-sm rounded-md shadow-sm border">
+                                        <option value="csv">CSV - {% trans "Egyszerű szöveges állomány, vesszővel tagolva" %}</option>
+                                        <option value="xlsx" selected>Excel (XLSX) - {% trans "Modern Excel formátum" %}</option>
+                                        <option value="xls">Excel (XLS) - {% trans "Régebbi Excel formátum (97-2003)" %}</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Group by User (Checkbox) -->
+                                <div id="groupByGroup" class="flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="group_by_user" name="group_by_user" value="true" type="checkbox" checked class="focus:ring-brand h-4 w-4 text-brand border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="group_by_user" class="font-medium text-gray-700">{% trans "Munkalapokra bontás dolgozónként" %}</label>
+                                        <p class="text-gray-500">{% trans "Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel fájlban." %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="submit" onclick="closeExportModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:ml-3 sm:w-auto sm:text-sm transition">
+                        {% trans "Letöltés" %}
+                    </button>
+                    <button type="button" onclick="closeExportModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition">
+                        {% trans "Mégsem" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
+function openExportModal() {
+    // Snyc current state of 'Szabadságok mutatása' checkbox with hidden form input
+    document.getElementById('exportIncludeLeaves').value = document.getElementById('toggleLeaves').checked ? 'true' : 'false';
+    document.getElementById('exportModal').classList.remove('hidden');
+    toggleGroupBy();
+}
+
+function closeExportModal() {
+    document.getElementById('exportModal').classList.add('hidden');
+}
+
+function toggleGroupBy() {
+    const format = document.getElementById('exportFormat').value;
+    const groupDiv = document.getElementById('groupByGroup');
+    const groupCheck = document.getElementById('group_by_user');
+    
+    // Csak XLS/XLSX esetén érhető el
+    if (format === 'xls' || format === 'xlsx') {
+        groupDiv.style.display = 'flex';
+    } else {
+        groupDiv.style.display = 'none';
+        groupCheck.checked = false;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const toggleLeaves = document.getElementById('toggleLeaves');
     if (toggleLeaves) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 07:16+0000\n"
+"POT-Creation-Date: 2026-05-24 07:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgid "Típus"
 msgstr ""
 
 #: leaves/forms.py:13 templates/leaves/leave_list.html:34
-#: templates/reports/index.html:109
+#: templates/reports/index.html:109 timesheet/views.py:409
 msgid "Megjegyzés"
 msgstr "Notes"
 
@@ -512,7 +512,7 @@ msgid "Projekt Név"
 msgstr "Projects"
 
 #: templates/projects/project_list.html:36 templates/reports/index.html:36
-#: templates/reports/index.html:106
+#: templates/reports/index.html:106 timesheet/views.py:409
 msgid "Partner"
 msgstr "Client"
 
@@ -557,6 +557,7 @@ msgid "Minden Partner"
 msgstr "All Clients"
 
 #: templates/reports/index.html:50 templates/reports/index.html:107
+#: timesheet/views.py:409
 msgid "Projekt"
 msgstr "Project"
 
@@ -592,15 +593,15 @@ msgstr "workdays"
 msgid "óra"
 msgstr "hours"
 
-#: templates/reports/index.html:104
+#: templates/reports/index.html:104 timesheet/views.py:409
 msgid "Dolgozó"
 msgstr "Employee"
 
-#: templates/reports/index.html:105
+#: templates/reports/index.html:105 timesheet/views.py:409
 msgid "Dátum"
 msgstr "Date"
 
-#: templates/reports/index.html:108
+#: templates/reports/index.html:108 timesheet/views.py:409
 msgid "Óra"
 msgstr "Hours"
 
@@ -613,8 +614,47 @@ msgid "Szabadságok mutatása"
 msgstr "Show leaves"
 
 #: templates/reports/index.html:147
-msgid "Exportálás (Hamarosan)"
-msgstr "Export (Coming soon)"
+#, fuzzy
+#| msgid "Exportálás (Hamarosan)"
+msgid "Exportálás"
+msgstr "Export"
+
+#: templates/reports/index.html:186
+msgid "Táblázat Exportálása"
+msgstr "Export Table"
+
+#: templates/reports/index.html:191
+msgid "Fájlformátum"
+msgstr "File Format"
+
+#: templates/reports/index.html:193
+msgid "Egyszerű szöveges állomány, vesszővel tagolva"
+msgstr "Simple text file, separated by commas"
+
+#: templates/reports/index.html:194
+msgid "Modern Excel formátum"
+msgstr "Modern Excel format"
+
+#: templates/reports/index.html:195
+msgid "Régebbi Excel formátum (97-2003)"
+msgstr "Older Excel format (97-2003)"
+
+#: templates/reports/index.html:205
+msgid "Munkalapokra bontás dolgozónként"
+msgstr "Split to worksheets by employee"
+
+#: templates/reports/index.html:206
+msgid ""
+"Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel fájlban."
+msgstr ""
+
+#: templates/reports/index.html:215
+msgid "Letöltés"
+msgstr "Download"
+
+#: templates/reports/index.html:218 templates/users/user_form.html:84
+msgid "Mégsem"
+msgstr "Cancel"
 
 #: templates/users/user_confirm_delete.html:4
 msgid "Dolgozó törlése"
@@ -654,10 +694,6 @@ msgstr "Add New User"
 msgid "Jelszó módosításához írj be egy újat, különben hagyd üresen."
 msgstr "To change password, enter a new one, otherwise leave blank."
 
-#: templates/users/user_form.html:84
-msgid "Mégsem"
-msgstr "Cancel"
-
 #: templates/users/user_list.html:32
 msgid "Felhasználónév"
 msgstr "Username or Email"
@@ -686,9 +722,13 @@ msgstr "Normal user"
 msgid "Nincs megjeleníthető dolgozó."
 msgstr "No users to display."
 
-#: timesheet/views.py:331
+#: timesheet/views.py:376
 msgid "Szabadság"
 msgstr "Leaves"
+
+#: timesheet/views.py:393
+msgid "Nincs jogosultságod ehhez a felülethez."
+msgstr ""
 
 #: users/forms.py:11
 msgid "Lekérdező (Könyvelő/Asszisztens)"
@@ -778,5 +818,9 @@ msgstr ""
 #~ msgid "Fizetés nélküli szabadság"
 #~ msgstr "Unpaid Leave"
 
-msgid "Nincsenek munkaóra rögzítések a megadott feltételekkel ebben a hónapban."
-msgstr "No time entries found for the selected conditions this month."
+#~ msgid ""
+#~ "Nincsenek munkaóra rögzítések a megadott feltételekkel ebben a hónapban."
+#~ msgstr "No time entries found for the selected conditions this month."
+
+msgid "Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel fájlban."
+msgstr "Each selected employee will be on a separate worksheet (tab) in the Excel file."

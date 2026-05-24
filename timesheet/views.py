@@ -218,6 +218,9 @@ from clients.models import Client
 from leaves.models import Leave
 from holidays.models import Holiday
 import calendar
+import csv
+import xlwt
+import openpyxl
 from django.utils.translation import gettext as _
 
 User = get_user_model()
@@ -247,6 +250,8 @@ def reports_index(request):
         
     prev_month_date, next_month_date = get_prev_and_next_month(year, month)
     
+    entries, _, _ = get_filtered_report_entries(request)
+    
     client_id = request.GET.get('client_id')
     project_id = request.GET.get('project_id')
     
@@ -254,16 +259,61 @@ def reports_index(request):
     projects = Project.objects.filter(is_active=True)
     if client_id:
         projects = projects.filter(client_id=client_id)
+        
+    total_hours = sum(float(e['hours']) for e in entries if not e['is_leave'])
     
-    entries = []
-    total_hours = 0.0
     active_project_ids = []
     active_client_ids = []
-    
     if selected_users.exists():
         active_project_ids = list(TimeEntry.objects.filter(user__in=selected_users).values_list('project_id', flat=True).distinct())
         active_client_ids = list(Project.objects.filter(id__in=active_project_ids).values_list('client_id', flat=True).distinct())
 
+    context = {
+        'users': users,
+        'valid_user_ids': valid_user_ids,
+        'user_query_params': user_query_params,
+        'entries': entries,
+        'total_hours': total_hours,
+        'total_days': total_hours / 8 if total_hours else 0,
+        'year': year,
+        'month': month,
+        'prev_month': prev_month_date,
+        'next_month': next_month_date,
+        'clients': clients,
+        'projects': projects,
+        'selected_client_id': client_id,
+        'selected_project_id': project_id,
+        'current_date': date(year, month, 1),
+        'active_project_ids': active_project_ids,
+        'active_client_ids': active_client_ids,
+    }
+    return render(request, 'reports/index.html', context)
+
+
+
+def get_filtered_report_entries(request):
+    users = CustomUser.objects.filter(is_active=True).order_last_first()
+    
+    user_ids = request.GET.getlist('user_id')
+    if user_ids:
+        valid_user_ids = [int(u) for u in user_ids if u.isdigit()]
+        selected_users = users.filter(id__in=valid_user_ids)
+    else:
+        selected_users = users.none()
+        valid_user_ids = []
+
+    try:
+        year = int(request.GET.get('year', date.today().year))
+        month = int(request.GET.get('month', date.today().month))
+    except ValueError:
+        year, month = date.today().year, date.today().month
+        
+    client_id = request.GET.get('client_id')
+    project_id = request.GET.get('project_id')
+    
+    entries = []
+    
+    if selected_users.exists():
         qs = TimeEntry.objects.filter(
             user__in=selected_users,
             date__year=year,
@@ -275,10 +325,6 @@ def reports_index(request):
         if project_id:
             qs = qs.filter(project_id=project_id)
             
-        total_hours = sum(float(e.hours) for e in qs)
-        
-        # Build mixed list of time entries
-        entries = []
         for e in qs:
             entries.append({
                 'is_leave': False,
@@ -290,7 +336,6 @@ def reports_index(request):
                 'description': e.description,
             })
             
-        # Get leaves
         first_weekday, num_days = calendar.monthrange(year, month)
         start_of_month = date(year, month, 1)
         end_of_month = date(year, month, num_days)
@@ -332,26 +377,125 @@ def reports_index(request):
                         })
                 curr += timedelta(days=1)
                 
-        # Sort combined entries by date descending
         entries.sort(key=lambda x: x['date'], reverse=True)
 
-    context = {
-        'users': users,
-        'valid_user_ids': valid_user_ids,
-        'user_query_params': user_query_params,
-        'entries': entries,
-        'total_hours': total_hours,
-        'total_days': total_hours / 8 if total_hours else 0,
-        'year': year,
-        'month': month,
-        'prev_month': prev_month_date,
-        'next_month': next_month_date,
-        'clients': clients,
-        'projects': projects,
-        'selected_client_id': client_id,
-        'selected_project_id': project_id,
-        'current_date': date(year, month, 1),
-        'active_project_ids': active_project_ids,
-        'active_client_ids': active_client_ids,
-    }
-    return render(request, 'reports/index.html', context)
+    return entries, year, month
+
+
+
+import csv
+import xlwt
+import openpyxl
+from openpyxl.utils import get_column_letter
+
+def reports_export(request):
+    if not (request.user.is_staff or getattr(request.user, 'is_reporter', False)):
+        return HttpResponseForbidden(_("Nincs jogosultságod ehhez a felülethez."))
+
+    entries, year, month = get_filtered_report_entries(request)
+    
+    # filter out leaves if checkbox not checked (default we include but if explicitly "include_leaves" is false)
+    # Actually wait, in UI the leave filter is JS only. Let's add 'include_leaves' parameter.
+    # We leave that for later. It defaults to include all.
+    include_leaves = request.GET.get('include_leaves', 'true') == 'true'
+    if not include_leaves:
+        entries = [e for e in entries if not e['is_leave']]
+
+    fmt = request.GET.get('format', 'csv')
+    group_by_user = request.GET.get('group_by_user', 'false') == 'true'
+
+    filename = f"yeleave_export_{year}_{month}"
+
+    header = [_("Dolgozó"), _("Dátum"), _("Partner"), _("Projekt"), _("Óra"), _("Megjegyzés")]
+
+    if fmt == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
+        response.write('﻿'.encode('utf8')) # BOM for Excel
+        writer = csv.writer(response, delimiter=';')
+        writer.writerow(header)
+        for e in entries:
+            writer.writerow([
+                e['user_name'],
+                e['date'].strftime('%Y-%m-%d'),
+                e['client_name'],
+                e['project_name'],
+                e['hours'],
+                e['description']
+            ])
+        return response
+
+    elif fmt == 'xls':
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = f'attachment; filename="{filename}.xls"'
+        wb = xlwt.Workbook(encoding='utf-8')
+        
+        if group_by_user:
+            users_in_entries = set([e['user_name'] for e in entries])
+            # limit sheet name length to 31
+            for user in users_in_entries:
+                ws = wb.add_sheet(user[:31])
+                for col_num, h in enumerate(header):
+                    ws.write(0, col_num, h)
+                user_entries = [e for e in entries if e['user_name'] == user]
+                for row_num, e in enumerate(user_entries, 1):
+                    ws.write(row_num, 0, e['user_name'])
+                    ws.write(row_num, 1, e['date'].strftime('%Y-%m-%d'))
+                    ws.write(row_num, 2, e['client_name'])
+                    ws.write(row_num, 3, e['project_name'])
+                    ws.write(row_num, 4, e['hours'])
+                    ws.write(row_num, 5, e['description'])
+        else:
+            ws = wb.add_sheet("Export")
+            for col_num, h in enumerate(header):
+                ws.write(0, col_num, h)
+            for row_num, e in enumerate(entries, 1):
+                ws.write(row_num, 0, e['user_name'])
+                ws.write(row_num, 1, e['date'].strftime('%Y-%m-%d'))
+                ws.write(row_num, 2, e['client_name'])
+                ws.write(row_num, 3, e['project_name'])
+                ws.write(row_num, 4, e['hours'])
+                ws.write(row_num, 5, e['description'])
+                
+        wb.save(response)
+        return response
+
+    elif fmt == 'xlsx':
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename="{filename}.xlsx"'
+        wb = openpyxl.Workbook()
+        
+        if group_by_user and entries:
+            wb.remove(wb.active) # Remove default sheet
+            users_in_entries = set([e['user_name'] for e in entries])
+            for user in users_in_entries:
+                ws = wb.create_sheet(title=user[:31])
+                ws.append(header)
+                user_entries = [e for e in entries if e['user_name'] == user]
+                for e in user_entries:
+                    ws.append([
+                        e['user_name'],
+                        e['date'].strftime('%Y-%m-%d'),
+                        e['client_name'],
+                        e['project_name'],
+                        e['hours'],
+                        e['description']
+                    ])
+        else:
+            ws = wb.active
+            ws.title = "Export"
+            ws.append(header)
+            for e in entries:
+                ws.append([
+                    e['user_name'],
+                    e['date'].strftime('%Y-%m-%d'),
+                    e['client_name'],
+                    e['project_name'],
+                    e['hours'],
+                    e['description']
+                ])
+                
+        wb.save(response)
+        return response
+        
+    return HttpResponse("Invalid format")

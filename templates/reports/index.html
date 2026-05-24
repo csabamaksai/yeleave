@@ -25,8 +25,8 @@
                     <!-- multiselect with standard select -->
                     <select name="user_id" id="user_id" multiple size="1" title="{% trans 'Válassz dolgozókat (CMD/CTRL gombbal többet is lehet)' %}" class="w-full sm:w-64 text-sm border border-gray-300 rounded-md focus:ring-brand focus:border-brand px-3 py-1.5 bg-white shadow-sm overflow-y-auto max-h-[80px]">
                         {% for u in users %}
-                            <option value="{{ u.id }}" {% if u.id in valid_user_ids %}selected{% endif %} class="py-1 px-1 {% if u.id not in assigned_user_ids %}text-gray-400 opacity-50{% else %}text-gray-900 font-bold{% endif %}" {% if u.id not in assigned_user_ids %}disabled{% endif %}>
-                                {{ u.last_name }} {{ u.first_name }} {% if u.id not in assigned_user_ids %}(Nem beosztott){% endif %}
+                            <option value="{{ u.id }}" data-client-ids="{{ u.data_client_ids }}" data-project-ids="{{ u.data_project_ids }}" {% if u.id in valid_user_ids %}selected{% endif %} class="py-1 px-1 text-gray-900 font-medium">
+                                {{ u.last_name }} {{ u.first_name }}
                             </option>
                         {% endfor %}
                     </select>
@@ -60,7 +60,7 @@
                     </select>
                 </div>
                 
-                <button type="submit" class="bg-gray-100 text-gray-700 hover:bg-gray-200 px-6 py-2 border border-gray-300 rounded-md text-sm font-medium transition shadow-sm h-full self-stretch">
+                <button type="submit" class="bg-brand text-white hover:bg-blue-700 px-6 py-2 border border-gray-300 rounded-md text-sm font-medium transition shadow-sm h-full self-stretch">
                     {% trans "Alkalmaz" %}
                 </button>
             </form>
@@ -228,21 +228,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const clientSelect = document.getElementById('client_id');
     const projectSelect = document.getElementById('project_id');
     const projectOptions = Array.from(projectSelect.options);
+    
+    const userSelect = document.getElementById('user_id');
+    const userOptions = Array.from(userSelect.options);
 
-    function filterProjects() {
+    function filterProjectsAndUsers() {
         const selectedClientId = clientSelect.value;
-        let selectedProjectExistsInFiltered = false;
         const currentProjectVal = projectSelect.value;
         
+        let selectedProjectExistsInFiltered = false;
+        
+        // Filter Projects
         projectSelect.innerHTML = '';
-        
-        // Always add the "Minden Projekt" option
         projectSelect.appendChild(projectOptions[0]);
-        
         for (let i = 1; i < projectOptions.length; i++) {
             const opt = projectOptions[i];
             const optClientId = opt.getAttribute('data-client-id');
-            
             if (!selectedClientId || optClientId === selectedClientId) {
                 projectSelect.appendChild(opt.cloneNode(true));
                 if (opt.value === currentProjectVal) {
@@ -257,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
             projectSelect.value = currentProjectVal;
         }
         
-        // Disable project select if it only contains the default "Minden Projekt" option
+        // Project UI Disable Check
         if (projectSelect.options.length <= 1) {
             projectSelect.disabled = true;
             projectSelect.classList.add('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
@@ -265,24 +266,49 @@ document.addEventListener('DOMContentLoaded', function() {
             projectSelect.disabled = false;
             projectSelect.classList.remove('bg-gray-100', 'cursor-not-allowed', 'opacity-75');
         }
+        
+        // Filter Users
+        const activeProjectVal = projectSelect.value;
+        userSelect.innerHTML = '';
+        
+        for (let i = 0; i < userOptions.length; i++) {
+            const uOpt = userOptions[i];
+            const uClientIds = uOpt.getAttribute('data-client-ids') ? uOpt.getAttribute('data-client-ids').split(',') : [];
+            const uProjectIds = uOpt.getAttribute('data-project-ids') ? uOpt.getAttribute('data-project-ids').split(',') : [];
+            
+            let showUser = true;
+            
+            if (activeProjectVal) {
+                // If a specific project is selected, user must be assigned to it
+                if (!uProjectIds.includes(activeProjectVal)) {
+                    showUser = false;
+                }
+            } else if (selectedClientId) {
+                // If only a client is selected, user must be assigned to at least one of its projects
+                if (!uClientIds.includes(selectedClientId)) {
+                    showUser = false;
+                }
+            }
+            // else show all
+            
+            if (showUser) {
+                userSelect.appendChild(uOpt.cloneNode(true));
+            }
+        }
     }
 
-    // Run on init in case it was pre-selected initially
-    // wait, we don't want to reset user selection on init. We just hide options.
-    // However, cloning clones the selected state if we don't overwrite it, but we set projectSelect.value afterwards.
-    
-    // We modify it slightly for init
-    const initialClientId = clientSelect.value;
     const initialProjectVal = projectSelect.value;
-    filterProjects();
+    filterProjectsAndUsers();
     projectSelect.value = initialProjectVal;
 
     clientSelect.addEventListener('change', function() {
-        filterProjects();
-        // If client changes, reset project to "Minden Projekt"
         projectSelect.value = '';
+        filterProjectsAndUsers();
     });
     
+    projectSelect.addEventListener('change', function() {
+        filterProjectsAndUsers();
+    });
 });
 </script>
 

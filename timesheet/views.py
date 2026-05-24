@@ -232,14 +232,18 @@ def is_reporter_or_staff(user):
 
 @user_passes_test(is_reporter_or_staff)
 def reports_index(request):
-    users = User.objects.filter(is_active=True).order_by('last_name', 'first_name')
+    users = list(User.objects.filter(is_active=True).order_by('last_name', 'first_name').prefetch_related('assigned_projects', 'assigned_projects__client'))
+    for u in users:
+        active_projs = [p for p in u.assigned_projects.all() if p.is_active and p.client.is_active]
+        u.data_project_ids = ','.join(str(p.id) for p in active_projs)
+        u.data_client_ids = ','.join(str(p.client_id) for p in active_projs)
     
     user_ids = request.GET.getlist('user_id')
     if user_ids:
         valid_user_ids = [int(u) for u in user_ids if u.isdigit()]
-        selected_users = users.filter(id__in=valid_user_ids)
+        selected_users = [u for u in users if u.id in valid_user_ids]
     else:
-        selected_users = users.none()
+        selected_users = []
         valid_user_ids = []
         
     user_query_params = "".join([f"&user_id={uid}" for uid in valid_user_ids])
@@ -265,8 +269,8 @@ def reports_index(request):
     
     active_project_ids = []
     active_client_ids = []
-    if selected_users.exists():
-        active_project_ids = list(TimeEntry.objects.filter(user__in=selected_users).values_list('project_id', flat=True).distinct())
+    if selected_users:
+        active_project_ids = list(TimeEntry.objects.filter(user__in=[su.id for su in selected_users]).values_list('project_id', flat=True).distinct())
         active_client_ids = list(Project.objects.filter(id__in=active_project_ids).values_list('client_id', flat=True).distinct())
 
     # Get users that are assigned to the currently selected project/client
@@ -281,7 +285,7 @@ def reports_index(request):
     elif client_id:
         assigned_user_ids = list(User.objects.filter(assigned_projects__client_id=client_id).values_list('id', flat=True).distinct())
     else:
-        assigned_user_ids = list(users.values_list('id', flat=True))
+        assigned_user_ids = [u.id for u in users]
 
     context = {
         'assigned_user_ids': assigned_user_ids,
@@ -313,9 +317,9 @@ def get_filtered_report_entries(request):
     user_ids = request.GET.getlist('user_id')
     if user_ids:
         valid_user_ids = [int(u) for u in user_ids if u.isdigit()]
-        selected_users = users.filter(id__in=valid_user_ids)
+        selected_users = [u for u in users if u.id in valid_user_ids]
     else:
-        selected_users = users.none()
+        selected_users = []
         valid_user_ids = []
 
     try:
@@ -329,7 +333,7 @@ def get_filtered_report_entries(request):
     
     entries = []
     
-    if selected_users.exists():
+    if selected_users:
         qs = TimeEntry.objects.filter(
             user__in=selected_users,
             date__year=year,

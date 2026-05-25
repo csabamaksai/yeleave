@@ -279,5 +279,70 @@
             }
         });
     </script>
+
+    <!-- Vázlatok automatikus mentése SessionStorage-ba -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ezt az azonosítót minden oldal megkapja, ami egyedi az URL alapján
+            const pagePath = window.location.pathname;
+            
+            // Keressük meg az összes olyan bemeneti mezőt, amelyet érdemes menteni (pl. ami nem rejtett vagy jelszó)
+            const inputs = document.querySelectorAll('input:not([type="hidden"]):not([type="password"]):not([type="submit"]):not([type="button"]), select, textarea');
+            
+            // 1. Töltsük vissza a mentett értékeket
+            inputs.forEach(input => {
+                // Generáljunk egy stabil ID-t (ha nincs ID-ja, name attribútumból)
+                const inputId = input.id || input.name;
+                if (!inputId) return;
+                
+                const storageKey = `draft_${pagePath}_${inputId}`;
+                const savedValue = sessionStorage.getItem(storageKey);
+                
+                // Csak akkor írjuk felül, ha volt elmentve valami, és ha az egy űrlap eleme (TS, TIG, normál oldalak)
+                if (savedValue !== null) {
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        if (savedValue === "true") {
+                            input.checked = true;
+                        }
+                    } else {
+                        // Különleges kivétel a TIG-nél: ha az input.value amúgy más volt betöltéskor
+                        // ne írjuk felül a friss adatbázis adatot elavult form értékkel.
+                        // (Egyszerű szöveges draft mentésnél elegendő ez most)
+                        if (input.dataset.serverValue !== savedValue) {
+                           input.value = savedValue;
+                           // Trigger onchange for TIG custom logic
+                           input.dispatchEvent(new Event('input', { bubbles: true }));
+                           input.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                    }
+                }
+
+                // 2. mentsünk minden változást
+                input.addEventListener('input', function() {
+                    let valToSave = this.value;
+                    if (this.type === 'checkbox' || this.type === 'radio') {
+                        valToSave = this.checked ? "true" : "false";
+                    }
+                    sessionStorage.setItem(`draft_${pagePath}_${inputId}`, valToSave);
+                });
+            });
+
+            // 3. Ha a formot tényleg elküldték (sikeres Submit kattintás),
+            // és nem csak elkattintott navigálni az ember, akkor töröljük a draftot erről az oldalról
+            document.querySelectorAll('form').forEach(f => {
+                f.addEventListener('submit', function() {
+                    const keysToRemove = [];
+                    for(let i=0; i<sessionStorage.length; i++) {
+                        const k = sessionStorage.key(i);
+                        if (k && k.startsWith(`draft_${pagePath}_`)) {
+                            keysToRemove.push(k);
+                        }
+                    }
+                    keysToRemove.forEach(k => sessionStorage.removeItem(k));
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

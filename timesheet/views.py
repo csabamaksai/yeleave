@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, QueryDict
 from django.views.decorators.http import require_POST
 import json
 from calendar import monthrange
@@ -233,6 +233,16 @@ def is_reporter_or_staff(user):
 
 @user_passes_test(is_reporter_or_staff)
 def reports_index(request):
+    # Retrieve or save session state for reports
+    if request.GET:
+        # User explicitly requested a filter, save it
+        request.session['reports_filters'] = request.GET.urlencode()
+    else:
+        # No filter provided (e.g. clicked on menu), try loading from session
+        saved_filters = request.session.get('reports_filters')
+        if saved_filters:
+            request.GET = QueryDict(saved_filters)
+
     users = list(User.objects.filter(is_active=True).order_by('last_name', 'first_name').prefetch_related('assigned_projects', 'assigned_projects__client'))
     for u in users:
         active_projs = [p for p in u.assigned_projects.all() if p.is_active and p.client.is_active]
@@ -593,6 +603,14 @@ def is_staff_or_reporter(user):
 @login_required
 @user_passes_test(is_staff_or_reporter)
 def partner_tig_index(request):
+    # Retrieve or save session state for partner tig
+    if request.GET:
+        request.session['partner_tig_filters'] = request.GET.urlencode()
+    else:
+        saved_filters = request.session.get('partner_tig_filters')
+        if saved_filters:
+            request.GET = QueryDict(saved_filters)
+
     try:
         year = int(request.GET.get('year', datetime.now().year))
         month = int(request.GET.get('month', datetime.now().month))

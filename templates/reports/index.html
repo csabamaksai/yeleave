@@ -69,6 +69,11 @@
             </form>
         </div>
 
+        <div class="mb-2 text-gray-700 text-sm flex gap-6">
+            <div>{% trans "Partner" %}: {% if selected_client_name %}{{ selected_client_name }}{% else %}{% trans "Mind" %}{% endif %}</div>
+            <div>{% trans "Projekt" %}: {% if selected_project_name %}{{ selected_project_name }}{% else %}{% trans "Mind" %}{% endif %}</div>
+        </div>
+
         <div class="bg-white shadow rounded-lg border border-gray-200 overflow-hidden mb-6">
             
             <!-- Month Stepper Navbar -->

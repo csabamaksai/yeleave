@@ -700,8 +700,8 @@ msgid "Betöltés"
 msgstr "Download"
 
 #: templates/timesheet/partner_tig.html:68
-msgid "Mi rendszerünk (Mért adat)"
-msgstr "Our System (Measured)"
+msgid "Dolgozó TS"
+msgstr "Employee TS"
 
 #: templates/timesheet/partner_tig.html:69
 #, fuzzy
@@ -955,3 +955,6 @@ msgstr ""
 #~ msgid ""
 #~ "Nincsenek munkaóra rögzítések a megadott feltételekkel ebben a hónapban."
 #~ msgstr "No time entries found for the selected conditions this month."
+
+msgid "Mind"
+msgstr "All"

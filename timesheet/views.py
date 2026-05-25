@@ -589,14 +589,31 @@ def partner_tig_index(request):
     
     users = []
     if client_id:
+        # Get existing certificates for the month and client
+        certificates = ClientCertificate.objects.filter(
+            year=year,
+            month=month,
+            client_id=client_id
+        ).select_related('user')
+        
+        cert_dict = {c.user_id: c for c in certificates}
+        
         # Get users who have time entries for this client in this month
         time_entries = TimeEntry.objects.filter(
             date__year=year, 
             date__month=month,
             project__client_id=client_id
-        ).select_related('user').order_by('user__last_name', 'user__first_name')
+        ).select_related('user')
         
         user_dict = {}
+        # First, add everyone who has a certificate
+        for c in certificates:
+            user_dict[c.user_id] = {
+                'user': c.user,
+                'internal_hours': 0
+            }
+            
+        # Then compile time entries (and add new users if they have time entries but no cert yet)
         for te in time_entries:
             if te.user_id not in user_dict:
                 user_dict[te.user_id] = {
@@ -604,17 +621,13 @@ def partner_tig_index(request):
                     'internal_hours': 0
                 }
             user_dict[te.user_id]['internal_hours'] += te.hours
-            
-        # Get existing certificates
-        certificates = ClientCertificate.objects.filter(
-            year=year,
-            month=month,
-            client_id=client_id,
-            user_id__in=user_dict.keys()
-        )
-        cert_dict = {c.user_id: c for c in certificates}
+
         
-        for u_id, data in user_dict.items():
+        # Sort the dictionary keys by user's full name to display alphabetically
+        sorted_users = sorted(user_dict.keys(), key=lambda uid: (user_dict[uid]['user'].last_name, user_dict[uid]['user'].first_name))
+        
+        for u_id in sorted_users:
+            data = user_dict[u_id]
             cert = cert_dict.get(u_id)
             users.append({
                 'user': data['user'],
@@ -636,12 +649,20 @@ def partner_tig_index(request):
     else:
         next_month = {'year': year, 'month': month + 1}
         
+    selected_client_name = ""
+    if client_id and client_id.isdigit():
+        for c in clients:
+            if c.id == int(client_id):
+                selected_client_name = c.name
+                break
+
     context = {
         'year': year,
         'month': month,
         'current_date': date(year, month, 1),
         'clients': clients,
         'selected_client_id': int(client_id) if client_id and client_id.isdigit() else '',
+        'selected_client_name': selected_client_name,
         'users': users,
         'prev_month': prev_month,
         'next_month': next_month,

@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 import json
 from calendar import monthrange
 from datetime import date, datetime, timedelta
+from itertools import groupby
 from .models import TimeEntry
 from projects.models import Project
 from leaves.models import Leave
@@ -267,6 +268,21 @@ def reports_index(request):
         
     total_hours = sum(float(e['hours']) for e in entries if not e['is_leave'])
     
+    # Sort and group entries by user for the template
+    entries.sort(key=lambda x: (x['user_name'], -x['date'].toordinal()))
+    grouped_entries = []
+    
+    for user_name, group in groupby(entries, key=lambda x: x['user_name']):
+        group_list = list(group)
+        user_hours = sum(float(e['hours']) for e in group_list if not e['is_leave'])
+        user_days = round(user_hours / 8, 2)
+        grouped_entries.append({
+            'user_name': user_name,
+            'entries': group_list,
+            'total_hours': user_hours,
+            'total_days': user_days
+        })
+    
     active_project_ids = []
     active_client_ids = []
     if selected_users:
@@ -288,6 +304,7 @@ def reports_index(request):
         assigned_user_ids = [u.id for u in users]
 
     context = {
+        'grouped_entries': grouped_entries,
         'assigned_user_ids': assigned_user_ids,
         'users': users,
         'valid_user_ids': valid_user_ids,

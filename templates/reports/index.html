@@ -95,6 +95,7 @@
                 </a>
             </div>
 
+            {% if grouped_entries %}
             <!-- Total Hours Summary -->
             <div class="bg-blue-50 px-4 py-2 border-b border-blue-100 flex justify-between items-center relative">
                 <span class="text-sm text-blue-800 font-medium">{% trans "Összesített munkaóra" %}:</span>
@@ -103,6 +104,7 @@
                 </span>
                 <span class="text-sm font-bold text-brand">{{ total_hours }} {% trans "óra" %}</span>
             </div>
+            {% endif %}
 
             <!-- Table -->
             <div class="overflow-x-auto overflow-y-auto max-h-[55vh]">
@@ -118,19 +120,27 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        {% for entry in entries %}
-                        <tr class="{% if entry.is_leave %}leave-row bg-red-50/50 hover:bg-red-50 text-red-700{% else %}hover:bg-gray-50 text-gray-500{% endif %} transition">
-                            <td class="px-4 py-2 whitespace-nowrap text-sm font-medium {% if not entry.is_leave %}text-gray-900{% endif %}">{{ entry.user_name }}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-sm {% if not entry.is_leave %}text-gray-900{% endif %}">{{ entry.date|date:"Y.m.d. (l)" }}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-sm">{{ entry.client_name }}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-sm">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if entry.is_leave %}bg-red-100 text-red-800{% else %}bg-gray-100 text-gray-800{% endif %}">
-                                    {{ entry.project_name }}
-                                </span>
-                            </td>
-                            <td class="px-4 py-2 whitespace-nowrap text-sm font-bold {% if not entry.is_leave %}text-gray-900{% endif %} text-right">{% if not entry.is_leave %}{{ entry.hours }}h{% endif %}</td>
-                            <td class="px-4 py-2 text-sm truncate max-w-xs">{{ entry.description|default:"-" }}</td>
-                        </tr>
+                        {% for group in grouped_entries %}
+                            {% for entry in group.entries %}
+                            <tr class="{% if entry.is_leave %}leave-row bg-red-50/50 hover:bg-red-50 text-red-700{% else %}hover:bg-gray-50 text-gray-500{% endif %} transition">
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium {% if not entry.is_leave %}text-gray-900{% endif %}">{{ entry.user_name }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm {% if not entry.is_leave %}text-gray-900{% endif %}">{{ entry.date|date:"Y.m.d. (l)" }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm">{{ entry.client_name }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if entry.is_leave %}bg-red-100 text-red-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ entry.project_name }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-bold {% if not entry.is_leave %}text-gray-900{% endif %} text-right">{% if not entry.is_leave %}{{ entry.hours }}h{% endif %}</td>
+                                <td class="px-4 py-2 text-sm truncate max-w-xs">{{ entry.description|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                            <!-- Summary row for user -->
+                            <tr class="bg-blue-50 border-t-2 border-blue-100 summary-row-user">
+                                <td colspan="4" class="px-4 py-2 whitespace-nowrap text-sm font-bold text-gray-700 text-right">{% trans "Összesen:" %} {{ group.user_name }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-bold text-brand text-right">{{ group.total_hours }}h</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{{ group.total_days|floatformat:"-2" }} {% trans "nap" %}</td>
+                            </tr>
                         {% empty %}
                         <tr>
                             <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500 font-medium">
@@ -146,11 +156,17 @@
         
         <!-- Table Action Bar (Export) -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700 select-none">
-                <input type="checkbox" id="toggleLeaves" checked class="rounded border-gray-300 text-brand shadow-sm focus:ring-brand">
-                {% trans "Szabadságok mutatása" %}
-            </label>
-            <button type="button" onclick="openExportModal()" class="bg-brand text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2">
+            <div class="flex flex-col gap-2">
+                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700 select-none">
+                    <input type="checkbox" id="toggleLeaves" checked class="rounded border-gray-300 text-brand shadow-sm focus:ring-brand">
+                    {% trans "Szabadságok mutatása" %}
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700 select-none">
+                    <input type="checkbox" id="toggleSummary" checked class="rounded border-gray-300 text-brand shadow-sm focus:ring-brand">
+                    {% trans "Összesítő sorok mutatása" %}
+                </label>
+            </div>
+            <button type="button" onclick="openExportModal()" class="bg-brand text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2 mt-auto">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 {% trans "Exportálás" %}
             </button>
@@ -363,6 +379,20 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleLeaves.addEventListener('change', function() {
             const leaveRows = document.querySelectorAll('.leave-row');
             leaveRows.forEach(row => {
+                if (this.checked) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    const toggleSummary = document.getElementById('toggleSummary');
+    if (toggleSummary) {
+        toggleSummary.addEventListener('change', function() {
+            const summaryRows = document.querySelectorAll('.summary-row-user');
+            summaryRows.forEach(row => {
                 if (this.checked) {
                     row.style.display = '';
                 } else {

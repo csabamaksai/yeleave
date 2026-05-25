@@ -30,6 +30,8 @@ urlpatterns = [
     path('leaves/', include('leaves.urls')),
     path('reports/export/', timesheet_views.reports_export, name='reports_export'),
     path('reports/', timesheet_views.reports_index, name='reports'),
+    path('partner-tig/', timesheet_views.partner_tig_index, name='partner_tig'),
+    path('api/partner-tig/save/', timesheet_views.api_partner_tig_save, name='api_partner_tig_save'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
     path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),

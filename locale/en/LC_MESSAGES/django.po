@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 08:44+0000\n"
+"POT-Creation-Date: 2026-05-25 05:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,8 @@ msgid "Típus"
 msgstr ""
 
 #: leaves/forms.py:13 templates/leaves/leave_list.html:39
-#: templates/reports/index.html:112 timesheet/views.py:429
+#: templates/reports/index.html:112 templates/timesheet/partner_tig.html:72
+#: timesheet/models.py:42 timesheet/views.py:429
 msgid "Megjegyzés"
 msgstr "Notes"
 
@@ -170,29 +171,36 @@ msgstr "Projects"
 msgid "Riportok"
 msgstr "Reports"
 
-#: templates/base.html:54
+#: templates/base.html:45 templates/timesheet/partner_tig.html:4
+#: timesheet/models.py:47
+#, fuzzy
+#| msgid "Partner"
+msgid "Partner TIG"
+msgstr "Client"
+
+#: templates/base.html:55
 msgid "Kijelentkezés"
 msgstr "Logout"
 
-#: templates/base.html:57 templates/home.html:18
+#: templates/base.html:58 templates/home.html:18
 #: templates/registration/login.html:4 templates/registration/login.html:40
 msgid "Bejelentkezés"
 msgstr "Login"
 
-#: templates/base.html:82 templates/pages/contact.html:4
+#: templates/base.html:83 templates/pages/contact.html:4
 #: templates/pages/contact.html:8
 msgid "Kapcsolat"
 msgstr "Contact"
 
-#: templates/base.html:83
+#: templates/base.html:84
 msgid "Adatvédelem"
 msgstr "Privacy"
 
-#: templates/base.html:84 templates/pages/terms.html:4
+#: templates/base.html:85 templates/pages/terms.html:4
 msgid "Felhasználási feltételek"
 msgstr "Terms of Service"
 
-#: templates/base.html:92
+#: templates/base.html:93
 msgid "Nyelv"
 msgstr "Language"
 
@@ -412,6 +420,8 @@ msgid "Kivett napok"
 msgstr ""
 
 #: templates/leaves/leave_list.html:54 templates/leaves/leave_list.html:73
+#: templates/timesheet/partner_tig.html:80
+#: templates/timesheet/partner_tig.html:152
 msgid "nap"
 msgstr ""
 
@@ -513,7 +523,8 @@ msgid "Projekt Név"
 msgstr "Projects"
 
 #: templates/projects/project_list.html:36 templates/reports/index.html:36
-#: templates/reports/index.html:109 timesheet/views.py:429
+#: templates/reports/index.html:109 templates/timesheet/partner_tig.html:25
+#: timesheet/models.py:37 timesheet/views.py:429
 msgid "Partner"
 msgstr "Client"
 
@@ -549,7 +560,7 @@ msgstr "Password"
 msgid "Válassz dolgozókat (CMD/CTRL gombbal többet is lehet)"
 msgstr "Select employees (CMD/CTRL to select multiple)"
 
-#: templates/reports/index.html:37
+#: templates/reports/index.html:37 templates/timesheet/partner_tig.html:26
 msgid "Válassz partnert"
 msgstr "Select client"
 
@@ -578,11 +589,11 @@ msgstr "No results found"
 msgid "Alkalmaz"
 msgstr "Apply"
 
-#: templates/reports/index.html:79
+#: templates/reports/index.html:79 templates/timesheet/partner_tig.html:48
 msgid "Előző"
 msgstr "Previous"
 
-#: templates/reports/index.html:88
+#: templates/reports/index.html:88 templates/timesheet/partner_tig.html:57
 msgid "Következő"
 msgstr "Next"
 
@@ -594,11 +605,13 @@ msgstr "Total logged hours"
 msgid "munkanap"
 msgstr "workdays"
 
-#: templates/reports/index.html:99
+#: templates/reports/index.html:99 templates/timesheet/partner_tig.html:80
+#: templates/timesheet/partner_tig.html:152
 msgid "óra"
 msgstr "hours"
 
-#: templates/reports/index.html:107 timesheet/views.py:429
+#: templates/reports/index.html:107 templates/timesheet/partner_tig.html:67
+#: timesheet/views.py:429
 msgid "Dolgozó"
 msgstr "Employee"
 
@@ -606,7 +619,8 @@ msgstr "Employee"
 msgid "Dátum"
 msgstr "Date"
 
-#: templates/reports/index.html:111 timesheet/views.py:429
+#: templates/reports/index.html:111 templates/timesheet/partner_tig.html:88
+#: timesheet/models.py:34 timesheet/views.py:429
 msgid "Óra"
 msgstr "Hours"
 
@@ -662,6 +676,92 @@ msgstr "Download"
 #: templates/reports/index.html:221 templates/users/user_form.html:84
 msgid "Mégsem"
 msgstr "Cancel"
+
+#: templates/timesheet/partner_tig.html:8
+msgid "Partner TIG (Teljesítés Igazolás)"
+msgstr "Client Timesheet (Certificate of Performance)"
+
+#: templates/timesheet/partner_tig.html:12
+#, fuzzy
+#| msgid "szerkesztése"
+msgid "Összes Mentése"
+msgstr "edit"
+
+#: templates/timesheet/partner_tig.html:27
+#, fuzzy
+#| msgid "Válassz partnert"
+msgid "Válassz egy partnert..."
+msgstr "Select client"
+
+#: templates/timesheet/partner_tig.html:35
+#, fuzzy
+#| msgid "Letöltés"
+msgid "Betöltés"
+msgstr "Download"
+
+#: templates/timesheet/partner_tig.html:68
+msgid "Mi rendszerünk (Mért adat)"
+msgstr "Our System (Measured)"
+
+#: templates/timesheet/partner_tig.html:69
+#, fuzzy
+#| msgid "Partner törlése"
+msgid "Partner Értéke"
+msgstr "Clients"
+
+#: templates/timesheet/partner_tig.html:70
+msgid "Egység"
+msgstr "Unit"
+
+#: templates/timesheet/partner_tig.html:71
+msgid "Ellenőrzés"
+msgstr "Verification"
+
+#: templates/timesheet/partner_tig.html:87 timesheet/models.py:33
+msgid "Nap"
+msgstr ""
+
+#: templates/timesheet/partner_tig.html:95
+msgid "Opcionális ok..."
+msgstr "Optional note..."
+
+#: templates/timesheet/partner_tig.html:101
+msgid "Senki sem volt ehhez a partnerhez beosztva ebben a hónapban."
+msgstr "No one was assigned to this client this month."
+
+#: templates/timesheet/partner_tig.html:114
+#, fuzzy
+#| msgid "Válassz partnert"
+msgid "Válassz partnert a betöltéshez"
+msgstr "Select client"
+
+#: templates/timesheet/partner_tig.html:115
+msgid ""
+"A rendszer csak azon dolgozókat listázza ki, akiknek van mért jelenléte az "
+"adott partnernél az adott hónapban."
+msgstr ""
+
+#: templates/timesheet/partner_tig.html:149
+msgid "Egyezik"
+msgstr "Matches"
+
+#: templates/timesheet/partner_tig.html:175
+#, fuzzy
+#| msgid "Mentés"
+msgid "Mentés..."
+msgstr "Save"
+
+#: templates/timesheet/partner_tig.html:217
+msgid "Mentve!"
+msgstr "Saved!"
+
+#: templates/timesheet/partner_tig.html:224
+msgid "Hiba történt a mentés során:"
+msgstr "An error occurred during save:"
+
+#: templates/timesheet/partner_tig.html:230
+msgid "Hálózati hiba történt."
+msgstr "Network error occurred."
 
 #: templates/users/user_confirm_delete.html:4
 msgid "Dolgozó törlése"
@@ -728,6 +828,34 @@ msgstr "Normal user"
 #: templates/users/user_list.html:79
 msgid "Nincs megjeleníthető dolgozó."
 msgstr "No users to display."
+
+#: timesheet/models.py:36
+#, fuzzy
+#| msgid "Felhasználók"
+msgid "Felhasználó"
+msgstr "Username or Email"
+
+#: timesheet/models.py:38
+msgid "Év"
+msgstr ""
+
+#: timesheet/models.py:39
+msgid "Hónap"
+msgstr ""
+
+#: timesheet/models.py:40
+msgid "Érték"
+msgstr "Value"
+
+#: timesheet/models.py:41
+msgid "Mértékegység"
+msgstr "Unit"
+
+#: timesheet/models.py:48
+#, fuzzy
+#| msgid "Partnerek"
+msgid "Partner TIG-ek"
+msgstr "Clients"
 
 #: timesheet/views.py:396
 msgid "Szabadság"
@@ -811,10 +939,6 @@ msgstr ""
 
 #~ msgid "Riportok (Fejlesztés alatt)"
 #~ msgstr "Reports (Under Development)"
-
-#~| msgid "Felhasználónév vagy Email"
-#~ msgid "Felhasználók"
-#~ msgstr "Username or Email"
 
 #~ msgid "Üdvözlünk a yeleave rendszerben!"
 #~ msgstr "Welcome to the YeLeave system!"

@@ -562,3 +562,128 @@ def bulk_save_time_entries(request):
         import traceback
         traceback.print_exc()
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+import json
+from django.http import JsonResponse
+from datetime import datetime, date
+from timesheet.models import ClientCertificate
+from clients.models import Client
+
+def is_staff_or_reporter(user):
+    return user.is_staff or user.is_reporter
+
+@login_required
+@user_passes_test(is_staff_or_reporter)
+def partner_tig_index(request):
+    try:
+        year = int(request.GET.get('year', datetime.now().year))
+        month = int(request.GET.get('month', datetime.now().month))
+    except ValueError:
+        year = datetime.now().year
+        month = datetime.now().month
+
+    client_id = request.GET.get('client_id')
+    
+    clients = Client.objects.filter(is_active=True).order_by('name')
+    
+    users = []
+    if client_id:
+        # Get users who have time entries for this client in this month
+        time_entries = TimeEntry.objects.filter(
+            date__year=year, 
+            date__month=month,
+            project__client_id=client_id
+        ).select_related('user').order_by('user__last_name', 'user__first_name')
+        
+        user_dict = {}
+        for te in time_entries:
+            if te.user_id not in user_dict:
+                user_dict[te.user_id] = {
+                    'user': te.user,
+                    'internal_hours': 0
+                }
+            user_dict[te.user_id]['internal_hours'] += te.hours
+            
+        # Get existing certificates
+        certificates = ClientCertificate.objects.filter(
+            year=year,
+            month=month,
+            client_id=client_id,
+            user_id__in=user_dict.keys()
+        )
+        cert_dict = {c.user_id: c for c in certificates}
+        
+        for u_id, data in user_dict.items():
+            cert = cert_dict.get(u_id)
+            users.append({
+                'user': data['user'],
+                'internal_hours': float(data['internal_hours']),
+                'internal_days': round(float(data['internal_hours']) / 8, 2),
+                'cert_value': float(cert.value) if cert else '',
+                'cert_unit': cert.unit if cert else 'days',
+                'cert_notes': cert.notes if cert else ''
+            })
+            
+    # prev/next month
+    if month == 1:
+        prev_month = {'year': year - 1, 'month': 12}
+    else:
+        prev_month = {'year': year, 'month': month - 1}
+
+    if month == 12:
+        next_month = {'year': year + 1, 'month': 1}
+    else:
+        next_month = {'year': year, 'month': month + 1}
+        
+    context = {
+        'year': year,
+        'month': month,
+        'current_date': date(year, month, 1),
+        'clients': clients,
+        'selected_client_id': int(client_id) if client_id and client_id.isdigit() else '',
+        'users': users,
+        'prev_month': prev_month,
+        'next_month': next_month,
+    }
+    return render(request, 'timesheet/partner_tig.html', context)
+
+@login_required
+@user_passes_test(is_staff_or_reporter)
+def api_partner_tig_save(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            year = data.get('year')
+            month = data.get('month')
+            client_id = data.get('client_id')
+            entries = data.get('entries', [])
+            
+            if not all([year, month, client_id]):
+                return JsonResponse({'status': 'error', 'message': 'Missing required fields'})
+                
+            for entry in entries:
+                user_id = entry.get('user_id')
+                value = entry.get('value')
+                unit = entry.get('unit', 'days')
+                notes = entry.get('notes', '')
+                
+                if value == '' or value is None:
+                    # If empty, delete the cert if exists
+                    ClientCertificate.objects.filter(year=year, month=month, client_id=client_id, user_id=user_id).delete()
+                else:
+                    ClientCertificate.objects.update_or_create(
+                        year=year,
+                        month=month,
+                        client_id=client_id,
+                        user_id=user_id,
+                        defaults={
+                            'value': value,
+                            'unit': unit,
+                            'notes': notes
+                        }
+                    )
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

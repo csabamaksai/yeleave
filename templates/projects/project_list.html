@@ -46,13 +46,13 @@
         <tbody class="bg-white divide-y divide-gray-200">
             {% for project in projects %}
             <tr class="hover:bg-gray-50 transition project-row">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 project-name cursor-pointer" onclick="window.location.href='{% url 'projects:update' project.pk %}'">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 project-name cursor-pointer" onclick="window.location.href=this.dataset.href" data-href="{% url 'projects:update' project.pk %}">
                     {{ project.name }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 project-client cursor-pointer" onclick="window.location.href='{% url 'projects:update' project.pk %}'">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 project-client cursor-pointer" onclick="window.location.href=this.dataset.href" data-href="{% url 'projects:update' project.pk %}">
                     {{ project.client.name }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" onclick="window.location.href='{% url 'projects:update' project.pk %}'">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" onclick="window.location.href=this.dataset.href" data-href="{% url 'projects:update' project.pk %}">
                     {{ project.created_at|date:"Y. m. d." }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

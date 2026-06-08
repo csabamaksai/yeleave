@@ -3,10 +3,15 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
-    is_reporter = models.BooleanField(
-        _('Lekérdező'),
+    is_company_admin = models.BooleanField(
+        _('Cégvezető / Admin'),
         default=False,
-        help_text=_('Designates whether the user can access reports but not admin features.')
+        help_text=_('A felületen minden funkcióhoz hozzáfér (Projektek, Partnerek, Felhasználók stb.), de nem Django site admin.')
+    )
+    is_reporter = models.BooleanField(
+        _('Lekérdező (Könyvelő)'),
+        default=False,
+        help_text=_('Csak a riportokhoz fér hozzá.')
     )
 
     def __str__(self):

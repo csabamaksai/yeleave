@@ -229,7 +229,7 @@ from django.utils.translation import gettext as _
 User = get_user_model()
 
 def is_reporter_or_staff(user):
-    return user.is_authenticated and (user.is_staff or getattr(user, 'is_reporter', False))
+    return user.is_authenticated and (getattr(user, 'is_company_admin', False) or user.is_staff or user.is_superuser or getattr(user, 'is_reporter', False))
 
 @user_passes_test(is_reporter_or_staff)
 def reports_index(request):
@@ -243,7 +243,7 @@ def reports_index(request):
         if saved_filters:
             request.GET = QueryDict(saved_filters)
 
-    users = list(User.objects.filter(is_active=True).order_by('last_name', 'first_name').prefetch_related('assigned_projects', 'assigned_projects__client'))
+    users = list(User.objects.filter(is_active=True, is_staff=False, is_superuser=False).order_by('last_name', 'first_name').prefetch_related('assigned_projects', 'assigned_projects__client'))
     for u in users:
         active_projs = [p for p in u.assigned_projects.all() if p.is_active and p.client.is_active]
         u.data_project_ids = ','.join(str(p.id) for p in active_projs)
@@ -309,7 +309,7 @@ def reports_index(request):
         if p:
             assigned_user_ids = list(p.assigned_users.values_list('id', flat=True))
     elif client_id:
-        assigned_user_ids = list(User.objects.filter(assigned_projects__client_id=client_id).values_list('id', flat=True).distinct())
+        assigned_user_ids = list(User.objects.filter(assigned_projects__client_id=client_id, is_staff=False, is_superuser=False).values_list('id', flat=True).distinct())
     else:
         assigned_user_ids = [u.id for u in users]
 
@@ -339,7 +339,7 @@ def reports_index(request):
 
 
 def get_filtered_report_entries(request):
-    users = CustomUser.objects.filter(is_active=True).order_by('last_name', 'first_name')
+    users = CustomUser.objects.filter(is_active=True, is_staff=False, is_superuser=False).order_by('last_name', 'first_name')
     
     user_ids = request.GET.getlist('user_id')
     if user_ids:
@@ -436,7 +436,7 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 
 def reports_export(request):
-    if not (request.user.is_staff or getattr(request.user, 'is_reporter', False)):
+    if not (getattr(request.user, 'is_company_admin', False) or request.user.is_staff or request.user.is_superuser or getattr(request.user, 'is_reporter', False)):
         return HttpResponseForbidden(_("Nincs jogosultságod ehhez a felülethez."))
 
     entries, year, month = get_filtered_report_entries(request)
@@ -597,11 +597,11 @@ from datetime import datetime, date
 from timesheet.models import ClientCertificate
 from clients.models import Client
 
-def is_staff_or_reporter(user):
-    return user.is_staff or user.is_reporter
+def is_company_admin_only(user):
+    return getattr(user, 'is_company_admin', False) or user.is_staff or user.is_superuser
 
 @login_required
-@user_passes_test(is_staff_or_reporter)
+@user_passes_test(is_company_admin_only)
 def partner_tig_index(request):
     # Retrieve or save session state for partner tig
     if request.GET:
@@ -705,7 +705,7 @@ def partner_tig_index(request):
     return render(request, 'timesheet/partner_tig.html', context)
 
 @login_required
-@user_passes_test(is_staff_or_reporter)
+@user_passes_test(is_company_admin_only)
 def api_partner_tig_save(request):
     if request.method == 'POST':
         try:

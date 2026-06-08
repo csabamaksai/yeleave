@@ -14,6 +14,12 @@ class ProjectForm(forms.ModelForm):
             'assigned_users': forms.SelectMultiple(attrs={'class': 'tom-select-multiple'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        self.fields['assigned_users'].queryset = User.objects.filter(is_active=True, is_staff=False, is_superuser=False).order_by('last_name', 'first_name')
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if not name or len(name) < 5:

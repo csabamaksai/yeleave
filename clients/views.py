@@ -10,7 +10,8 @@ from .hungarian_cities import HUNGARIAN_CITIES
 
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_authenticated and self.request.user.is_staff
+        user = self.request.user
+        return user.is_authenticated and (getattr(user, 'is_company_admin', False) or user.is_staff or user.is_superuser)
 
 class ClientListView(StaffRequiredMixin, ListView):
     model = Client

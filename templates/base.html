@@ -35,14 +35,14 @@
                         {% if user.is_authenticated %}
                             <a href="{% url 'timesheet:index' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Jelenléti ív" %}</a>
                             <a href="{% url 'leaves:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Szabadságok" %}</a>
-                            {% if user.is_staff %}
+                            {% if user.is_company_admin or user.is_staff or user.is_superuser %}
                                 <a href="{% url 'users:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Dolgozók" %}</a>
                                 <a href="{% url 'clients:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Partnerek" %}</a>
                                 <a href="{% url 'projects:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Projektek" %}</a>
-                            {% endif %}
-                            {% if user.is_staff or user.is_reporter %}
-                                <a href="{% url 'reports' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Riportok" %}</a>
                                 <a href="{% url 'partner_tig' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Partner TIG" %}</a>
+                            {% endif %}
+                            {% if user.is_company_admin or user.is_staff or user.is_superuser or user.is_reporter %}
+                                <a href="{% url 'reports' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Riportok" %}</a>
                             {% endif %}
                         {% endif %}
                     </div>

@@ -52,7 +52,7 @@ class UserForm(forms.ModelForm):
         
         # Ha a felhasználó létezik, beállítjuk a role mező kezdőértékét
         if self.instance.pk:
-            if self.instance.is_superuser or self.instance.is_staff:
+            if getattr(self.instance, 'is_company_admin', False) or self.instance.is_superuser or self.instance.is_staff:
                 self.fields['role'].initial = 'admin'
             elif getattr(self.instance, 'is_reporter', False):
                 self.fields['role'].initial = 'reporter'
@@ -96,16 +96,20 @@ class UserForm(forms.ModelForm):
         
         role = self.cleaned_data.get('role')
         if role == 'admin':
-            user.is_staff = True
+            user.is_company_admin = True
             user.is_reporter = False
+            user.is_staff = False  # Ezt levesszük, ne legyen automatikus Django admin hozzáférése
+            user.is_superuser = False
         elif role == 'reporter':
-            user.is_staff = False
-            user.is_superuser = False
+            user.is_company_admin = False
             user.is_reporter = True
-        else:
             user.is_staff = False
             user.is_superuser = False
+        else:
+            user.is_company_admin = False
             user.is_reporter = False
+            user.is_staff = False
+            user.is_superuser = False
             
         if commit:
             user.save()

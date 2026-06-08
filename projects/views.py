@@ -11,7 +11,8 @@ from timesheet.models import TimeEntry
 
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_authenticated and self.request.user.is_staff
+        user = self.request.user
+        return user.is_authenticated and (getattr(user, 'is_company_admin', False) or user.is_staff or user.is_superuser)
 
 class ProjectListView(StaffRequiredMixin, ListView):
     model = Project

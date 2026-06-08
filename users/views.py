@@ -10,7 +10,8 @@ User = get_user_model()
 
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_authenticated and self.request.user.is_staff
+        user = self.request.user
+        return user.is_authenticated and (getattr(user, 'is_company_admin', False) or user.is_staff or user.is_superuser)
 
 class UserListView(StaffRequiredMixin, ListView):
     model = User
@@ -18,8 +19,8 @@ class UserListView(StaffRequiredMixin, ListView):
     context_object_name = 'users'
 
     def get_queryset(self):
-        # Csak az aktív felhasználókat listázzuk
-        return User.objects.filter(is_active=True).order_by('last_name', 'first_name')
+        # Csak az aktív felhasználókat listázzuk, akik nem Django adminok (is_staff/is_superuser)
+        return User.objects.filter(is_active=True, is_staff=False, is_superuser=False).order_by('last_name', 'first_name')
 
 class UserCreateView(StaffRequiredMixin, CreateView):
     model = User

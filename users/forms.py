@@ -32,13 +32,15 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'is_active']
+        fields = ['username', 'email', 'first_name', 'last_name', 'is_active', 'employment_type', 'annual_leave_allowance']
         labels = {
             'username': _('Felhasználónév'),
             'email': _('Email cím'),
             'first_name': _('Keresztnév'),
             'last_name': _('Vezetéknév'),
             'is_active': _('Aktív'),
+            'employment_type': _('Jogviszony'),
+            'annual_leave_allowance': _('Éves szabadságkeret (nap)'),
         }
         widgets = {
             'email': forms.EmailInput(attrs={'type': 'email'}),

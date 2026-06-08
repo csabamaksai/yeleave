@@ -7,7 +7,7 @@ from clients.models import Client
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['client', 'name', 'assigned_users', 'description']
+        fields = ['client', 'name', 'assigned_users', 'max_daily_hours', 'description']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
             'client': forms.Select(attrs={'class': 'tom-select'}),

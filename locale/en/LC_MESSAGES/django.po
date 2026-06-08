@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 11:47+0000\n"
+"POT-Creation-Date: 2026-06-08 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,11 +62,11 @@ msgstr "Contact Person"
 msgid "Kapcsolattartó telefonja"
 msgstr "Contact Person"
 
-#: clients/models.py:15 projects/models.py:19 users/forms.py:41
+#: clients/models.py:15 projects/models.py:20 users/forms.py:41
 msgid "Aktív"
 msgstr ""
 
-#: clients/models.py:16 projects/models.py:21
+#: clients/models.py:16 projects/models.py:22
 #: templates/projects/project_list.html:39
 msgid "Létrehozva"
 msgstr "Created"
@@ -113,7 +113,7 @@ msgstr "English"
 msgid "Dátum"
 msgstr "Date"
 
-#: holidays/models.py:6 projects/models.py:9 timesheet/models.py:14
+#: holidays/models.py:6 projects/models.py:10 timesheet/models.py:14
 msgid "Leírás"
 msgstr ""
 
@@ -235,23 +235,27 @@ msgstr ""
 msgid "Projekt Név"
 msgstr "Projects"
 
-#: projects/models.py:16
+#: projects/models.py:9
+msgid "Max napi könyvelhető óraszám"
+msgstr ""
+
+#: projects/models.py:17
 msgid "Hozzárendelt tanácsadók"
 msgstr ""
 
-#: projects/models.py:20
+#: projects/models.py:21
 #, fuzzy
 #| msgid "Befejezés dátuma"
 msgid "Befejezés Dátuma"
 msgstr "End Date"
 
-#: projects/models.py:27 templates/reports/index.html:50
+#: projects/models.py:28 templates/reports/index.html:50
 #: templates/reports/index.html:74 templates/reports/index.html:117
 #: timesheet/models.py:8 timesheet/views.py:460
 msgid "Projekt"
 msgstr "Project"
 
-#: projects/models.py:28 templates/base.html:42
+#: projects/models.py:29 templates/base.html:42
 msgid "Projektek"
 msgstr "Projects"
 
@@ -337,7 +341,7 @@ msgstr ""
 #: templates/leaves/leave_confirm_delete.html:29
 #: templates/leaves/leave_form.html:90
 #: templates/projects/project_confirm_delete.html:31
-#: templates/projects/project_form.html:118
+#: templates/projects/project_form.html:125
 #: templates/users/user_confirm_delete.html:31
 #: templates/users/user_form.html:42
 msgid "Igen"
@@ -352,8 +356,8 @@ msgstr ""
 #: templates/leaves/leave_confirm_delete.html:32
 #: templates/leaves/leave_form.html:50 templates/leaves/leave_form.html:93
 #: templates/projects/project_confirm_delete.html:28
-#: templates/projects/project_form.html:76
-#: templates/projects/project_form.html:121
+#: templates/projects/project_form.html:83
+#: templates/projects/project_form.html:128
 #: templates/users/user_confirm_delete.html:28
 msgid "Mégse"
 msgstr "Cancel"
@@ -404,7 +408,7 @@ msgstr "Deactivate"
 
 #: templates/clients/client_form.html:73 templates/leaves/leave_form.html:59
 #: templates/leaves/leave_form.html:181 templates/leaves/leave_form.html:206
-#: templates/projects/project_form.html:85
+#: templates/projects/project_form.html:92
 #: templates/timesheet/partner_tig.html:121 templates/users/user_form.html:95
 msgid "Mentés"
 msgstr "Save"
@@ -836,23 +840,23 @@ msgstr "Add New Project"
 msgid "Új projekt hozzáadása"
 msgstr "Add New Project"
 
-#: templates/projects/project_form.html:80
+#: templates/projects/project_form.html:87
 msgid "Lezárás"
 msgstr "Close"
 
-#: templates/projects/project_form.html:108
+#: templates/projects/project_form.html:115
 #, fuzzy
 #| msgid "Felhasználói jogosultság"
 msgid "Felhasználó eltávolítása"
 msgstr "Username or Email"
 
-#: templates/projects/project_form.html:111
+#: templates/projects/project_form.html:118
 msgid ""
 "Figyelem! Ha törlöd a projektről a felhasználót, akkor nem tud többet TS-"
 "elni erre a projektre."
 msgstr ""
 
-#: templates/projects/project_form.html:112
+#: templates/projects/project_form.html:119
 msgid "Biztosan törlöd?"
 msgstr ""
 

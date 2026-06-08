@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from timesheet import views as timesheet_views
+from users import views as users_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,7 +33,7 @@ urlpatterns = [
     path('reports/', timesheet_views.reports_index, name='reports'),
     path('partner-tig/', timesheet_views.partner_tig_index, name='partner_tig'),
     path('api/partner-tig/save/', timesheet_views.api_partner_tig_save, name='api_partner_tig_save'),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', users_views.home_redirect_view, name='home'),
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
     path('help/', TemplateView.as_view(template_name='pages/help.html'), name='help'),
     path('contact/', TemplateView.as_view(template_name='pages/contact.html'), name='contact'),

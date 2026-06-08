@@ -9,6 +9,16 @@ from .forms import UserForm
 
 User = get_user_model()
 
+def home_redirect_view(request):
+    """
+    Kezdőlap nézet. Ha a sima felhasználó be van jelentkezve, automatikusan a timesheet-re irányítjuk.
+    """
+    if request.user.is_authenticated:
+        # Ha normal user (nem admin és nem reporter)
+        if not (getattr(request.user, 'is_company_admin', False) or request.user.is_staff or request.user.is_superuser or getattr(request.user, 'is_reporter', False)):
+            return redirect('timesheet:index')
+    return render(request, 'home.html')
+
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         user = self.request.user

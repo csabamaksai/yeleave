@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 11:09+0000\n"
+"POT-Creation-Date: 2026-06-08 11:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,11 +77,11 @@ msgstr "Created"
 #: templates/timesheet/partner_tig.html:19
 #: templates/timesheet/partner_tig.html:35
 #: templates/timesheet/partner_tig.html:66 timesheet/models.py:36
-#: timesheet/views.py:456
+#: timesheet/views.py:460
 msgid "Partner"
 msgstr "Client"
 
-#: clients/models.py:23 templates/base.html:42
+#: clients/models.py:23 templates/base.html:41
 #: templates/clients/client_list.html:8
 msgid "Partnerek"
 msgstr "Clients"
@@ -107,8 +107,9 @@ msgstr "Hungarian"
 msgid "English"
 msgstr "English"
 
-#: holidays/models.py:5 templates/reports/index.html:115 timesheet/models.py:9
-#: timesheet/views.py:456
+#: holidays/models.py:5 templates/reports/index.html:115
+#: templates/timesheet/index.html:40 timesheet/models.py:9
+#: timesheet/views.py:460
 msgid "Dátum"
 msgstr "Date"
 
@@ -148,7 +149,7 @@ msgstr ""
 
 #: leaves/forms.py:13 leaves/models.py:19 templates/leaves/leave_list.html:39
 #: templates/reports/index.html:119 templates/timesheet/partner_tig.html:69
-#: timesheet/models.py:41 timesheet/views.py:456
+#: timesheet/models.py:41 timesheet/views.py:460
 msgid "Megjegyzés"
 msgstr "Notes"
 
@@ -172,7 +173,7 @@ msgstr "Unpaid Leave"
 
 #: leaves/models.py:15 templates/reports/index.html:114
 #: templates/timesheet/partner_tig.html:64 timesheet/models.py:7
-#: timesheet/views.py:456
+#: timesheet/views.py:460
 msgid "Tanácsadó"
 msgstr ""
 
@@ -192,13 +193,13 @@ msgstr ""
 msgid "A megadott intervallum nem tartalmaz munkanapot."
 msgstr ""
 
-#: leaves/models.py:76 timesheet/views.py:423
+#: leaves/models.py:76 templates/timesheet/index.html:43 timesheet/views.py:427
 msgid "Szabadság"
 msgstr "Leaves"
 
-#: leaves/models.py:77 templates/base.html:38
-#: templates/leaves/leave_list.html:4 templates/leaves/leave_list.html:9
-#: templates/pages/help.html:25 templates/pages/help.html:66
+#: leaves/models.py:77 templates/leaves/leave_list.html:4
+#: templates/leaves/leave_list.html:9 templates/pages/help.html:25
+#: templates/pages/help.html:66
 msgid "Szabadságok"
 msgstr "Leaves"
 
@@ -246,12 +247,11 @@ msgstr "End Date"
 
 #: projects/models.py:27 templates/reports/index.html:50
 #: templates/reports/index.html:74 templates/reports/index.html:117
-#: templates/timesheet/index.html:39 timesheet/models.py:8
-#: timesheet/views.py:456
+#: timesheet/models.py:8 timesheet/views.py:460
 msgid "Projekt"
 msgstr "Project"
 
-#: projects/models.py:28 templates/base.html:43
+#: projects/models.py:28 templates/base.html:42
 msgid "Projektek"
 msgstr "Projects"
 
@@ -276,12 +276,12 @@ msgstr ""
 msgid "Timesheet"
 msgstr ""
 
-#: templates/base.html:41 templates/reports/index.html:24
+#: templates/base.html:40 templates/reports/index.html:24
 #: templates/users/user_list.html:4 templates/users/user_list.html:8
 msgid "Tanácsadók"
 msgstr ""
 
-#: templates/base.html:44 templates/pages/help.html:31
+#: templates/base.html:43 templates/pages/help.html:31
 #: templates/pages/help.html:101 templates/timesheet/partner_tig.html:4
 #: templates/timesheet/partner_tig.html:8 timesheet/models.py:46
 #, fuzzy
@@ -289,51 +289,51 @@ msgstr ""
 msgid "Partner TIG"
 msgstr "Client"
 
-#: templates/base.html:47 templates/reports/index.html:4
+#: templates/base.html:46 templates/reports/index.html:4
 #: templates/reports/index.html:8
 msgid "Riportok"
 msgstr "Reports"
 
-#: templates/base.html:71
+#: templates/base.html:70
 msgid "Kijelentkezés"
 msgstr "Logout"
 
-#: templates/base.html:74 templates/home.html:18
+#: templates/base.html:73 templates/home.html:18
 #: templates/registration/login.html:4 templates/registration/login.html:40
 msgid "Bejelentkezés"
 msgstr "Login"
 
-#: templates/base.html:99 templates/pages/contact.html:4
+#: templates/base.html:98 templates/pages/contact.html:4
 #: templates/pages/contact.html:9
 msgid "Kapcsolat"
 msgstr "Contact"
 
-#: templates/base.html:100
+#: templates/base.html:99
 msgid "Adatvédelem"
 msgstr "Privacy"
 
-#: templates/base.html:101 templates/pages/help.html:4
+#: templates/base.html:100 templates/pages/help.html:4
 #: templates/pages/help.html:10
 msgid "Tudástár"
 msgstr ""
 
-#: templates/base.html:120
+#: templates/base.html:119
 msgid "Beállítás"
 msgstr "Set"
 
-#: templates/base.html:143
+#: templates/base.html:142
 msgid "Mentetlen változtatások!"
 msgstr ""
 
-#: templates/base.html:146
+#: templates/base.html:145
 msgid "Módosítottál egy vagy több mezőt az űrlapon."
 msgstr ""
 
-#: templates/base.html:147
+#: templates/base.html:146
 msgid "El szeretnéd menteni a változtatásokat kilépés előtt?"
 msgstr ""
 
-#: templates/base.html:153 templates/clients/client_confirm_delete.html:31
+#: templates/base.html:152 templates/clients/client_confirm_delete.html:31
 #: templates/leaves/leave_confirm_delete.html:29
 #: templates/leaves/leave_form.html:90
 #: templates/projects/project_confirm_delete.html:31
@@ -343,11 +343,11 @@ msgstr ""
 msgid "Igen"
 msgstr "Yes"
 
-#: templates/base.html:156
+#: templates/base.html:155
 msgid "Nem"
 msgstr ""
 
-#: templates/base.html:159 templates/clients/client_confirm_delete.html:28
+#: templates/base.html:158 templates/clients/client_confirm_delete.html:28
 #: templates/clients/client_form.html:64
 #: templates/leaves/leave_confirm_delete.html:32
 #: templates/leaves/leave_form.html:50 templates/leaves/leave_form.html:93
@@ -460,9 +460,7 @@ msgstr "You are logged in:"
 #| msgid ""
 #| "Válaszd ki a fenti menüből, hogy a jelenléti íveket vagy a szabadságokat "
 #| "szeretnéd kezelni."
-msgid ""
-"Válaszd ki a fenti menüből, hogy a Timesheet-eket vagy a szabadságokat "
-"szeretnéd kezelni."
+msgid "Válaszd ki a fenti menüből, hogy melyik modult szeretnéd használni."
 msgstr ""
 "Please choose from the navigation menu above to manage timesheets or leaves."
 
@@ -942,7 +940,7 @@ msgid "óra"
 msgstr "hours"
 
 #: templates/reports/index.html:118 templates/timesheet/partner_tig.html:91
-#: timesheet/models.py:33 timesheet/views.py:456
+#: timesheet/models.py:33 timesheet/views.py:460
 msgid "Óra"
 msgstr "Hours"
 
@@ -1018,11 +1016,23 @@ msgstr "Download"
 msgid "Mégsem"
 msgstr "Cancel"
 
-#: templates/timesheet/index.html:47
+#: templates/timesheet/index.html:29
+msgid "Hétvégi napok eltüntetése"
+msgstr ""
+
+#: templates/timesheet/index.html:52
+msgid "Feladat"
+msgstr ""
+
+#: templates/timesheet/index.html:55
 #, fuzzy
 #| msgid "szerkesztése"
 msgid "Összesen"
 msgstr "edit"
+
+#: templates/timesheet/index.html:113
+msgid "Beküldés (Mentés)"
+msgstr ""
 
 #: templates/timesheet/partner_tig.html:21
 msgid "Válassz egy partnert..."
@@ -1210,7 +1220,7 @@ msgstr "Unit"
 msgid "Partner TIG-ek"
 msgstr "Clients"
 
-#: timesheet/views.py:440
+#: timesheet/views.py:444
 msgid "Nincs jogosultságod ehhez a felülethez."
 msgstr ""
 

@@ -82,11 +82,19 @@ class UserForm(forms.ModelForm):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm")
+        employment_type = cleaned_data.get("employment_type")
+        annual_leave_allowance = cleaned_data.get("annual_leave_allowance")
 
         if password and password != password_confirm:
             raise ValidationError({
                 "password_confirm": _("A két jelszó nem egyezik meg! Kérlek, próbáld újra.")
             })
+            
+        if employment_type == 'employee' and annual_leave_allowance is None:
+            self.add_error('annual_leave_allowance', _("Alkalmazott esetén kötelező megadni az éves szabadságkeretet."))
+            
+        if employment_type != 'employee':
+            cleaned_data['annual_leave_allowance'] = None
 
         return cleaned_data
 

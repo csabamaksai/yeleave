@@ -608,6 +608,12 @@ def bulk_save_time_entries(request):
                         
                     parsed_hours = parse_hours(hours_str) if hours_str else 0.0
                     
+                    if parsed_hours > project.max_daily_hours:
+                        return JsonResponse({
+                            'status': 'error', 
+                            'message': f'A(z) {project.name} projektre maximum napi {project.max_daily_hours} óra könyvelhető, de te ennyit írtál be: {hours_str}'
+                        }, status=400)
+
                     if parsed_hours <= 0:
                         # Törölni kell, ha 0
                         deleted = TimeEntry.objects.filter(user=request.user, project=project, date=entry_date).delete()

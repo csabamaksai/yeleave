@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}Aktív Projektek - yeleave{% endblock %}
+{% block title %}{% trans "Projektek" %} - yeleave{% endblock %}
 
 {% block content %}
 <div class="mb-6 flex justify-between items-center">
-    <h2 class="text-xl font-bold text-gray-900">{% trans "Aktív Projektek" %}</h2>
+    <h2 class="text-xl font-bold text-gray-900">{% trans "Projektek" %}</h2>
     <a href="{% url 'projects:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:opacity-90 transition">
         {% trans "Új projekt hozzáadása" %}
     </a>

@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class Project(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('Projekt Név'))
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='projects', verbose_name=_('Partner'))
-    max_daily_hours = models.DecimalField(max_digits=4, decimal_places=2, default=8, verbose_name=_('Max napi könyvelhető óraszám'))
+    max_daily_hours = models.IntegerField(default=8, verbose_name=_('Max napi könyvelhető óraszám'))
     description = models.TextField(blank=True, null=True, verbose_name=_('Leírás'))
     
     # ManyToMany kapcsolat a felhasználókkal (kik vannak delegálva a projektre)

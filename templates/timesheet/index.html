@@ -103,6 +103,16 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot class="bg-gray-100">
+                <tr>
+                    <td colspan="{{ projects|length|add:3 }}" class="px-4 py-3 whitespace-nowrap text-right text-sm font-bold text-gray-900 border-r border-gray-200">
+                        Összes könyvelt (MD):
+                    </td>
+                    <td class="px-2 py-3 whitespace-nowrap text-center text-sm font-bold text-brand bg-white" id="grandTotalMd">
+                        0 MD
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
     
@@ -146,14 +156,27 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     const calculateTotals = () => {
+        let grandTotalHours = 0;
         document.querySelectorAll('tbody tr.day-row').forEach(row => {
             let total = 0;
+            // Ne számoljuk bele ha le van tiltva (szabadság be lett pipálva)
             row.querySelectorAll('.ts-input').forEach(input => {
-                if (!input.disabled) total += parseHoursJS(input.value);
+                if (!input.disabled) {
+                    let hrs = parseHoursJS(input.value);
+                    total += hrs;
+                    grandTotalHours += hrs;
+                }
             });
             const totalCell = row.querySelector('.row-total');
             if (totalCell) totalCell.innerText = formatHoursJS(total);
         });
+
+        // Havi összesített Man-Day számítás (8 óra = 1 MD)
+        const grandTotalMdElement = document.getElementById('grandTotalMd');
+        if (grandTotalMdElement) {
+            const mdValue = (grandTotalHours / 8.0).toFixed(2).replace('.00', '');
+            grandTotalMdElement.innerText = `${mdValue} MD`;
+        }
     };
 
     calculateTotals();

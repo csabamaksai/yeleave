@@ -133,7 +133,7 @@ def timesheet_view(request):
         })
 
     # Felhasználóhoz rendelt projektek lekérdezése
-    projects = request.user.assigned_projects.filter(is_active=True, client__is_active=True).select_related('client')
+    projects = list(request.user.assigned_projects.filter(is_active=True, client__is_active=True).select_related('client'))
     
     # E havi mentett bejegyzések
     entries = TimeEntry.objects.filter(
@@ -142,37 +142,41 @@ def timesheet_view(request):
         date__month=month
     )
     
-    # Szótárat építünk a gyors kereséshez: (project_id, dátum_string) -> float hours
-    entry_dict = {(e.project_id, str(e.date)): float(e.hours) for e in entries}
+    # Szótárat építünk a gyors kereséshez: (dátum_string, project_id) -> TimeEntry
+    entry_dict = {(str(e.date), e.project_id): e for e in entries}
+    
+    # Feladat leírások kikeresése naponként
+    day_descriptions = {}
+    for e in entries:
+        date_str = str(e.date)
+        if date_str not in day_descriptions and e.description:
+            day_descriptions[date_str] = e.description
 
-    # Sorok előkészítése a template-hez
-    project_rows = []
-    for project in projects:
-        row_days = []
-        for d in days_in_month:
-            date_str = str(d['date'])
-            hours_decimal = entry_dict.get((project.id, date_str), 0)
+    # Kiegészítjük a days_in_month listát a projektek óráival
+    for d in days_in_month:
+        date_str = str(d['date'])
+        
+        project_hours = []
+        for project in projects:
+            e = entry_dict.get((date_str, project.id))
+            hours_decimal = float(e.hours) if e else 0.0
             hours_formatted = format_hours(hours_decimal) if hours_decimal > 0 else ''
             
-            row_days.append({
-                'date_str': date_str,
+            project_hours.append({
+                'project_id': project.id,
                 'hours_formatted': hours_formatted,
-                'hours_decimal': hours_decimal,
-                'is_weekend': d['is_weekend'],
-                'is_leave': d['is_leave']
+                'hours_decimal': hours_decimal
             })
-        project_rows.append({
-            'project': project,
-            'client_name': project.client.name,
-            'days': row_days
-        })
+            
+        d['project_hours'] = project_hours
+        d['description'] = day_descriptions.get(date_str, "")
 
     return render(request, 'timesheet/index.html', {
         'current_date': current_date,
         'prev_month': prev_month,
         'next_month': next_month,
         'days_in_month': days_in_month,
-        'project_rows': project_rows,
+        'projects': projects,
     })
 
 @login_required
@@ -552,39 +556,74 @@ def reports_export(request):
 def bulk_save_time_entries(request):
     try:
         data = json.loads(request.body)
-        entries = data.get('entries', [])
+        days = data.get('days', [])
         
-        # Lehetőségek: validálni a projekt jogosultságot bulkosan
         updated_count = 0
         deleted_count = 0
-        for entry in entries:
-            project_id = entry.get('project_id')
-            entry_date_str = entry.get('date')
-            hours_str = entry.get('hours')
+        leave_updated = 0
+        leave_deleted = 0
+        
+        for day_obj in days:
+            entry_date_str = day_obj.get('date')
+            is_leave = day_obj.get('is_leave', False)
+            task_desc = day_obj.get('task', '')
+            entries = day_obj.get('entries', [])
             
-            project = Project.objects.filter(id=project_id, assigned_users=request.user).first()
-            if not project:
-                continue
-                
             entry_date = datetime.strptime(entry_date_str, '%Y-%m-%d').date()
-            parsed_hours = parse_hours(hours_str) if hours_str else 0.0
-            
-            if parsed_hours <= 0:
-                # Törölni kell, ha 0
-                deleted = TimeEntry.objects.filter(user=request.user, project=project, date=entry_date).delete()
-                if deleted[0] > 0:
-                    deleted_count += deleted[0]
-            else:
-                hours = round(parsed_hours, 2)
-                obj, created = TimeEntry.objects.update_or_create(
-                    user=request.user,
-                    project=project,
-                    date=entry_date,
-                    defaults={'hours': hours}
-                )
-                updated_count += 1
+
+            if is_leave:
+                # Töröljük a TimeEntry-ket ha voltak
+                del_time = TimeEntry.objects.filter(user=request.user, date=entry_date).delete()
+                if del_time[0]:
+                    deleted_count += del_time[0]
                 
-        return JsonResponse({'status': 'success', 'message': f'Sikeresen beküldve: {updated_count} módosítva/létrehozva, {deleted_count} törölve.'})
+                # Ha nem volt még erre a napra szabadság, próbáljuk meg létrehozni
+                exists = Leave.objects.filter(user=request.user, start_date__lte=entry_date, end_date__gte=entry_date).exists()
+                if not exists:
+                    try:
+                        Leave.objects.create(
+                            user=request.user,
+                            start_date=entry_date,
+                            end_date=entry_date,
+                            leave_type='PTO',
+                            notes=task_desc
+                        )
+                        leave_updated += 1
+                    except Exception as exc:
+                        # Akkor futhat ide, ha hétvégére esne (a modell clean() dobna exceptiont)
+                        pass
+            else:
+                # Nincs szabadság, törölni kell a napi szabadságot ha pontosan egyezik.
+                del_leave = Leave.objects.filter(user=request.user, start_date=entry_date, end_date=entry_date).delete()
+                if del_leave[0]: 
+                    leave_deleted += del_leave[0]
+                
+                for row_entry in entries:
+                    project_id = row_entry.get('project_id')
+                    hours_str = row_entry.get('hours')
+                    
+                    project = Project.objects.filter(id=project_id, assigned_users=request.user).first()
+                    if not project:
+                        continue
+                        
+                    parsed_hours = parse_hours(hours_str) if hours_str else 0.0
+                    
+                    if parsed_hours <= 0:
+                        # Törölni kell, ha 0
+                        deleted = TimeEntry.objects.filter(user=request.user, project=project, date=entry_date).delete()
+                        if deleted[0] > 0:
+                            deleted_count += deleted[0]
+                    else:
+                        hours = round(parsed_hours, 2)
+                        obj, created = TimeEntry.objects.update_or_create(
+                            user=request.user,
+                            project=project,
+                            date=entry_date,
+                            defaults={'hours': hours, 'description': task_desc}
+                        )
+                        updated_count += 1
+                        
+        return JsonResponse({'status': 'success', 'message': f'Sikeresen beküldve: {updated_count} TS és {leave_updated} Szabadság mentve.'})
     except Exception as e:
         import traceback
         traceback.print_exc()

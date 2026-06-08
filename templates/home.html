@@ -5,9 +5,9 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto mt-12 bg-white p-8 rounded-lg shadow-sm border border-gray-100 text-center">
-    <h1 class="text-xl font-bold mb-4">
+    <h2 class="text-xl font-bold text-gray-900 mb-4">
         {% trans "Üdvözlünk a" %} <span class="text-brand">yeleave</span> {% trans "rendszerben!" %}
-    </h1>
+    </h2>
     
     {% if user.is_authenticated %}
         <p class="text-gray-700">{% trans "Be vagy jelentkezve:" %} <strong>{{ user.username }}</strong></p>

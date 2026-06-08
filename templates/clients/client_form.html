@@ -6,13 +6,13 @@
 {% block content %}
 <div class="max-w-2xl mx-auto">
     <div class="mb-6">
-        <h1 class="text-xl font-bold text-gray-900">
+        <h2 class="text-xl font-bold text-gray-900">
             {% if object %}
                 {% blocktrans with name=object.name %}<span class="text-brand">{{ name }}</span> szerkesztése{% endblocktrans %}
             {% else %}
                 {% trans "Új partner hozzáadása" %}
             {% endif %}
-        </h1>
+        </h2>
     </div>
 
     {% if messages %}

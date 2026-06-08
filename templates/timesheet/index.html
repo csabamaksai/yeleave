@@ -6,7 +6,7 @@
 {% block content %}
 <!-- Címsor (Page Title) -->
 <div class="mb-6 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-gray-900">{% trans "Timesheet" %}</h1>
+    <h2 class="text-xl font-bold text-gray-900">{% trans "Timesheet" %}</h2>
 </div>
 
 <div class="bg-white shadow sm:rounded-lg mb-6">
@@ -14,19 +14,14 @@
     <div class="px-4 py-4 border-b border-gray-200 sm:px-6 flex items-center justify-between">
         <div class="flex items-center gap-4">
             <a href="?year={{ prev_month.year }}&month={{ prev_month.month }}" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 transition">
-                <!-- Left Arrow -->
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </a>
             <h2 class="text-lg font-bold leading-6 text-gray-900 w-48 text-center">
                 {{ current_date|date:"Y F" }}
             </h2>
             <a href="?year={{ next_month.year }}&month={{ next_month.month }}" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 transition">
-                <!-- Right Arrow -->
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
-        </div>
-        <div class="text-sm text-gray-500">
-            <!-- Reserved for right side header items -->
         </div>
     </div>
 
@@ -35,53 +30,69 @@
         <table class="min-w-full divide-y divide-gray-200 border-b border-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th scope="col" class="sticky left-0 z-10 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] w-64 min-w-[200px]">
-                        {% trans "Projekt" %}
+                    <th scope="col" class="sticky left-0 z-10 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] w-32 min-w-[120px]">
+                        {% trans "Dátum" %}
                     </th>
-                    {% for day in days_in_month %}
-                        <th scope="col" class="px-2 py-2 text-center text-xs font-medium uppercase tracking-wider border-r border-gray-200 w-[58px] min-w-[58px] max-w-[58px] {% if day.is_weekend %}bg-gray-200 text-gray-600{% else %}text-gray-500{% endif %}">
-                            <div class="opacity-60">{{ day.weekday_name }}</div>
-                            <div class="font-bold text-sm mt-1">{{ day.day }}</div>
+                    {% for project in projects %}
+                        <th scope="col" class="px-2 py-2 text-center text-xs font-medium uppercase tracking-wider border-r border-gray-200 w-32 min-w-[100px] max-w-[120px]">
+                            <div class="text-brand truncate font-bold" title="{{ project.client.name }}">{{ project.client.name }}</div>
+                            <div class="text-[10px] text-gray-500 truncate" title="{{ project.name }}">{{ project.name }}</div>
                         </th>
                     {% endfor %}
-                    <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">{% trans "Összesen" %}</th>
+                    <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
+                        {% trans "Szabadság" %}
+                    </th>
+                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
+                        {% trans "Feladat" %}
+                    </th>
+                    <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
+                        {% trans "Összesen" %}
+                    </th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                {% for row in project_rows %}
-                    <tr class="hover:bg-blue-50/30 transition-colors">
-                        <td class="sticky left-0 z-10 bg-white px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)]">
-                            <div class="font-medium text-brand">{{ row.client_name }}</div>
-                            <div class="text-gray-500 text-xs">{{ row.project.name }}</div>
+                {% for day in days_in_month %}
+                    <tr class="hover:bg-blue-50/30 transition-colors {% if day.is_weekend %}bg-gray-100/50{% endif %}" data-date="{{ day.date|date:'Y-m-d' }}">
+                        <td class="sticky left-0 z-10 bg-white {% if day.is_weekend %}bg-gray-50{% endif %} px-4 py-3 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] flex items-center justify-between">
+                            <span class="font-bold">{{ day.day }}.</span>
+                            <span class="text-gray-400 text-xs ml-2">{{ day.weekday_name }}</span>
                         </td>
-                        {% for day in row.days %}
-                            <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} hover:bg-yellow-50 focus-within:bg-yellow-100 transition-colors">
-                                <!-- A cellába írhat a felhasználó, az input kitölti az egészet -->
+                        {% for hs in day.project_hours %}
+                            <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
                                 <input 
                                     type="text" 
                                     class="ts-input w-full h-full min-h-[48px] text-center text-sm bg-transparent border-0 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave %}cursor-not-allowed placeholder-red-300 text-red-500{% endif %}"
-                                    value="{{ day.hours_formatted }}" 
-                                    data-project="{{ row.project.id }}" 
-                                    data-date="{{ day.date_str }}"
-                                    data-original="{{ day.hours_formatted }}"
-                                    data-decimal="{{ day.hours_decimal }}"
-                                    {% if day.is_leave %}disabled placeholder="L"{% else %}placeholder=""{% endif %}
+                                    value="{{ hs.hours_formatted }}" 
+                                    data-project="{{ hs.project_id }}" 
+                                    data-date="{{ day.date|date:'Y-m-d' }}"
+                                    data-original="{{ hs.hours_formatted }}"
+                                    {% if day.is_leave %}disabled placeholder="L"{% endif %}
                                 >
-                                <!-- Zöld pipa animáció sikeres mentéskor -->
-                                <div class="save-indicator absolute top-1 right-1 hidden text-green-500">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                                </div>
                             </td>
                         {% endfor %}
+                        <td class="border-r border-gray-200 text-center relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
+                            <input type="checkbox" class="leave-checkbox cursor-pointer w-4 h-4 text-brand rounded border-gray-300 focus:ring-brand" 
+                                data-date="{{ day.date|date:'Y-m-d' }}"
+                                data-original="{% if day.is_leave %}true{% else %}false{% endif %}"
+                                {% if day.is_leave %}checked{% endif %}
+                                {% if day.is_weekend %}disabled title="Hétvégén/ünnepnapon nem értelmezett"{% endif %}>
+                        </td>
+                        <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
+                            <input type="text" class="task-input w-full h-full min-h-[48px] text-sm bg-transparent border-0 px-3 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave %}cursor-not-allowed text-gray-400{% endif %}"
+                                value="{{ day.description|default:'' }}"
+                                data-date="{{ day.date|date:'Y-m-d' }}"
+                                data-original="{{ day.description|default:'' }}"
+                                placeholder="Napi feladat megnevezése"
+                                {% if day.is_leave %}disabled{% endif %}>
+                        </td>
                         <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-bold text-gray-700 row-total">
-                            <!-- Ide jöhet egy kis JS logika, ami összesíti a sort -->
                             0.0
                         </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="{{ days_in_month|length|add:2 }}" class="px-6 py-8 text-center text-gray-500">
-                            Még nincsenek projektek hozzád rendelve.
+                        <td colspan="10" class="px-6 py-8 text-center text-gray-500">
+                            Még nincsenek projektek hozzád rendelve, vagy nincs adat.
                         </td>
                     </tr>
                 {% endfor %}
@@ -93,7 +104,7 @@
     <div class="px-4 py-4 sm:px-6 bg-gray-50 flex justify-end">
         <button id="submitTimesheetBtn" class="bg-brand text-white hover:opacity-90 px-6 py-2 rounded-md font-medium transition shadow-sm flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            Beküldés (Mentés)
+            {% trans "Beküldés (Mentés)" %}
         </button>
     </div>
 </div>
@@ -103,36 +114,22 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     
-    // JS Parser to calculate total in decimals
     const parseHoursJS = (str) => {
         if (!str) return 0;
         str = str.trim().toLowerCase();
-        
         let m = str.match(/^(\d+)\s*(?:ó|o|h)\s*(?:(\d+)\s*(?:p|m)?)?$/);
-        if (m) {
-            let h = parseInt(m[1]) || 0;
-            let m_val = parseInt(m[2]) || 0;
-            return h + (m_val / 60.0);
-        }
-        
+        if (m) return (parseInt(m[1]) || 0) + ((parseInt(m[2]) || 0) / 60.0);
         let m_only = str.match(/^(\d+)\s*(?:p|m)$/);
-        if (m_only) {
-            return parseInt(m_only[1]) / 60.0;
-        }
-
+        if (m_only) return parseInt(m_only[1]) / 60.0;
         str = str.replace(',', '.');
         if (str.includes(':')) {
             let parts = str.split(':');
-            let h = parseFloat(parts[0]) || 0;
-            let m_val = parts.length > 1 ? parseFloat(parts[1]) : 0;
-            return h + (m_val / 60.0);
+            return (parseFloat(parts[0]) || 0) + (parts.length > 1 ? parseFloat(parts[1]) / 60.0 : 0);
         }
-
         let val = parseFloat(str);
         return isNaN(val) ? 0 : val;
     };
 
-    // JS Formatter to display decimals as "Xó Yp" in the JS code if needed, but we use it for total
     const formatHoursJS = (dec) => {
         if (!dec || dec === 0) return '0.0';
         let h = Math.floor(dec);
@@ -142,12 +139,12 @@ document.addEventListener("DOMContentLoaded", function() {
         return `${h}ó ${m}p`;
     };
 
-    // Total sorok kiszámítása az oldal betöltésekor
     const calculateTotals = () => {
-        document.querySelectorAll('tbody tr').forEach(row => {
+        document.querySelectorAll('tbody tr.day-row').forEach(row => {
             let total = 0;
+            // Ha disabled (is_leave), akkor a szummázott érték nulla legyen vizuálisan? Vagy ne, mert el lesz dobva.
             row.querySelectorAll('.ts-input').forEach(input => {
-                total += parseHoursJS(input.value);
+                if (!input.disabled) total += parseHoursJS(input.value);
             });
             const totalCell = row.querySelector('.row-total');
             if (totalCell) totalCell.innerText = total > 0 ? formatHoursJS(total) : '0.0';
@@ -156,22 +153,48 @@ document.addEventListener("DOMContentLoaded", function() {
 
     calculateTotals();
 
-    // Kiszínezés és totál frissítése változáskor
-    document.querySelectorAll('.ts-input').forEach(input => {
-        // Amikor elhagyja a mezőt
+    // Szabadság checkbox kattintás logika
+    document.querySelectorAll('.leave-checkbox').forEach(cb => {
+        cb.addEventListener('change', function() {
+            const tr = this.closest('tr');
+            const inputs = tr.querySelectorAll('.ts-input, .task-input');
+            const isChecked = this.checked;
+            
+            inputs.forEach(input => {
+                input.disabled = isChecked;
+                if (isChecked) {
+                    if (input.classList.contains('ts-input')) {
+                        input.classList.add('cursor-not-allowed', 'text-red-500', 'placeholder-red-300');
+                        input.placeholder = "L";
+                        input.value = ""; // Vizuálisan ürítjük ha rákattint, backend a mentéskor dobja
+                    } else {
+                        input.classList.add('cursor-not-allowed', 'text-gray-400');
+                        input.value = "";
+                    }
+                } else {
+                    if (input.classList.contains('ts-input')) {
+                        input.classList.remove('cursor-not-allowed', 'text-red-500', 'placeholder-red-300');
+                        input.placeholder = "";
+                    } else {
+                        input.classList.remove('cursor-not-allowed', 'text-gray-400');
+                    }
+                }
+            });
+            calculateTotals();
+        });
+    });
+
+    document.querySelectorAll('.ts-input, .task-input').forEach(input => {
         input.addEventListener('blur', function() {
             const val = this.value.trim();
             const originalVal = this.getAttribute('data-original');
             if (val !== originalVal) {
-                // Csak vizuális jelleg
-                this.parentElement.classList.add('bg-yellow-200');
+                this.parentElement.classList.add('bg-yellow-100');
             } else {
-                this.parentElement.classList.remove('bg-yellow-200');
+                this.parentElement.classList.remove('bg-yellow-100');
             }
-            calculateTotals();
+            if (this.classList.contains('ts-input')) calculateTotals();
         });
-
-        // Enter esetén formázzon és ugorjon ki
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -180,41 +203,59 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Beküldés gomb működése
     const submitBtn = document.getElementById('submitTimesheetBtn');
     if (submitBtn) {
         submitBtn.addEventListener('click', async function() {
             const csrfToken = '{{ csrf_token }}';
+            let dayData = [];
             
-            // Csak azokat küldjük be (spórolásképp), ami megváltozott
-            // vagy akár küldhetjük mindet is ami ki van töltve.
-            // MOST: Azokat küldjük be, amelyek tartalma nem egyezik a data-original val, 
-            // de az is lehet, hogy töröltek belőle (üres lett).
-            
-            let entriesToSave = [];
-            
-            document.querySelectorAll('.ts-input').forEach(input => {
-                const val = input.value.trim();
-                const originalVal = input.getAttribute('data-original');
+            document.querySelectorAll('tbody tr.day-row').forEach(row => {
+                const date = row.getAttribute('data-date');
+                const cb = row.querySelector('.leave-checkbox');
+                if (!cb) return;
+
+                const leaveCheckOrig = cb.getAttribute('data-original') === 'true';
+                const isLeave = cb.checked;
                 
-                if (val !== originalVal) {
-                    entriesToSave.push({
-                        project_id: input.getAttribute('data-project'),
-                        date: input.getAttribute('data-date'),
-                        hours: val
+                const taskInput = row.querySelector('.task-input');
+                const taskVal = taskInput ? taskInput.value.trim() : "";
+                const taskOrig = taskInput ? taskInput.getAttribute('data-original') : "";
+                
+                let hasChanges = (isLeave !== leaveCheckOrig) || (!isLeave && taskVal !== taskOrig);
+                
+                let entries = [];
+                if (!isLeave) {
+                    row.querySelectorAll('.ts-input').forEach(inp => {
+                        const val = inp.value.trim();
+                        if (val !== inp.getAttribute('data-original')) {
+                            hasChanges = true;
+                        }
+                        entries.push({
+                            project_id: inp.getAttribute('data-project'),
+                            hours: val
+                        });
+                    });
+                }
+                
+                // Még ha nincs is check eltérés, lehet hogy a formán csak a totalt vagy a szöveget írta át
+                // De beküldünk mindent ami az adott napon van, ha BÁRMI változott
+                if (hasChanges) {
+                    dayData.push({
+                        date: date,
+                        is_leave: isLeave,
+                        task: taskVal,
+                        entries: entries
                     });
                 }
             });
             
-            if (entriesToSave.length === 0) {
+            if (dayData.length === 0) {
                 alert('Nincs módosított bejegyzés, amit be lehetne küldeni!');
                 return;
             }
             
-            // Gomb tiltása töltés alatt
             submitBtn.disabled = true;
-            const originalBtnHtml = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Beküldés folyamatban...';
+            submitBtn.innerHTML = 'Kérlek várj...';
             
             try {
                 const response = await fetch('{% url "timesheet:api_bulk_save" %}', {
@@ -223,40 +264,22 @@ document.addEventListener("DOMContentLoaded", function() {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': csrfToken
                     },
-                    body: JSON.stringify({ entries: entriesToSave })
+                    body: JSON.stringify({ days: dayData })
                 });
 
                 const data = await response.json();
                 
                 if (response.ok && data.status === 'success') {
-                    // Mentés sikeres
-                    // Frissítjük a data-original attribútumokat
-                    document.querySelectorAll('.ts-input').forEach(input => {
-                        const val = input.value.trim();
-                        const originalVal = input.getAttribute('data-original');
-                        if (val !== originalVal) {
-                            input.setAttribute('data-original', val);
-                            input.parentElement.classList.remove('bg-yellow-200');
-                            
-                            // Kis zöld pipa felvillanása
-                            const indicator = input.parentElement.querySelector('.save-indicator');
-                            if (indicator) {
-                                indicator.classList.remove('hidden');
-                                setTimeout(() => indicator.classList.add('hidden'), 2000);
-                            }
-                        }
-                    });
-                    calculateTotals();
-                    alert(data.message || 'Sikeresen beküldve!');
+                    window.location.reload();
                 } else {
-                    alert('Hiba történt a mentés során: ' + (data.message || 'Ismeretlen hiba'));
+                    alert('Hiba történt a beküldés során!\n' + (data.message || ''));
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Beküldés (Mentés)';
                 }
             } catch (err) {
-                console.error(err);
-                alert('Hálózati hiba történt a beküldés során!');
-            } finally {
+                alert('Hálózati hiba történt az elküldés során.');
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnHtml;
+                submitBtn.innerHTML = 'Beküldés (Mentés)';
             }
         });
     }

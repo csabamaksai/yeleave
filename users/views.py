@@ -30,7 +30,7 @@ class UserCreateView(StaffRequiredMixin, CreateView):
     success_url = reverse_lazy('users:list')
 
     def form_valid(self, form):
-        messages.success(self.request, _("Új dolgozó sikeresen hozzáadva."))
+        messages.success(self.request, _("Új tanácsadó sikeresen hozzáadva."))
         return super().form_valid(form)
 
 class UserUpdateView(StaffRequiredMixin, UpdateView):
@@ -40,7 +40,7 @@ class UserUpdateView(StaffRequiredMixin, UpdateView):
     success_url = reverse_lazy('users:list')
 
     def form_valid(self, form):
-        messages.success(self.request, _("Dolgozó adatai sikeresen frissítve."))
+        messages.success(self.request, _("Tanácsadó adatai sikeresen frissítve."))
         return super().form_valid(form)
 
 class UserDeleteView(StaffRequiredMixin, TemplateView):

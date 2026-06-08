@@ -13,7 +13,7 @@ class Project(models.Model):
         settings.AUTH_USER_MODEL, 
         related_name='assigned_projects', 
         blank=True, 
-        verbose_name=_('Hozzárendelt dolgozók')
+        verbose_name=_('Hozzárendelt tanácsadók')
     )
     
     is_active = models.BooleanField(default=True, verbose_name=_('Aktív'))

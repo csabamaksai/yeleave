@@ -12,7 +12,7 @@ class Leave(models.Model):
         ('UNP', _('Fizetés Nélküli Szabadság')),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leaves', verbose_name=_('Dolgozó'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leaves', verbose_name=_('Tanácsadó'))
     start_date = models.DateField(verbose_name=_('Kezdés dátuma'))
     end_date = models.DateField(verbose_name=_('Befejezés dátuma'))
     leave_type = models.CharField(max_length=3, choices=LEAVE_TYPES, default='PTO', verbose_name=_('Típus'))

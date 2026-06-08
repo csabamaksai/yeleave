@@ -4,7 +4,7 @@ from projects.models import Project
 from django.utils.translation import gettext_lazy as _
 
 class TimeEntry(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='time_entries', verbose_name=_('Dolgozó'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='time_entries', verbose_name=_('Tanácsadó'))
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='time_entries', verbose_name=_('Projekt'))
     date = models.DateField(verbose_name=_('Dátum'))
     

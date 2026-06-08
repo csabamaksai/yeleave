@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 08:17+0000\n"
+"POT-Creation-Date: 2026-06-08 11:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgid "A névnek legalább 5 karakter hosszúnak kell lennie."
 msgstr ""
 
 #: clients/models.py:5 templates/clients/client_list.html:33
-#: templates/users/user_list.html:29
+#: templates/users/user_list.html:33
 msgid "Név"
 msgstr "Name"
 
@@ -81,7 +81,7 @@ msgstr "Created"
 msgid "Partner"
 msgstr "Client"
 
-#: clients/models.py:23 templates/base.html:40
+#: clients/models.py:23 templates/base.html:42
 #: templates/clients/client_list.html:8
 msgid "Partnerek"
 msgstr "Clients"
@@ -173,8 +173,8 @@ msgstr "Unpaid Leave"
 #: leaves/models.py:15 templates/reports/index.html:114
 #: templates/timesheet/partner_tig.html:64 timesheet/models.py:7
 #: timesheet/views.py:456
-msgid "Dolgozó"
-msgstr "Employee"
+msgid "Tanácsadó"
+msgstr ""
 
 #: leaves/models.py:49
 msgid "A befejező dátum nem lehet korábbi a kezdő dátumnál."
@@ -196,7 +196,7 @@ msgstr ""
 msgid "Szabadság"
 msgstr "Leaves"
 
-#: leaves/models.py:77 templates/base.html:37
+#: leaves/models.py:77 templates/base.html:38
 #: templates/leaves/leave_list.html:4 templates/leaves/leave_list.html:9
 #: templates/pages/help.html:25 templates/pages/help.html:66
 msgid "Szabadságok"
@@ -235,7 +235,7 @@ msgid "Projekt Név"
 msgstr "Projects"
 
 #: projects/models.py:16
-msgid "Hozzárendelt dolgozók"
+msgid "Hozzárendelt tanácsadók"
 msgstr ""
 
 #: projects/models.py:20
@@ -251,7 +251,7 @@ msgstr "End Date"
 msgid "Projekt"
 msgstr "Project"
 
-#: projects/models.py:28 templates/base.html:41
+#: projects/models.py:28 templates/base.html:43
 msgid "Projektek"
 msgstr "Projects"
 
@@ -270,18 +270,18 @@ msgstr ""
 msgid "A(z) '%(name)s' projekt sikeresen lezárva."
 msgstr ""
 
-#: templates/base.html:36 templates/pages/help.html:22
+#: templates/base.html:37 templates/pages/help.html:22
 #: templates/pages/help.html:48 templates/timesheet/index.html:4
 #: templates/timesheet/index.html:9
-msgid "Jelenléti ív"
-msgstr "Timesheet"
+msgid "Timesheet"
+msgstr ""
 
-#: templates/base.html:39 templates/reports/index.html:24
+#: templates/base.html:41 templates/reports/index.html:24
 #: templates/users/user_list.html:4 templates/users/user_list.html:8
-msgid "Dolgozók"
-msgstr "Employees"
+msgid "Tanácsadók"
+msgstr ""
 
-#: templates/base.html:42 templates/pages/help.html:31
+#: templates/base.html:44 templates/pages/help.html:31
 #: templates/pages/help.html:101 templates/timesheet/partner_tig.html:4
 #: templates/timesheet/partner_tig.html:8 timesheet/models.py:46
 #, fuzzy
@@ -289,51 +289,51 @@ msgstr "Employees"
 msgid "Partner TIG"
 msgstr "Client"
 
-#: templates/base.html:45 templates/reports/index.html:4
+#: templates/base.html:47 templates/reports/index.html:4
 #: templates/reports/index.html:8
 msgid "Riportok"
 msgstr "Reports"
 
-#: templates/base.html:69
+#: templates/base.html:71
 msgid "Kijelentkezés"
 msgstr "Logout"
 
-#: templates/base.html:72 templates/home.html:18
+#: templates/base.html:74 templates/home.html:18
 #: templates/registration/login.html:4 templates/registration/login.html:40
 msgid "Bejelentkezés"
 msgstr "Login"
 
-#: templates/base.html:97 templates/pages/contact.html:4
+#: templates/base.html:99 templates/pages/contact.html:4
 #: templates/pages/contact.html:9
 msgid "Kapcsolat"
 msgstr "Contact"
 
-#: templates/base.html:98
+#: templates/base.html:100
 msgid "Adatvédelem"
 msgstr "Privacy"
 
-#: templates/base.html:99 templates/pages/help.html:4
+#: templates/base.html:101 templates/pages/help.html:4
 #: templates/pages/help.html:10
 msgid "Tudástár"
 msgstr ""
 
-#: templates/base.html:118
+#: templates/base.html:120
 msgid "Beállítás"
 msgstr "Set"
 
-#: templates/base.html:141
+#: templates/base.html:143
 msgid "Mentetlen változtatások!"
 msgstr ""
 
-#: templates/base.html:144
+#: templates/base.html:146
 msgid "Módosítottál egy vagy több mezőt az űrlapon."
 msgstr ""
 
-#: templates/base.html:145
+#: templates/base.html:147
 msgid "El szeretnéd menteni a változtatásokat kilépés előtt?"
 msgstr ""
 
-#: templates/base.html:151 templates/clients/client_confirm_delete.html:31
+#: templates/base.html:153 templates/clients/client_confirm_delete.html:31
 #: templates/leaves/leave_confirm_delete.html:29
 #: templates/leaves/leave_form.html:90
 #: templates/projects/project_confirm_delete.html:31
@@ -343,11 +343,11 @@ msgstr ""
 msgid "Igen"
 msgstr "Yes"
 
-#: templates/base.html:154
+#: templates/base.html:156
 msgid "Nem"
 msgstr ""
 
-#: templates/base.html:157 templates/clients/client_confirm_delete.html:28
+#: templates/base.html:159 templates/clients/client_confirm_delete.html:28
 #: templates/clients/client_form.html:64
 #: templates/leaves/leave_confirm_delete.html:32
 #: templates/leaves/leave_form.html:50 templates/leaves/leave_form.html:93
@@ -422,12 +422,12 @@ msgid "Kapcsolattartó"
 msgstr "Contact Person"
 
 #: templates/clients/client_list.html:45 templates/leaves/leave_list.html:40
-#: templates/projects/project_list.html:42 templates/users/user_list.html:41
+#: templates/projects/project_list.html:42 templates/users/user_list.html:45
 msgid "Műveletek"
 msgstr "Actions"
 
 #: templates/clients/client_list.html:78 templates/leaves/leave_list.html:58
-#: templates/projects/project_list.html:59 templates/users/user_list.html:73
+#: templates/projects/project_list.html:59 templates/users/user_list.html:77
 msgid "Szerkesztés"
 msgstr "Edit"
 
@@ -456,8 +456,12 @@ msgid "Be vagy jelentkezve:"
 msgstr "You are logged in:"
 
 #: templates/home.html:14
+#, fuzzy
+#| msgid ""
+#| "Válaszd ki a fenti menüből, hogy a jelenléti íveket vagy a szabadságokat "
+#| "szeretnéd kezelni."
 msgid ""
-"Válaszd ki a fenti menüből, hogy a jelenléti íveket vagy a szabadságokat "
+"Válaszd ki a fenti menüből, hogy a Timesheet-eket vagy a szabadságokat "
 "szeretnéd kezelni."
 msgstr ""
 "Please choose from the navigation menu above to manage timesheets or leaves."
@@ -499,7 +503,9 @@ msgid "Törlés"
 msgstr "Delete"
 
 #: templates/leaves/leave_form.html:80
-msgid "Ütközés a Jelenléti ívvel"
+#, fuzzy
+#| msgid "Ütközés a Jelenléti ívvel"
+msgid "Ütközés a Timesheet-tel"
 msgstr "Timesheet"
 
 #: templates/leaves/leave_form.html:83
@@ -508,7 +514,7 @@ msgstr ""
 
 #: templates/leaves/leave_form.html:84
 msgid ""
-"Ha most mented a szabadságot, a korábbi jelenléti bejegyzések erre az "
+"Ha most mented a szabadságot, a korábbi Timesheet bejegyzések erre az "
 "időszakra VÉGLEGESEN TÖRLŐDNEK. Biztosan folytatod?"
 msgstr ""
 
@@ -591,7 +597,7 @@ msgstr "Administrator"
 
 #: templates/pages/help.html:51
 msgid ""
-"A Jelenléti ív modulban rögzítheted a napi munkaóráidat az adott projektekre "
+"A Timesheet modulban rögzítheted a napi munkaóráidat az adott projektekre "
 "vetítve. A felület automatikusan betölti a számodra elérhető projekteket."
 msgstr ""
 
@@ -631,7 +637,7 @@ msgstr ""
 #: templates/pages/help.html:69
 msgid ""
 "Itt igényelhetsz és tarthatsz nyilván különböző távolléteket. Ezek az adatok "
-"automatikusan bekerülnek a jelenléti ívedbe is."
+"automatikusan bekerülnek a Timesheet-edbe is."
 msgstr ""
 
 #: templates/pages/help.html:71
@@ -664,7 +670,7 @@ msgstr ""
 #: templates/pages/help.html:87
 msgid ""
 "A Riportok felületen nyomon követhető az összes rögzített adat, szűrve "
-"dolgozókra, projektekre, vagy időszakokra."
+"tanácsadókra, projektekre, vagy időszakokra."
 msgstr ""
 
 #: templates/pages/help.html:89
@@ -675,7 +681,7 @@ msgstr "Filter"
 
 #: templates/pages/help.html:89
 msgid ""
-"Válaszd ki a hónapot és évet, a partnereket, vagy dolgozókat a bal oldali "
+"Válaszd ki a hónapot és évet, a partnereket, vagy tanácsadókat a bal oldali "
 "sávban, majd kattints a \"Szűrés\" gombra az összesítések megtekintéséhez."
 msgstr ""
 
@@ -687,9 +693,9 @@ msgstr "Export"
 
 #: templates/pages/help.html:90
 msgid ""
-"Az adatok nem csak a képernyőn láthatóak – a \"Jelenléti ívek exportálása\" "
+"Az adatok nem csak a képernyőn láthatóak – a \"Timesheet-ek exportálása\" "
 "gombbal hivatalos, nyomtatható .xls fájl generálható az adatokból "
-"dolgozónként."
+"tanácsadónként."
 msgstr ""
 
 #: templates/pages/help.html:104 templates/pages/help.html:123
@@ -700,7 +706,7 @@ msgstr ""
 msgid ""
 "A Partner Teljesítés Igazolás (TIG) oldalon lehetőség van a partnerek "
 "(ügyfelek) által leigazolt, hivatalosan elfogadott munkaórák rögzítésére "
-"dolgozónként és projektenként."
+"tanácsadónként és projektenként."
 msgstr ""
 
 #: templates/pages/help.html:107
@@ -710,7 +716,7 @@ msgstr ""
 #: templates/pages/help.html:107
 msgid ""
 "A rendszer a TIG-be beírt jóváhagyott tételek alpján tudja összemérni a "
-"munkavállaló által a jelenléti íven rögzített órákat a partner által valósan "
+"munkavállaló által a Timesheet-en rögzített órákat a partner által valósan "
 "elismert órákkal."
 msgstr ""
 
@@ -722,7 +728,7 @@ msgstr "An error occurred during save:"
 
 #: templates/pages/help.html:108
 msgid ""
-"Amikor lemented az összesítést, a rendszer hónapra, projektre és dolgozóra "
+"Amikor lemented az összesítést, a rendszer hónapra, projektre és tanácsadóra "
 "lebontva párosítja az adatokat az időbejegyzésekkel, és automatikusan "
 "kiszámítja az eltérést (Deltát)."
 msgstr ""
@@ -738,12 +744,12 @@ msgid ""
 msgstr ""
 
 #: templates/pages/help.html:120
-msgid "Dolgozók, Partnerek és Projektek"
+msgid "Tanácsadók, Partnerek és Projektek"
 msgstr ""
 
 #: templates/pages/help.html:124
 msgid ""
-"Itt építhető fel a cég adatbázisa. Ezek nélkül a dolgozók nem tudnak "
+"Itt építhető fel a cég adatbázisa. Ezek nélkül a tanácsadók nem tudnak "
 "munkaórákat rögzíteni."
 msgstr ""
 
@@ -768,20 +774,18 @@ msgstr "Projects"
 #: templates/pages/help.html:127
 msgid ""
 "Minden projekt egy partnerhez van rendelve. Fontos: a projekt létrehozásánál "
-"vagy szerkesztésénél kell kijelölni azokat a dolgozókat (Assigned users), "
+"vagy szerkesztésénél kell kijelölni azokat a tanácsadókat (Assigned users), "
 "akik erre a projektre időt rögzíthetnek."
 msgstr ""
 
 #: templates/pages/help.html:128
-#, fuzzy
-#| msgid "Dolgozók"
-msgid "Dolgozók:"
-msgstr "Employees"
+msgid "Tanácsadók:"
+msgstr ""
 
 #: templates/pages/help.html:128
 msgid ""
 "Új munkatársak rögzítése. Meghatározható, hogy az illető cégvezető, "
-"könyvelő, vagy normál dolgozói jogosultsággal rendelkezik-e."
+"könyvelő, vagy normál tanácsadói jogosultsággal rendelkezik-e."
 msgstr ""
 
 #: templates/pages/privacy.html:4 templates/pages/privacy.html:9
@@ -883,7 +887,9 @@ msgid "Jelszó"
 msgstr "Password"
 
 #: templates/reports/index.html:26
-msgid "Válassz dolgozókat (CMD/CTRL gombbal többet is lehet)"
+#, fuzzy
+#| msgid "Válassz dolgozókat (CMD/CTRL gombbal többet is lehet)"
+msgid "Válassz tanácsadókat (CMD/CTRL gombbal többet is lehet)"
 msgstr "Select employees (CMD/CTRL to select multiple)"
 
 #: templates/reports/index.html:37 templates/timesheet/partner_tig.html:20
@@ -987,12 +993,19 @@ msgid "Régebbi Excel formátum (97-2003)"
 msgstr "Older Excel format (97-2003)"
 
 #: templates/reports/index.html:229
-msgid "Munkalapokra bontás dolgozónként"
+#, fuzzy
+#| msgid "Munkalapokra bontás dolgozónként"
+msgid "Munkalapokra bontás tanácsadónként"
 msgstr "Split to worksheets by employee"
 
 #: templates/reports/index.html:230
+#, fuzzy
+#| msgid ""
+#| "Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel "
+#| "fájlban."
 msgid ""
-"Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel fájlban."
+"Minden kiválasztott tanácsadó külön munkalapra (fülre) kerül az Excel "
+"fájlban."
 msgstr ""
 "Each selected employee will be on a separate worksheet (tab) in the Excel "
 "file."
@@ -1020,8 +1033,8 @@ msgid "Betöltés"
 msgstr "Load"
 
 #: templates/timesheet/partner_tig.html:65
-msgid "Dolgozó TS"
-msgstr "Employee TS"
+msgid "Tanácsadó TS"
+msgstr ""
 
 #: templates/timesheet/partner_tig.html:67
 msgid "Egység"
@@ -1074,7 +1087,9 @@ msgid "Hálózati hiba történt."
 msgstr "Network error occurred."
 
 #: templates/users/user_confirm_delete.html:4
-msgid "Dolgozó törlése"
+#, fuzzy
+#| msgid "Szabadság törlése"
+msgid "Tanácsadó törlése"
 msgstr "Leaves"
 
 #: templates/users/user_confirm_delete.html:14
@@ -1091,52 +1106,68 @@ msgstr ""
 
 #: templates/users/user_confirm_delete.html:21
 msgid ""
-"Figyelem: A deaktiválással a dolgozó automatikusan lekerül az összes olyan "
+"Figyelem: A deaktiválással a tanácsadó automatikusan lekerül az összes olyan "
 "projektről, amihez hozzá van rendelve!"
 msgstr ""
 
 #: templates/users/user_form.html:4
-msgid "Dolgozó szerkesztése"
-msgstr "Edit User"
+#, fuzzy
+#| msgid "Partner szerkesztése"
+msgid "Tanácsadó szerkesztése"
+msgstr "edit"
 
 #: templates/users/user_form.html:4
-msgid "Új dolgozó"
-msgstr "Users"
+msgid "Új tanácsadó"
+msgstr ""
 
 #: templates/users/user_form.html:13 templates/users/user_list.html:10
-msgid "Új dolgozó hozzáadása"
+#, fuzzy
+#| msgid "Új dolgozó hozzáadása"
+msgid "Új tanácsadó hozzáadása"
 msgstr "Add New User"
 
 #: templates/users/user_form.html:77
 msgid "Jelszó módosításához írj be egy újat, különben hagyd üresen."
 msgstr "To change password, enter a new one, otherwise leave blank."
 
-#: templates/users/user_list.html:32 users/forms.py:37
+#: templates/users/user_list.html:25
+msgid "Keresés a tanácsadók között..."
+msgstr ""
+
+#: templates/users/user_list.html:36 users/forms.py:37
 msgid "Felhasználónév"
 msgstr "Username or Email"
 
-#: templates/users/user_list.html:35
+#: templates/users/user_list.html:39
 msgid "E-mail"
 msgstr "Email"
 
-#: templates/users/user_list.html:38
+#: templates/users/user_list.html:42
 msgid "Jogosultság"
 msgstr "Role"
 
-#: templates/users/user_list.html:60 users/forms.py:12
+#: templates/users/user_list.html:64 users/forms.py:12
 msgid "Adminisztrátor"
 msgstr "Administrator"
 
-#: templates/users/user_list.html:64
+#: templates/users/user_list.html:68
 msgid "Lekérdező"
 msgstr "Reporter"
 
-#: templates/users/user_list.html:68 users/forms.py:10
+#: templates/users/user_list.html:72 users/forms.py:10
 msgid "Normál felhasználó"
 msgstr "Normal user"
 
-#: templates/users/user_list.html:79
-msgid "Nincs megjeleníthető dolgozó."
+#: templates/users/user_list.html:82
+#, fuzzy
+#| msgid "Nincs a keresésnek megfelelő partner."
+msgid "Nincs a keresésnek megfelelő tanácsadó."
+msgstr "No clients match your search."
+
+#: templates/users/user_list.html:88
+#, fuzzy
+#| msgid "Nincs megjeleníthető dolgozó."
+msgid "Nincs megjeleníthető tanácsadó."
 msgstr "No users to display."
 
 #: timesheet/models.py:12
@@ -1256,11 +1287,11 @@ msgstr ""
 #: users/views.py:33
 #, fuzzy
 #| msgid "Új dolgozó hozzáadása"
-msgid "Új dolgozó sikeresen hozzáadva."
+msgid "Új tanácsadó sikeresen hozzáadva."
 msgstr "Add New User"
 
 #: users/views.py:43
-msgid "Dolgozó adatai sikeresen frissítve."
+msgid "Tanácsadó adatai sikeresen frissítve."
 msgstr ""
 
 #: users/views.py:60
@@ -1271,6 +1302,32 @@ msgstr ""
 #, python-format
 msgid "%(username)s fiókja deaktiválva lett és lekerült az aktív projektekről."
 msgstr ""
+
+#~ msgid "Dolgozó"
+#~ msgstr "Employee"
+
+#~ msgid "Jelenléti ív"
+#~ msgstr "Timesheet"
+
+#~ msgid "Dolgozók"
+#~ msgstr "Employees"
+
+#, fuzzy
+#~| msgid "Dolgozók"
+#~ msgid "Dolgozók:"
+#~ msgstr "Employees"
+
+#~ msgid "Dolgozó TS"
+#~ msgstr "Employee TS"
+
+#~ msgid "Dolgozó törlése"
+#~ msgstr "Leaves"
+
+#~ msgid "Dolgozó szerkesztése"
+#~ msgstr "Edit User"
+
+#~ msgid "Új dolgozó"
+#~ msgstr "Users"
 
 #~ msgid "szerkesztése"
 #~ msgstr "edit"

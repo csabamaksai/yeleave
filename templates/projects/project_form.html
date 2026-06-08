@@ -145,11 +145,11 @@
             placeholder: "Válassz partnert..."
         });
 
-        // Inicializáljuk a dolgozók többes keresős legördülőjét
+        // Inicializáljuk a tanácsadók többes keresős legördülőjét
         assignedUsersSelect = new TomSelect(".tom-select-multiple", {
             create: false,
             plugins: ['remove_button'],
-            placeholder: "Dolgozók menedzselése...",
+            placeholder: "Tanácsadók menedzselése...",
             onDelete: function(values) {
                 // Ha már leokézták a modalt, engedjük a törlést
                 if (skipModalConfirm) return true;

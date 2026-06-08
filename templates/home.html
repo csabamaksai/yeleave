@@ -11,7 +11,7 @@
     
     {% if user.is_authenticated %}
         <p class="text-gray-700">{% trans "Be vagy jelentkezve:" %} <strong>{{ user.username }}</strong></p>
-        <p class="text-gray-600 mt-2">{% trans "Válaszd ki a fenti menüből, hogy a jelenléti íveket vagy a szabadságokat szeretnéd kezelni." %}</p>
+        <p class="text-gray-600 mt-2">{% trans "Válaszd ki a fenti menüből, hogy a Timesheet-eket vagy a szabadságokat szeretnéd kezelni." %}</p>
     {% else %}
         <p class="text-gray-700">{% trans "Kérjük, jelentkezz be a folytatáshoz." %}</p>
         <div class="mt-8">

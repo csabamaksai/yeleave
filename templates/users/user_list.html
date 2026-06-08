@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Dolgozók" %} - yeleave{% endblock %}
+{% block title %}{% trans "Tanácsadók" %} - yeleave{% endblock %}
 
 {% block content %}
 <div class="mb-6 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-gray-900">{% trans "Dolgozók" %}</h1>
+    <h1 class="text-xl font-bold text-gray-900">{% trans "Tanácsadók" %}</h1>
     <a href="{% url 'users:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:opacity-90 transition">
-        {% trans "Új dolgozó hozzáadása" %}
+        {% trans "Új tanácsadó hozzáadása" %}
     </a>
 </div>
 
@@ -22,7 +22,7 @@
 {% endif %}
 
 <div class="mb-4">
-    <input type="text" id="userFilter" placeholder="{% trans 'Keresés a dolgozók között...' %}" class="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-md focus:ring-brand focus:border-brand shadow-sm">
+    <input type="text" id="userFilter" placeholder="{% trans 'Keresés a tanácsadók között...' %}" class="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-md focus:ring-brand focus:border-brand shadow-sm">
 </div>
 
 <div class="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
@@ -79,13 +79,13 @@
             </tr>
             <tr id="noResultsRow" style="display: none;">
                 <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                    {% trans "Nincs a keresésnek megfelelő dolgozó." %}
+                    {% trans "Nincs a keresésnek megfelelő tanácsadó." %}
                 </td>
             </tr>
             {% empty %}
             <tr>
                 <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                    {% trans "Nincs megjeleníthető dolgozó." %}
+                    {% trans "Nincs megjeleníthető tanácsadó." %}
                 </td>
             </tr>
             {% endfor %}

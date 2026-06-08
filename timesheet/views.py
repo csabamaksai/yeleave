@@ -98,7 +98,7 @@ def timesheet_view(request):
     for l in leaves:
         curr = l.start_date
         while curr <= l.end_date:
-            # Csak akkor számít szabadságnak vizuálisan a Jelenléti íven, ha ez nem hétvége/ünnep, 
+            # Csak akkor számít szabadságnak vizuálisan a Timesheet-en, ha ez nem hétvége/ünnep, 
             # de ezt a logikát lejjebb oldjuk meg, vagy csak nem rakjuk be a leave_dates be.
             leave_dates.add(curr)
             curr += timedelta(days=1)
@@ -453,7 +453,7 @@ def reports_export(request):
 
     filename = f"yeleave_export_{year}_{month}"
 
-    header = [_("Dolgozó"), _("Dátum"), _("Partner"), _("Projekt"), _("Óra"), _("Megjegyzés")]
+    header = [_("Tanácsadó"), _("Dátum"), _("Partner"), _("Projekt"), _("Óra"), _("Megjegyzés")]
 
     if fmt == 'csv':
         response = HttpResponse(content_type='text/csv')

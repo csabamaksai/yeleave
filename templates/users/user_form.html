@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% if object %}{% trans "Dolgozó szerkesztése" %}{% else %}{% trans "Új dolgozó" %}{% endif %} - yeleave{% endblock %}
+{% block title %}{% if object %}{% trans "Tanácsadó szerkesztése" %}{% else %}{% trans "Új tanácsadó" %}{% endif %} - yeleave{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
@@ -10,7 +10,7 @@
             {% if object %}
                 {% blocktrans with name=object.username %}<span class="text-brand">{{ name }}</span> szerkesztése{% endblocktrans %}
             {% else %}
-                {% trans "Új dolgozó hozzáadása" %}
+                {% trans "Új tanácsadó hozzáadása" %}
             {% endif %}
         </h1>
     </div>

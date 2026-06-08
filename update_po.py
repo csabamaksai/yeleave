@@ -18,7 +18,7 @@ translations = {
     'Felhasználói jogosultság': 'User Role',
     'Riportok': 'Reports',
     'Riportok (Fejlesztés alatt)': 'Reports (Under Development)',
-    'Ez az oldal a jövőben különféle lekérdezési és riportálási lehetőségeket fog biztosítani a könyvelők és asszisztensek számára (például jelenléti ívek összesítése, szabadság statisztikák).': 'This page will provide various querying and reporting options for accountants and assistants in the future (e.g., timesheet summaries, leave statistics).'
+    'Ez az oldal a jövőben különféle lekérdezési és riportálási lehetőségeket fog biztosítani a könyvelők és asszisztensek számára (például Timesheet-ek összesítése, szabadság statisztikák).': 'This page will provide various querying and reporting options for accountants and assistants in the future (e.g., timesheet summaries, leave statistics).'
 }
 
 for i, line in enumerate(lines):

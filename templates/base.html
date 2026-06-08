@@ -33,8 +33,10 @@
                     </a>
                     <div class="hidden sm:ml-8 sm:flex sm:space-x-4">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'timesheet:index' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Jelenléti ív" %}</a>
-                            <a href="{% url 'leaves:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Szabadságok" %}</a>
+                            {% if not user.is_company_admin %}
+                                <a href="{% url 'timesheet:index' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Jelenléti ív" %}</a>
+                                <a href="{% url 'leaves:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Szabadságok" %}</a>
+                            {% endif %}
                             {% if user.is_company_admin or user.is_staff or user.is_superuser %}
                                 <a href="{% url 'users:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Dolgozók" %}</a>
                                 <a href="{% url 'clients:list' %}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{% trans "Partnerek" %}</a>
@@ -105,16 +107,16 @@
                         {% csrf_token %}
                         <input name="next" type="hidden" value="{{ request.path }}">
                         <label for="language-select" class="text-sm text-gray-500 font-medium whitespace-nowrap">nyelv / language:</label>
-                        <select name="language" id="language-select" class="block w-full pl-3 pr-8 py-1 text-xs border-gray-300 focus:outline-none focus:ring-brand focus:border-brand rounded-md bg-gray-50 text-gray-700">
-                            {% get_current_language as LANGUAGE_CODE %}
-                            {% get_available_languages as LANGUAGES %}
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        <select name="language" id="language-select" data-current-lang="{{ LANGUAGE_CODE }}" class="block w-full pl-3 pr-8 py-1 text-xs border-gray-300 focus:outline-none focus:ring-brand focus:border-brand rounded-md bg-gray-50 text-gray-700" onchange="document.getElementById('langSubmitBtn').classList.toggle('hidden', this.value === this.dataset.currentLang)">
                             {% for lang in LANGUAGES %}
                                 <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
                                     {% if lang.0 == 'hu' %}magyar{% elif lang.0 == 'en' %}English{% else %}{{ lang.1 }}{% endif %}
                                 </option>
                             {% endfor %}
                         </select>
-                        <button type="submit" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-2 rounded transition">
+                        <button type="submit" id="langSubmitBtn" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-2 rounded transition hidden">
                             {% trans "Beállítás" %}
                         </button>
                     </form>
@@ -138,23 +140,23 @@
                     </div>
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            Mentetlen változtatások!
+                            {% trans "Mentetlen változtatások!" %}
                         </h3>
                         <div class="mt-2 text-sm text-gray-500">
-                            <p>Módosítottál egy vagy több mezőt az űrlapon.</p>
-                            <p class="mt-2 font-semibold">El szeretnéd menteni a változtatásokat kilépés előtt?</p>
+                            <p>{% trans "Módosítottál egy vagy több mezőt az űrlapon." %}</p>
+                            <p class="mt-2 font-semibold">{% trans "El szeretnéd menteni a változtatásokat kilépés előtt?" %}</p>
                         </div>
                     </div>
                 </div>
                 <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                     <button type="button" id="ucSaveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:ml-3 sm:w-auto sm:text-sm">
-                        Igen
+                        {% trans "Igen" %}
                     </button>
                     <button type="button" id="ucDiscardBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-50 text-base font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        Nem
+                        {% trans "Nem" %}
                     </button>
                     <button type="button" id="ucCancelBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:mt-0 sm:w-auto sm:text-sm">
-                        Mégse
+                        {% trans "Mégse" %}
                     </button>
                 </div>
             </div>

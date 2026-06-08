@@ -8,7 +8,7 @@
     <div class="mb-6">
         <h1 class="text-xl font-bold text-gray-900">
             {% if object %}
-                <span class="text-brand">{{ object.name }}</span> {% trans "szerkesztése" %}
+                {% blocktrans with name=object.name %}<span class="text-brand">{{ name }}</span> szerkesztése{% endblocktrans %}
             {% else %}
                 {% trans "Új partner hozzáadása" %}
             {% endif %}

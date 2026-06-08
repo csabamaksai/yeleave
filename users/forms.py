@@ -22,23 +22,23 @@ class UserForm(forms.ModelForm):
     password = forms.CharField(
         widget=forms.PasswordInput(), 
         required=False, 
-        label=_("Password")
+        label=_("Jelszó")
     )
     password_confirm = forms.CharField(
         widget=forms.PasswordInput(), 
         required=False, 
-        label=_("Confirm Password")
+        label=_("Jelszó újra")
     )
 
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'is_active']
         labels = {
-            'username': _('Username'),
-            'email': _('Email Address'),
-            'first_name': _('First Name'),
-            'last_name': _('Last Name'),
-            'is_active': _('Active'),
+            'username': _('Felhasználónév'),
+            'email': _('Email cím'),
+            'first_name': _('Keresztnév'),
+            'last_name': _('Vezetéknév'),
+            'is_active': _('Aktív'),
         }
         widgets = {
             'email': forms.EmailInput(attrs={'type': 'email'}),

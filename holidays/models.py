@@ -2,17 +2,17 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class Holiday(models.Model):
-    date = models.DateField(unique=True, verbose_name=_("Date"))
-    description = models.CharField(max_length=200, verbose_name=_("Description"))
+    date = models.DateField(unique=True, verbose_name=_("Dátum"))
+    description = models.CharField(max_length=200, verbose_name=_("Leírás"))
     is_working_day = models.BooleanField(
         default=False, 
-        verbose_name=_("Working Day Exception"), 
-        help_text=_("Check if this is a relocated working day (e.g. a working Saturday).")
+        verbose_name=_("Áthelyezett munkanap"), 
+        help_text=_("Jelöld be, ha ez egy pihenőnapra eső áthelyezett munkanap (pl. munkanap szombat).")
     )
 
     class Meta:
-        verbose_name = _("Holiday")
-        verbose_name_plural = _("Holidays")
+        verbose_name = _("Ünnepnap / Pihenőnap")
+        verbose_name_plural = _("Ünnepnapok / Pihenőnapok")
         ordering = ['date']
 
     def __str__(self):

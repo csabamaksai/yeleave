@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, View
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib import messages
+from django.utils.translation import gettext as _
 from django.utils.dateparse import parse_date
 
 from .models import Project
@@ -29,7 +30,7 @@ class ProjectCreateView(StaffRequiredMixin, CreateView):
     success_url = reverse_lazy('projects:list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Új projekt sikeresen hozzáadva.")
+        messages.success(self.request, _("Új projekt sikeresen hozzáadva."))
         return super().form_valid(form)
 
 class ProjectUpdateView(StaffRequiredMixin, UpdateView):
@@ -39,7 +40,7 @@ class ProjectUpdateView(StaffRequiredMixin, UpdateView):
     success_url = reverse_lazy('projects:list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Projekt adatai sikeresen frissítve.")
+        messages.success(self.request, _("Projekt adatai sikeresen frissítve."))
         return super().form_valid(form)
 
 class ProjectDeleteView(StaffRequiredMixin, View):
@@ -51,5 +52,5 @@ class ProjectDeleteView(StaffRequiredMixin, View):
         project = get_object_or_404(Project, pk=self.kwargs['pk'])
         project.is_active = False
         project.save()
-        messages.success(request, f"A(z) '{project.name}' projekt sikeresen lezárva.")
+        messages.success(request, _("A(z) '%(name)s' projekt sikeresen lezárva.") % {'name': project.name})
         return redirect('projects:list')

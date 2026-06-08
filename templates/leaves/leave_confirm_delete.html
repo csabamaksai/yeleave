@@ -18,7 +18,7 @@
             <div class="mt-2 text-sm text-gray-500">
                 <p>{% trans "Biztosan törölni szeretnéd ezt a szabadság bejegyzést?" %}</p>
                 <p class="mt-1 font-semibold">{{ object.start_date|date:"Y. m. d." }} - {{ object.end_date|date:"Y. m. d." }} ({{ object.get_leave_type_display }})</p>
-                <p class="mt-2 text-xs text-gray-400">Ez a művelet nem vonható vissza.</p>
+                <p class="mt-2 text-xs text-gray-400">{% trans "Ez a művelet nem vonható vissza." %}</p>
             </div>
         </div>
     </div>

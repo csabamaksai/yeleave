@@ -4,6 +4,7 @@ from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.utils.translation import gettext as _
 from .forms import UserForm
 
 User = get_user_model()
@@ -29,7 +30,7 @@ class UserCreateView(StaffRequiredMixin, CreateView):
     success_url = reverse_lazy('users:list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Új dolgozó sikeresen hozzáadva.")
+        messages.success(self.request, _("Új dolgozó sikeresen hozzáadva."))
         return super().form_valid(form)
 
 class UserUpdateView(StaffRequiredMixin, UpdateView):
@@ -39,7 +40,7 @@ class UserUpdateView(StaffRequiredMixin, UpdateView):
     success_url = reverse_lazy('users:list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Dolgozó adatai sikeresen frissítve.")
+        messages.success(self.request, _("Dolgozó adatai sikeresen frissítve."))
         return super().form_valid(form)
 
 class UserDeleteView(StaffRequiredMixin, TemplateView):

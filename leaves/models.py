@@ -7,16 +7,16 @@ from holidays.models import Holiday
 
 class Leave(models.Model):
     LEAVE_TYPES = [
-        ('PTO', _('Paid Time Off (PTO)')),
-        ('SIC', _('Sick Leave')),
-        ('UNP', _('Unpaid Leave')),
+        ('PTO', _('Fizetett Szabadság')),
+        ('SIC', _('Betegszabadság')),
+        ('UNP', _('Fizetés Nélküli Szabadság')),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leaves', verbose_name=_('User'))
-    start_date = models.DateField(verbose_name=_('Start Date'))
-    end_date = models.DateField(verbose_name=_('End Date'))
-    leave_type = models.CharField(max_length=3, choices=LEAVE_TYPES, default='PTO', verbose_name=_('Type'))
-    notes = models.TextField(blank=True, null=True, verbose_name=_('Notes'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leaves', verbose_name=_('Dolgozó'))
+    start_date = models.DateField(verbose_name=_('Kezdés dátuma'))
+    end_date = models.DateField(verbose_name=_('Befejezés dátuma'))
+    leave_type = models.CharField(max_length=3, choices=LEAVE_TYPES, default='PTO', verbose_name=_('Típus'))
+    notes = models.TextField(blank=True, null=True, verbose_name=_('Megjegyzés'))
 
     def __str__(self):
         return f"{self.user.username} - {self.get_leave_type_display()} ({self.start_date} -> {self.end_date})"
@@ -46,7 +46,7 @@ class Leave(models.Model):
     def clean(self):
         if self.start_date and self.end_date:
             if self.start_date > self.end_date:
-                raise ValidationError({'end_date': 'A befejező dátum nem lehet korábbi a kezdő dátumnál.'})
+                raise ValidationError({'end_date': _('A befejező dátum nem lehet korábbi a kezdő dátumnál.')})
             
             # Ellenőrizzük, hogy a kezdő vagy a végdátum esik-e hétvégére/ünnepnapra
             def is_day_off(d):
@@ -60,12 +60,12 @@ class Leave(models.Model):
                 return is_weekend
 
             if is_day_off(self.start_date):
-                raise ValidationError({'start_date': 'A kezdő dátum nem eshet hétvégére vagy ünnepnapra.'})
+                raise ValidationError({'start_date': _('A kezdő dátum nem eshet hétvégére vagy ünnepnapra.')})
             if is_day_off(self.end_date):
-                raise ValidationError({'end_date': 'A befejező dátum nem eshet hétvégére vagy ünnepnapra.'})
+                raise ValidationError({'end_date': _('A befejező dátum nem eshet hétvégére vagy ünnepnapra.')})
 
             if self.get_working_days() == 0:
-                raise ValidationError({'start_date': 'A megadott intervallum nem tartalmaz munkanapot.'})
+                raise ValidationError({'start_date': _('A megadott intervallum nem tartalmaz munkanapot.')})
 
     def save(self, *args, **kwargs):
         """Felülírjuk a save metódust, hogy a validáció minden mentésnél lefusson."""
@@ -73,6 +73,6 @@ class Leave(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'Leave'
-        verbose_name_plural = 'Leaves'
+        verbose_name = _('Szabadság')
+        verbose_name_plural = _('Szabadságok')
         ordering = ['-start_date']

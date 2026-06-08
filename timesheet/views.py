@@ -572,6 +572,15 @@ def bulk_save_time_entries(request):
             entry_date = datetime.strptime(entry_date_str, '%Y-%m-%d').date()
 
             if is_leave:
+                from datetime import date
+                today = date.today()
+                limit_date = date(entry_date.year, entry_date.month, 20)
+                if today > limit_date:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': f'A(z) {entry_date.strftime("%Y. %m. %d.")} napra már nem rögzíthetsz szabadságot, mivel a hónap 20-a elmúlt.'
+                    }, status=400)
+
                 # Töröljük a TimeEntry-ket ha voltak
                 del_time = TimeEntry.objects.filter(user=request.user, date=entry_date).delete()
                 if del_time[0]:

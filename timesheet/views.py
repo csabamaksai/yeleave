@@ -128,7 +128,7 @@ def timesheet_view(request):
             'date': day_date,
             'day': day,
             'is_weekend': is_weekend_behavior, 
-            'weekday_name': day_date.strftime('%a')[:2], 
+            'weekday_name': ['Hé', 'Ke', 'Sze', 'Cs', 'Pé', 'Szo', 'Va'][day_date.weekday()], 
             'is_leave': is_leave_behavior 
         })
 

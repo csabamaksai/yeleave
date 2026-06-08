@@ -59,9 +59,9 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 {% for day in days_in_month %}
                     <tr class="day-row hover:bg-blue-50/30 transition-colors {% if day.is_weekend %}bg-gray-100/50{% endif %}" data-date="{{ day.date|date:'Y-m-d' }}">
-                        <td class="sticky left-0 z-10 bg-white {% if day.is_weekend %}bg-gray-50{% endif %} px-4 py-3 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] flex items-center justify-between">
+                        <td class="sticky left-0 z-10 bg-white {% if day.is_weekend %}bg-gray-50{% endif %} px-2 py-1 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] flex items-center justify-between min-h-[32px]">
                             <span class="font-bold">{{ day.day }}.</span>
-                            <span class="text-gray-400 text-xs ml-2">{{ day.weekday_name }}</span>
+                            <span class="text-gray-400 text-xs ml-1">{{ day.weekday_name }}</span>
                         </td>
                         <td class="border-r border-gray-200 text-center relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
                             <input type="checkbox" class="leave-checkbox cursor-pointer w-4 h-4 text-brand rounded border-gray-300 focus:ring-brand" 
@@ -74,7 +74,7 @@
                             <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
                                 <input 
                                     type="text" 
-                                    class="ts-input w-full h-full min-h-[48px] text-center text-sm bg-transparent border-0 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave %}cursor-not-allowed placeholder-red-300 text-red-500{% endif %}"
+                                    class="ts-input w-full h-full min-h-[32px] text-center text-sm bg-transparent border-0 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave %}cursor-not-allowed placeholder-red-300 text-red-500{% endif %}"
                                     value="{{ hs.hours_formatted }}" 
                                     data-project="{{ hs.project_id }}" 
                                     data-date="{{ day.date|date:'Y-m-d' }}"
@@ -84,14 +84,14 @@
                             </td>
                         {% endfor %}
                         <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
-                            <textarea class="task-input resize-none overflow-hidden w-full min-h-[48px] py-2 text-sm bg-transparent border-0 px-3 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave or day.is_weekend %}cursor-not-allowed text-gray-400{% endif %}"
+                            <textarea class="task-input resize-none overflow-hidden w-full min-h-[32px] py-1 text-sm bg-transparent border-0 px-2 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave or day.is_weekend %}cursor-not-allowed text-gray-400{% endif %}"
                                 data-date="{{ day.date|date:'Y-m-d' }}"
                                 data-original="{{ day.description|default:'' }}"
                                 rows="1"
                                 {% if not day.is_leave and not day.is_weekend %}placeholder="Napi feladat megnevezése"{% else %}placeholder=""{% endif %}
                                 {% if day.is_leave or day.is_weekend %}disabled{% endif %}>{{ day.description|default:'' }}</textarea>
                         </td>
-                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-bold text-gray-700 row-total">
+                        <td class="px-2 py-1 whitespace-nowrap text-center text-sm font-bold text-gray-700 row-total">
                             0ó
                         </td>
                     </tr>

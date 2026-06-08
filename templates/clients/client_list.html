@@ -6,8 +6,9 @@
 {% block content %}
 <div class="mb-6 flex justify-between items-center">
     <h2 class="text-xl font-bold text-gray-900">{% trans "Partnerek" %} ({% trans "Ügyfelek" %})</h2>
-    <a href="{% url 'clients:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:opacity-90 transition">
-        {% trans "Új partner hozzáadása" %}
+    <a href="{% url 'clients:create' %}" class="bg-brand text-white px-4 py-2 rounded-md hover:opacity-90 transition flex items-center">
+        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        {% trans "Partner hozzáadása" %}
     </a>
 </div>
 
@@ -38,9 +39,6 @@
                 <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {% trans "Cím" %}
                 </th>
-                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {% trans "Kapcsolattartó" %}
-                </th>
                 <th scope="col" class="relative px-4 py-2">
                     <span class="sr-only">{% trans "Műveletek" %}</span>
                 </th>
@@ -62,32 +60,22 @@
                         -
                     {% endif %}
                 </td>
-                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                    {% if client.contact_name or client.contact_phone %}
-                        {% if client.contact_name %}
-                            <div class="text-gray-900">{{ client.contact_name }}</div>
-                        {% endif %}
-                        {% if client.contact_phone %}
-                            <div class="text-sm text-gray-600">{{ client.contact_phone }}</div>
-                        {% endif %}
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
                 <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="{% url 'clients:update' client.pk %}" class="text-brand hover:text-blue-900">{% trans "Szerkesztés" %}</a>
+                    <a href="{% url 'clients:update' client.pk %}" class="text-brand hover:text-blue-900" title="{% trans 'Szerkesztés' %}">
+                        <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    </a>
                 </td>
             </tr>
             {% empty %}
             <tr id="emptyRow">
-                <td colspan="5" class="px-4 py-4 text-center text-sm text-gray-500">
+                <td colspan="4" class="px-4 py-4 text-center text-sm text-gray-500">
                     {% trans "Nincs még rögzítve partner." %}
                 </td>
             </tr>
             {% endfor %}
             
             <tr id="noResultsRow" style="display: none;">
-                <td colspan="5" class="px-4 py-4 text-center text-sm text-gray-500">
+                <td colspan="4" class="px-4 py-4 text-center text-sm text-gray-500">
                     {% trans "Nincs a keresésnek megfelelő partner." %}
                 </td>
             </tr>

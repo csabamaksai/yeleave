@@ -49,7 +49,7 @@
                         </th>
                     {% endfor %}
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
-                        {% trans "Feladat" %}
+                        {% trans "NAPI FELADAT(OK)" %}
                     </th>
                     <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16 min-w-[64px]">
                         {% trans "Összesen" %}
@@ -88,7 +88,6 @@
                                 data-date="{{ day.date|date:'Y-m-d' }}"
                                 data-original="{{ day.description|default:'' }}"
                                 rows="1"
-                                {% if not day.is_leave and not day.is_weekend %}placeholder="Napi feladat megnevezése"{% else %}placeholder=""{% endif %}
                                 {% if day.is_leave or day.is_weekend %}disabled{% endif %}>{{ day.description|default:'' }}</textarea>
                         </td>
                         <td class="px-2 py-1 whitespace-nowrap text-center text-sm font-bold text-gray-700 row-total">
@@ -122,6 +121,33 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             {% trans "Beküldés (Mentés)" %}
         </button>
+    </div>
+</div>
+
+<!-- Modal a szabadság bejelölésére, ha vannak beírt adatok -->
+<div id="leaveConfirmModal" class="hidden fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">{% trans "Szabadság rögzítése" %}</h3>
+                    <div class="mt-2 text-sm text-gray-500">
+                        <p>{% trans "Ha szabadságra jelölöd ezt a napot, a beírt órák és feladatok elvesznek. Biztosan folytatod?" %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button type="button" id="confirmLeaveBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">{% trans "Igen" %}</button>
+                <button type="button" id="cancelLeaveBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:mt-0 sm:w-auto sm:text-sm">{% trans "Mégse" %}</button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -200,35 +226,75 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Szabadság checkbox kattintás logika
+    let pendingLeaveCheckbox = null;
+
+    const applyLeaveState = (cb, isChecked) => {
+        const tr = cb.closest('tr');
+        const inputs = tr.querySelectorAll('.ts-input, .task-input');
+        
+        inputs.forEach(input => {
+            input.disabled = isChecked;
+            if (isChecked) {
+                if (input.classList.contains('ts-input')) {
+                    input.classList.add('cursor-not-allowed', 'text-red-500', 'placeholder-red-300');
+                    input.placeholder = "L";
+                    input.value = ""; // Vizuálisan ürítjük ha rákattint, backend a mentéskor dobja
+                } else {
+                    input.classList.add('cursor-not-allowed', 'text-gray-400');
+                    input.value = "";
+                }
+            } else {
+                if (input.classList.contains('ts-input')) {
+                    input.classList.remove('cursor-not-allowed', 'text-red-500', 'placeholder-red-300');
+                    input.placeholder = "";
+                } else {
+                    input.classList.remove('cursor-not-allowed', 'text-gray-400');
+                }
+            }
+        });
+        calculateTotals();
+    };
+
     document.querySelectorAll('.leave-checkbox').forEach(cb => {
-        cb.addEventListener('change', function() {
-            const tr = this.closest('tr');
-            const inputs = tr.querySelectorAll('.ts-input, .task-input');
+        cb.addEventListener('click', function(e) {
             const isChecked = this.checked;
             
-            inputs.forEach(input => {
-                input.disabled = isChecked;
-                if (isChecked) {
-                    if (input.classList.contains('ts-input')) {
-                        input.classList.add('cursor-not-allowed', 'text-red-500', 'placeholder-red-300');
-                        input.placeholder = "L";
-                        input.value = ""; // Vizuálisan ürítjük ha rákattint, backend a mentéskor dobja
-                    } else {
-                        input.classList.add('cursor-not-allowed', 'text-gray-400');
-                        input.value = "";
-                    }
+            if (isChecked) {
+                const tr = this.closest('tr');
+                let hasData = false;
+                tr.querySelectorAll('.ts-input, .task-input').forEach(input => {
+                    if (input.value.trim() !== '') hasData = true;
+                });
+                
+                if (hasData) {
+                    e.preventDefault(); // Még nem engedjük bepipálni
+                    pendingLeaveCheckbox = this;
+                    document.getElementById('leaveConfirmModal').classList.remove('hidden');
                 } else {
-                    if (input.classList.contains('ts-input')) {
-                        input.classList.remove('cursor-not-allowed', 'text-red-500', 'placeholder-red-300');
-                        input.placeholder = "";
-                    } else {
-                        input.classList.remove('cursor-not-allowed', 'text-gray-400');
-                    }
+                    applyLeaveState(this, true);
                 }
-            });
-            calculateTotals();
+            } else {
+                applyLeaveState(this, false);
+            }
         });
     });
+
+    const leaveModal = document.getElementById('leaveConfirmModal');
+    if (leaveModal) {
+        document.getElementById('cancelLeaveBtn').addEventListener('click', function() {
+            leaveModal.classList.add('hidden');
+            pendingLeaveCheckbox = null;
+        });
+
+        document.getElementById('confirmLeaveBtn').addEventListener('click', function() {
+            leaveModal.classList.add('hidden');
+            if (pendingLeaveCheckbox) {
+                pendingLeaveCheckbox.checked = true; // Most már bepipáljuk vizuálisan
+                applyLeaveState(pendingLeaveCheckbox, true);
+                pendingLeaveCheckbox = null;
+            }
+        });
+    }
 
     // Szövegmezők dinamikus magassága (Auto-resize vertical)
     const autoResize = (el) => {

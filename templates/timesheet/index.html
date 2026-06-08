@@ -90,8 +90,8 @@
                                 rows="1"
                                 {% if day.is_leave or day.is_weekend %}disabled{% endif %}>{{ day.description|default:'' }}</textarea>
                         </td>
-                        <td class="px-2 py-1 whitespace-nowrap text-center text-sm font-bold text-gray-700 row-total">
-                            0ó
+                        <td class="px-2 py-1 whitespace-nowrap text-center text-sm font-bold text-gray-700 row-total {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
+                            {% if day.is_leave %}{% else %}0ó{% endif %}
                         </td>
                     </tr>
                 {% empty %}
@@ -185,6 +185,9 @@ document.addEventListener("DOMContentLoaded", function() {
         let grandTotalHours = 0;
         document.querySelectorAll('tbody tr.day-row').forEach(row => {
             let total = 0;
+            const leaveCb = row.querySelector('.leave-checkbox');
+            const isLeave = leaveCb && leaveCb.checked;
+            
             // Ne számoljuk bele ha le van tiltva (szabadság be lett pipálva)
             row.querySelectorAll('.ts-input').forEach(input => {
                 if (!input.disabled) {
@@ -194,7 +197,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
             const totalCell = row.querySelector('.row-total');
-            if (totalCell) totalCell.innerText = formatHoursJS(total);
+            if (totalCell) {
+                if (isLeave) {
+                    totalCell.innerText = '';
+                    totalCell.classList.add('bg-red-50');
+                } else {
+                    totalCell.innerText = formatHoursJS(total);
+                    totalCell.classList.remove('bg-red-50');
+                }
+            }
         });
 
         // Havi összesített Man-Day számítás (8 óra = 1 md)

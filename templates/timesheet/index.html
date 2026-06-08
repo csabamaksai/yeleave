@@ -23,6 +23,12 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
         </div>
+        <div class="flex items-center gap-2">
+            <input type="checkbox" id="hideWeekendsCb" class="h-4 w-4 text-brand rounded border-gray-300 focus:ring-brand cursor-pointer" checked>
+            <label for="hideWeekendsCb" class="text-sm text-gray-700 cursor-pointer select-none">
+                {% trans "Hétvégi napok eltüntetése" %}
+            </label>
+        </div>
     </div>
 
     <!-- Timesheet Table Wrapper -->
@@ -33,15 +39,15 @@
                     <th scope="col" class="sticky left-0 z-10 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] w-32 min-w-[120px]">
                         {% trans "Dátum" %}
                     </th>
-                    {% for project in projects %}
-                        <th scope="col" class="px-2 py-2 text-center text-xs font-medium uppercase tracking-wider border-r border-gray-200 w-32 min-w-[100px] max-w-[120px]">
-                            <div class="text-brand truncate font-bold" title="{{ project.client.name }}">{{ project.client.name }}</div>
-                            <div class="text-[10px] text-gray-500 truncate" title="{{ project.name }}">{{ project.name }}</div>
-                        </th>
-                    {% endfor %}
-                    <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16 min-w-[64px]">
+                    <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16 min-w-[64px] border-r border-gray-200">
                         {% trans "Szabadság" %}
                     </th>
+                    {% for project in projects %}
+                        <th scope="col" class="px-2 py-2 text-center text-xs font-medium uppercase tracking-wider border-r border-gray-200 w-32 min-w-[100px] max-w-[120px]">
+                            <div class="text-[10px] text-gray-500 truncate" title="{{ project.client.name }}">{{ project.client.name }}</div>
+                            <div class="text-brand truncate font-bold" title="{{ project.name }}">{{ project.name }}</div>
+                        </th>
+                    {% endfor %}
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">
                         {% trans "Feladat" %}
                     </th>
@@ -57,6 +63,13 @@
                             <span class="font-bold">{{ day.day }}.</span>
                             <span class="text-gray-400 text-xs ml-2">{{ day.weekday_name }}</span>
                         </td>
+                        <td class="border-r border-gray-200 text-center relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
+                            <input type="checkbox" class="leave-checkbox cursor-pointer w-4 h-4 text-brand rounded border-gray-300 focus:ring-brand" 
+                                data-date="{{ day.date|date:'Y-m-d' }}"
+                                data-original="{% if day.is_leave %}true{% else %}false{% endif %}"
+                                {% if day.is_leave %}checked{% endif %}
+                                {% if day.is_weekend %}disabled title="Hétvégén/ünnepnapon nem értelmezett"{% endif %}>
+                        </td>
                         {% for hs in day.project_hours %}
                             <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
                                 <input 
@@ -70,13 +83,6 @@
                                 >
                             </td>
                         {% endfor %}
-                        <td class="border-r border-gray-200 text-center relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
-                            <input type="checkbox" class="leave-checkbox cursor-pointer w-4 h-4 text-brand rounded border-gray-300 focus:ring-brand" 
-                                data-date="{{ day.date|date:'Y-m-d' }}"
-                                data-original="{% if day.is_leave %}true{% else %}false{% endif %}"
-                                {% if day.is_leave %}checked{% endif %}
-                                {% if day.is_weekend %}disabled title="Hétvégén/ünnepnapon nem értelmezett"{% endif %}>
-                        </td>
                         <td class="border-r border-gray-200 p-0 relative {% if day.is_leave %}bg-red-50{% elif day.is_weekend %}bg-gray-100{% endif %} transition-colors">
                             <textarea class="task-input resize-none overflow-hidden w-full min-h-[48px] py-2 text-sm bg-transparent border-0 px-3 focus:ring-2 focus:ring-inset focus:ring-brand outline-none {% if day.is_leave or day.is_weekend %}cursor-not-allowed text-gray-400{% endif %}"
                                 data-date="{{ day.date|date:'Y-m-d' }}"
@@ -142,7 +148,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const calculateTotals = () => {
         document.querySelectorAll('tbody tr.day-row').forEach(row => {
             let total = 0;
-            // Ha disabled (is_leave), akkor a szummázott érték nulla legyen vizuálisan? Vagy ne, mert el lesz dobva.
             row.querySelectorAll('.ts-input').forEach(input => {
                 if (!input.disabled) total += parseHoursJS(input.value);
             });
@@ -152,6 +157,24 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     calculateTotals();
+
+    // Hétvégi napok eltüntetése logika
+    const hideWeekendsCb = document.getElementById('hideWeekendsCb');
+    const updateWeekendVisibility = () => {
+        const hide = hideWeekendsCb.checked;
+        document.querySelectorAll('tr[data-date]').forEach(row => {
+            // Megnézzük a tr class-ában benne van-e az if day.is_weekend generált bg-gray-100/50 
+            if (row.classList.contains('bg-gray-100/50')) {
+                row.style.display = hide ? 'none' : '';
+            }
+        });
+    };
+    
+    if (hideWeekendsCb) {
+        hideWeekendsCb.addEventListener('change', updateWeekendVisibility);
+        // Alapértelmezett állapot frissítése betöltéskor
+        updateWeekendVisibility();
+    }
 
     // Szabadság checkbox kattintás logika
     document.querySelectorAll('.leave-checkbox').forEach(cb => {

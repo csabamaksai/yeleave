@@ -34,6 +34,6 @@ urlpatterns = [
     path('api/partner-tig/save/', timesheet_views.api_partner_tig_save, name='api_partner_tig_save'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
-    path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),
+    path('help/', TemplateView.as_view(template_name='pages/help.html'), name='help'),
     path('contact/', TemplateView.as_view(template_name='pages/contact.html'), name='contact'),
 ]

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}YeLeave {% trans "Tudástár" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            YeLeave {% trans "Tudástár" %}
+        </h1>
+        <p class="mt-4 text-lg text-gray-500">
+            {% trans "Minden, amit tudnod kell a YeLeave rendszer használatáról. Válaszd ki a téged érdeklő témakört!" %}
+        </p>
+    </div>
+
+    <div class="space-y-12">
+
+        <!-- Jelenléti ív -->
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brand bg-opacity-10 flex items-center justify-center text-brand">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900">{% trans "Jelenléti ív" %}</h2>
+            </div>
+            <div class="p-6 text-gray-600 space-y-4">
+                <p>{% blocktrans %}A Jelenléti ív modulban rögzítheted a napi munkaóráidat az adott projektekre vetítve. A felület automatikusan betölti a számodra elérhető projekteket.{% endblocktrans %}</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>{% trans "Napok és Hetek:" %}</strong> {% blocktrans %}A rendszer alapértelmezetten az aktuális hetet mutatja. A bal/jobb nyilakkal válthatsz a hetek között.{% endblocktrans %}</li>
+                    <li><strong>{% trans "Órák rögzítése:" %}</strong> {% blocktrans %}Válaszd ki a projektet a legördülőből, majd írd be a munkaórákat az adott naphoz.{% endblocktrans %}</li>
+                    <li><strong>{% trans "Mentés:" %}</strong> {% blocktrans %}Minden változtatás után ne felejtsd el megnyomni a "Mentés" gombot a táblázat alján!{% endblocktrans %}</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Szabadságok -->
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brand bg-opacity-10 flex items-center justify-center text-brand">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900">{% trans "Szabadságok" %}</h2>
+            </div>
+            <div class="p-6 text-gray-600 space-y-4">
+                <p>{% blocktrans %}Itt igényelhetsz és tarthatsz nyilván különböző távolléteket. Ezek az adatok automatikusan bekerülnek a jelenléti ívedbe is.{% endblocktrans %}</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>{% trans "Új igénylés:" %}</strong> {% blocktrans %}Kattints az "Új szabadság hozzáadása" gombra. Add meg a kezdő és végdátumot, majd a távollét típusát (pl. Szabadság, Betegszabadság, Fizetés nélküli).{% endblocktrans %}</li>
+                    <li><strong>{% trans "Áttekintés:" %}</strong> {% blocktrans %}A listában egy helyen láthatod az összes jövőbeli és múltbéli rögzített távollétedet.{% endblocktrans %}</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Riportok -->
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brand bg-opacity-10 flex items-center justify-center text-brand">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900">{% trans "Riportok & Exportálás" %}</h2>
+            </div>
+            <div class="p-6 text-gray-600 space-y-4">
+                <p><em>{% trans "(Csak vezetők és lekérdezők részére)" %}</em></p>
+                <p>{% blocktrans %}A Riportok felületen nyomon követhető az összes rögzített adat, szűrve dolgozókra, projektekre, vagy időszakokra.{% endblocktrans %}</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>{% trans "Szűrés:" %}</strong> {% blocktrans %}Válaszd ki a hónapot és évet, a partnereket, vagy dolgozókat a bal oldali sávban, majd kattints a "Szűrés" gombra az összesítések megtekintéséhez.{% endblocktrans %}</li>
+                    <li><strong>{% trans "Exportálás Excelbe:" %}</strong> {% blocktrans %}Az adatok nem csak a képernyőn láthatóak – a "Jelenléti ívek exportálása" gombbal hivatalos, nyomtatható .xls fájl generálható az adatokból dolgozónként.{% endblocktrans %}</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Adminisztráció -->
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brand bg-opacity-10 flex items-center justify-center text-brand">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900">{% trans "Dolgozók, Partnerek és Projektek" %}</h2>
+            </div>
+            <div class="p-6 text-gray-600 space-y-4">
+                <p><em>{% trans "(Csak vezetők részére)" %}</em></p>
+                <p>{% blocktrans %}Itt építhető fel a cég adatbázisa. Ezek nélkül a dolgozók nem tudnak munkaórákat rögzíteni.{% endblocktrans %}</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>{% trans "Partnerek:" %}</strong> {% blocktrans %}Ezek az ügyfelek vagy cégek, akikkel együtt dolgoztok. Először partnert kell létrehozni.{% endblocktrans %}</li>
+                    <li><strong>{% trans "Projektek:" %}</strong> {% blocktrans %}Minden projekt egy partnerhez van rendelve. Fontos: a projekt létrehozásánál vagy szerkesztésénél kell kijelölni azokat a dolgozókat (Assigned users), akik erre a projektre időt rögzíthetnek.{% endblocktrans %}</li>
+                    <li><strong>{% trans "Dolgozók:" %}</strong> {% blocktrans %}Új munkatársak rögzítése. Meghatározható, hogy az illető cégvezető, könyvelő, vagy normál dolgozói jogosultsággal rendelkezik-e.{% endblocktrans %}</li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+</div>
+{% endblock %}

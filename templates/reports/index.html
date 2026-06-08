@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="bg-brand text-white hover:bg-blue-700 px-6 py-2 border border-gray-300 rounded-md text-sm font-medium transition shadow-sm h-full self-stretch">
+                <button type="submit" class="bg-brand text-white hover:opacity-90 px-6 py-2 border border-gray-300 rounded-md text-sm font-medium transition shadow-sm h-full self-stretch">
                     {% trans "Alkalmaz" %}
                 </button>
             </form>
@@ -79,7 +79,7 @@
             <!-- Month Stepper Navbar -->
             <div class="bg-brand px-4 py-2 flex justify-between items-center text-white">
                 <a href="?year={{ prev_month.year }}&month={{ prev_month.month }}&client_id={{ selected_client_id|default:'' }}&project_id={{ selected_project_id|default:'' }}{{ user_query_params|safe }}" 
-                   class="hover:bg-blue-700 px-3 py-1 rounded transition flex items-center space-x-1">
+                   class="hover:opacity-90 px-3 py-1 rounded transition flex items-center space-x-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                     <span class="text-sm font-medium">{% trans "Előző" %}</span>
                 </a>
@@ -89,7 +89,7 @@
                 </h2>
                 
                 <a href="?year={{ next_month.year }}&month={{ next_month.month }}&client_id={{ selected_client_id|default:'' }}&project_id={{ selected_project_id|default:'' }}{{ user_query_params|safe }}" 
-                   class="hover:bg-blue-700 px-3 py-1 rounded transition flex items-center space-x-1">
+                   class="hover:opacity-90 px-3 py-1 rounded transition flex items-center space-x-1">
                     <span class="text-sm font-medium">{% trans "Következő" %}</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </a>
@@ -166,7 +166,7 @@
                     {% trans "Összesítő sorok mutatása" %}
                 </label>
             </div>
-            <button type="button" onclick="openExportModal()" class="bg-brand text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2 mt-auto">
+            <button type="button" onclick="openExportModal()" class="bg-brand text-white hover:opacity-90 px-4 py-2 rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2 mt-auto">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 {% trans "Exportálás" %}
             </button>
@@ -235,7 +235,7 @@
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="submit" onclick="closeExportModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:ml-3 sm:w-auto sm:text-sm transition">
+                    <button type="submit" onclick="closeExportModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:ml-3 sm:w-auto sm:text-sm transition">
                         {% trans "Letöltés" %}
                     </button>
                     <button type="button" onclick="closeExportModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition">

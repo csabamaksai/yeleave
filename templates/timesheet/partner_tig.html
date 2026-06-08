@@ -25,7 +25,7 @@
                 </select>
             </div>
             
-            <button type="submit" class="bg-brand text-white hover:bg-blue-700 px-6 py-2 border border-transparent rounded-md text-sm font-medium transition shadow-sm h-full self-stretch">
+            <button type="submit" class="bg-brand text-white hover:opacity-90 px-6 py-2 border border-transparent rounded-md text-sm font-medium transition shadow-sm h-full self-stretch">
                 {% trans "Betöltés" %}
             </button>
         </form>
@@ -40,7 +40,7 @@
         <!-- Month Stepper Navbar -->
         <div class="bg-brand px-4 py-2 flex justify-between items-center text-white">
             <a href="?year={{ prev_month.year }}&month={{ prev_month.month }}&client_id={{ selected_client_id|default:'' }}" 
-               class="hover:bg-blue-700 px-3 py-1 rounded transition flex items-center space-x-1">
+               class="hover:opacity-90 px-3 py-1 rounded transition flex items-center space-x-1">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 <span class="text-sm font-medium">{% trans "Előző" %}</span>
             </a>
@@ -50,7 +50,7 @@
             </h2>
             
             <a href="?year={{ next_month.year }}&month={{ next_month.month }}&client_id={{ selected_client_id|default:'' }}" 
-               class="hover:bg-blue-700 px-3 py-1 rounded transition flex items-center space-x-1">
+               class="hover:opacity-90 px-3 py-1 rounded transition flex items-center space-x-1">
                 <span class="text-sm font-medium">{% trans "Következő" %}</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
@@ -116,7 +116,7 @@
     
     {% if users %}
     <div class="flex justify-end mt-4 mb-8">
-        <button onclick="saveAll()" id="saveBtn" class="bg-brand text-white hover:bg-blue-700 px-6 py-2 border border-transparent rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2">
+        <button onclick="saveAll()" id="saveBtn" class="bg-brand text-white hover:opacity-90 px-6 py-2 border border-transparent rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             {% trans "Mentés" %}
         </button>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-25 06:26+0000\n"
+"POT-Creation-Date: 2026-06-08 06:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 msgid "A névnek legalább 5 karakter hosszúnak kell lennie."
 msgstr ""
 
-#: clients/views.py:35
+#: clients/views.py:36
 msgid "Új ügyfél sikeresen hozzáadva."
 msgstr ""
 
-#: clients/views.py:50
+#: clients/views.py:51
 msgid "Ügyfél adatai sikeresen frissítve."
 msgstr ""
 
-#: clients/views.py:68
+#: clients/views.py:69
 #, python-format
 msgid "%(name)s ügyfél és a hozzá tartozó projektek deaktiválva lettek."
 msgstr ""
@@ -79,8 +79,8 @@ msgid "Típus"
 msgstr ""
 
 #: leaves/forms.py:13 templates/leaves/leave_list.html:39
-#: templates/reports/index.html:117 templates/timesheet/partner_tig.html:69
-#: timesheet/models.py:42 timesheet/views.py:429
+#: templates/reports/index.html:119 templates/timesheet/partner_tig.html:69
+#: timesheet/models.py:42 timesheet/views.py:456
 msgid "Megjegyzés"
 msgstr "Notes"
 
@@ -140,16 +140,18 @@ msgstr ""
 msgid "A szabadság bejegyzést töröltük."
 msgstr ""
 
-#: projects/forms.py:20
+#: projects/forms.py:26
 msgid "A projekt nevének legalább 5 karakter hosszúnak kell lennie."
 msgstr ""
 
-#: templates/base.html:36
+#: templates/base.html:36 templates/pages/help.html:22
+#: templates/pages/help.html:48
 msgid "Jelenléti ív"
 msgstr "Timesheet"
 
 #: templates/base.html:37 templates/leaves/leave_list.html:4
-#: templates/leaves/leave_list.html:9
+#: templates/leaves/leave_list.html:9 templates/pages/help.html:25
+#: templates/pages/help.html:66
 msgid "Szabadságok"
 msgstr "Leaves"
 
@@ -166,43 +168,49 @@ msgstr "Clients"
 msgid "Projektek"
 msgstr "Projects"
 
-#: templates/base.html:44 templates/reports/index.html:4
-#: templates/reports/index.html:8
-msgid "Riportok"
-msgstr "Reports"
-
-#: templates/base.html:45 templates/timesheet/partner_tig.html:4
+#: templates/base.html:42 templates/pages/help.html:31
+#: templates/pages/help.html:101 templates/timesheet/partner_tig.html:4
 #: templates/timesheet/partner_tig.html:8 timesheet/models.py:47
 #, fuzzy
 #| msgid "Partner"
 msgid "Partner TIG"
 msgstr "Client"
 
-#: templates/base.html:55
+#: templates/base.html:45 templates/reports/index.html:4
+#: templates/reports/index.html:8
+msgid "Riportok"
+msgstr "Reports"
+
+#: templates/base.html:69
 msgid "Kijelentkezés"
 msgstr "Logout"
 
-#: templates/base.html:58 templates/home.html:18
+#: templates/base.html:72 templates/home.html:18
 #: templates/registration/login.html:4 templates/registration/login.html:40
 msgid "Bejelentkezés"
 msgstr "Login"
 
-#: templates/base.html:83 templates/pages/contact.html:4
-#: templates/pages/contact.html:8
+#: templates/base.html:97 templates/pages/contact.html:4
+#: templates/pages/contact.html:9
 msgid "Kapcsolat"
 msgstr "Contact"
 
-#: templates/base.html:84
+#: templates/base.html:98
 msgid "Adatvédelem"
 msgstr "Privacy"
 
-#: templates/base.html:85 templates/pages/terms.html:4
-msgid "Felhasználási feltételek"
-msgstr "Terms of Service"
+#: templates/base.html:99 templates/pages/help.html:4
+#: templates/pages/help.html:10
+msgid "Tudástár"
+msgstr ""
 
-#: templates/base.html:93
+#: templates/base.html:107
 msgid "Nyelv"
 msgstr "Language"
+
+#: templates/base.html:118
+msgid "Beállítás"
+msgstr "Set"
 
 #: templates/clients/client_confirm_delete.html:4
 msgid "Partner törlése"
@@ -421,7 +429,7 @@ msgid "Kivett napok"
 msgstr ""
 
 #: templates/leaves/leave_list.html:54 templates/leaves/leave_list.html:73
-#: templates/timesheet/partner_tig.html:82
+#: templates/reports/index.html:142 templates/timesheet/partner_tig.html:82
 #: templates/timesheet/partner_tig.html:166
 msgid "nap"
 msgstr ""
@@ -434,47 +442,242 @@ msgstr ""
 msgid "Összesen kivett munkanapok:"
 msgstr ""
 
-#: templates/pages/contact.html:10
+#: templates/pages/contact.html:12
 msgid "Elérhetőségek"
 msgstr "Contact Information"
 
-#: templates/pages/contact.html:19
+#: templates/pages/contact.html:21
 msgid ""
 "Ide egy űrlapot is tehetünk majd, ha szeretnél közvetlen üzenetküldési "
 "lehetőséget."
 msgstr ""
 
-#: templates/pages/privacy.html:4 templates/pages/privacy.html:8
+#: templates/pages/help.html:13
+msgid ""
+"Válaszd ki a bal oldali menüből a téma kategóriáját a részletek olvasásához!"
+msgstr ""
+
+#: templates/pages/help.html:28 templates/pages/help.html:83
+#, fuzzy
+#| msgid "Exportálás (Hamarosan)"
+msgid "Riportok & Exportálás"
+msgstr "Export"
+
+#: templates/pages/help.html:34
+#, fuzzy
+#| msgid "Adminisztrátor"
+msgid "Adminisztráció"
+msgstr "Administrator"
+
+#: templates/pages/help.html:51
+msgid ""
+"A Jelenléti ív modulban rögzítheted a napi munkaóráidat az adott projektekre "
+"vetítve. A felület automatikusan betölti a számodra elérhető projekteket."
+msgstr ""
+
+#: templates/pages/help.html:53
+msgid "Napok és Hetek:"
+msgstr ""
+
+#: templates/pages/help.html:53
+msgid ""
+"A rendszer alapértelmezetten az aktuális hetet mutatja. A bal/jobb nyilakkal "
+"válthatsz a hetek között."
+msgstr ""
+
+#: templates/pages/help.html:54
+msgid "Órák rögzítése:"
+msgstr ""
+
+#: templates/pages/help.html:54
+msgid ""
+"Minden projekt (amihez hozzá vagy rendelve) külön sorban jelenik meg. Keresd "
+"meg a megfelelő projekt sorát, majd írd be a munkaórákat az adott nap "
+"oszlopába."
+msgstr ""
+
+#: templates/pages/help.html:55
+#, fuzzy
+#| msgid "Mentés"
+msgid "Mentés:"
+msgstr "Save"
+
+#: templates/pages/help.html:55
+msgid ""
+"Minden változtatás után ne felejtsd el megnyomni a \"Mentés\" gombot a "
+"táblázat alján!"
+msgstr ""
+
+#: templates/pages/help.html:69
+msgid ""
+"Itt igényelhetsz és tarthatsz nyilván különböző távolléteket. Ezek az adatok "
+"automatikusan bekerülnek a jelenléti ívedbe is."
+msgstr ""
+
+#: templates/pages/help.html:71
+msgid "Új igénylés:"
+msgstr ""
+
+#: templates/pages/help.html:71
+msgid ""
+"Kattints az \"Új szabadság hozzáadása\" gombra. Add meg a kezdő és "
+"végdátumot, majd a távollét típusát (pl. Szabadság, Betegszabadság, Fizetés "
+"nélküli)."
+msgstr ""
+
+#: templates/pages/help.html:72
+#, fuzzy
+#| msgid "Mentés"
+msgid "Áttekintés:"
+msgstr "Save"
+
+#: templates/pages/help.html:72
+msgid ""
+"A listában egy helyen láthatod az összes jövőbeli és múltbéli rögzített "
+"távollétedet."
+msgstr ""
+
+#: templates/pages/help.html:86
+msgid "(Csak vezetők és lekérdezők részére)"
+msgstr ""
+
+#: templates/pages/help.html:87
+msgid ""
+"A Riportok felületen nyomon követhető az összes rögzített adat, szűrve "
+"dolgozókra, projektekre, vagy időszakokra."
+msgstr ""
+
+#: templates/pages/help.html:89
+#, fuzzy
+#| msgid "Szűrés"
+msgid "Szűrés:"
+msgstr "Filter"
+
+#: templates/pages/help.html:89
+msgid ""
+"Válaszd ki a hónapot és évet, a partnereket, vagy dolgozókat a bal oldali "
+"sávban, majd kattints a \"Szűrés\" gombra az összesítések megtekintéséhez."
+msgstr ""
+
+#: templates/pages/help.html:90
+#, fuzzy
+#| msgid "Exportálás (Hamarosan)"
+msgid "Exportálás Excelbe:"
+msgstr "Export"
+
+#: templates/pages/help.html:90
+msgid ""
+"Az adatok nem csak a képernyőn láthatóak – a \"Jelenléti ívek exportálása\" "
+"gombbal hivatalos, nyomtatható .xls fájl generálható az adatokból "
+"dolgozónként."
+msgstr ""
+
+#: templates/pages/help.html:104 templates/pages/help.html:123
+msgid "(Csak vezetők részére)"
+msgstr ""
+
+#: templates/pages/help.html:105
+msgid ""
+"A Partner Teljesítés Igazolás (TIG) oldalon lehetőség van a partnerek "
+"(ügyfelek) által leigazolt, hivatalosan elfogadott munkaórák rögzítésére "
+"dolgozónként és projektenként."
+msgstr ""
+
+#: templates/pages/help.html:107
+msgid "Miért kell tölteni?"
+msgstr ""
+
+#: templates/pages/help.html:107
+msgid ""
+"A rendszer a TIG-be beírt jóváhagyott tételek alpján tudja összemérni a "
+"munkavállaló által a jelenléti íven rögzített órákat a partner által valósan "
+"elismert órákkal."
+msgstr ""
+
+#: templates/pages/help.html:108
+#, fuzzy
+#| msgid "Hiba történt a mentés során:"
+msgid "Mi történik a háttérben?"
+msgstr "An error occurred during save:"
+
+#: templates/pages/help.html:108
+msgid ""
+"Amikor lemented az összesítést, a rendszer hónapra, projektre és dolgozóra "
+"lebontva párosítja az adatokat az időbejegyzésekkel, és automatikusan "
+"kiszámítja az eltérést (Deltát)."
+msgstr ""
+
+#: templates/pages/help.html:109
+msgid "Hol látható az eredmény?"
+msgstr ""
+
+#: templates/pages/help.html:109
+msgid ""
+"Ezt a riportok oldalon az exportálást követően az Excel táblázatokban lehet "
+"jól átlátni. Hasznos a számlázáshoz és a bérszámfejtéshez is!"
+msgstr ""
+
+#: templates/pages/help.html:120
+msgid "Dolgozók, Partnerek és Projektek"
+msgstr ""
+
+#: templates/pages/help.html:124
+msgid ""
+"Itt építhető fel a cég adatbázisa. Ezek nélkül a dolgozók nem tudnak "
+"munkaórákat rögzíteni."
+msgstr ""
+
+#: templates/pages/help.html:126
+#, fuzzy
+#| msgid "Partnerek"
+msgid "Partnerek:"
+msgstr "Clients"
+
+#: templates/pages/help.html:126
+msgid ""
+"Ezek az ügyfelek vagy cégek, akikkel együtt dolgoztok. Először partnert kell "
+"létrehozni."
+msgstr ""
+
+#: templates/pages/help.html:127
+#, fuzzy
+#| msgid "Projektek"
+msgid "Projektek:"
+msgstr "Projects"
+
+#: templates/pages/help.html:127
+msgid ""
+"Minden projekt egy partnerhez van rendelve. Fontos: a projekt létrehozásánál "
+"vagy szerkesztésénél kell kijelölni azokat a dolgozókat (Assigned users), "
+"akik erre a projektre időt rögzíthetnek."
+msgstr ""
+
+#: templates/pages/help.html:128
+#, fuzzy
+#| msgid "Dolgozók"
+msgid "Dolgozók:"
+msgstr "Employees"
+
+#: templates/pages/help.html:128
+msgid ""
+"Új munkatársak rögzítése. Meghatározható, hogy az illető cégvezető, "
+"könyvelő, vagy normál dolgozói jogosultsággal rendelkezik-e."
+msgstr ""
+
+#: templates/pages/privacy.html:4 templates/pages/privacy.html:9
 msgid "Adatvédelmi tájékoztató"
 msgstr "Privacy Policy"
 
-#: templates/pages/privacy.html:10
+#: templates/pages/privacy.html:12
 msgid ""
 "(Jogi tartalom helye. Itt kell leírni, hogy milyen adatokat gyűjt a "
 "rendszer, mire használja, és milyen jogai vannak a felhasználóknak.)"
 msgstr ""
 
-#: templates/pages/privacy.html:11
+#: templates/pages/privacy.html:13
 msgid ""
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui "
 "mauris. Vivamus hendrerit arcu sed erat molestie vehicula."
-msgstr ""
-
-#: templates/pages/terms.html:8
-msgid "Felhasználási feltételek (ÁSZF)"
-msgstr "Terms and Conditions (T&C)"
-
-#: templates/pages/terms.html:10
-msgid ""
-"(Jogi tartalom helye. Itt kell részletezni a szolgáltatás használatának "
-"szabályait.)"
-msgstr ""
-
-#: templates/pages/terms.html:11
-msgid ""
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel mattis "
-"nisi, a rhoncus lacus. Vestibulum tristique sapien ex, et malesuada nunc "
-"facilisis sed."
 msgstr ""
 
 #: templates/projects/project_confirm_delete.html:4
@@ -524,11 +727,11 @@ msgid "Projekt Név"
 msgstr "Projects"
 
 #: templates/projects/project_list.html:36 templates/reports/index.html:36
-#: templates/reports/index.html:73 templates/reports/index.html:114
+#: templates/reports/index.html:73 templates/reports/index.html:116
 #: templates/timesheet/partner_tig.html:19
 #: templates/timesheet/partner_tig.html:35
 #: templates/timesheet/partner_tig.html:66 timesheet/models.py:37
-#: timesheet/views.py:429
+#: timesheet/views.py:456
 msgid "Partner"
 msgstr "Client"
 
@@ -573,7 +776,7 @@ msgid "Minden Partner"
 msgstr "All Clients"
 
 #: templates/reports/index.html:50 templates/reports/index.html:74
-#: templates/reports/index.html:115 timesheet/views.py:429
+#: templates/reports/index.html:117 timesheet/views.py:456
 msgid "Projekt"
 msgstr "Project"
 
@@ -605,83 +808,95 @@ msgstr "Previous"
 msgid "Következő"
 msgstr "Next"
 
-#: templates/reports/index.html:100
+#: templates/reports/index.html:101
 msgid "Összesített munkaóra"
 msgstr "Total logged hours"
 
-#: templates/reports/index.html:102
+#: templates/reports/index.html:103
 msgid "munkanap"
 msgstr "workdays"
 
-#: templates/reports/index.html:104 templates/timesheet/partner_tig.html:82
+#: templates/reports/index.html:105 templates/timesheet/partner_tig.html:82
 #: templates/timesheet/partner_tig.html:166
 msgid "óra"
 msgstr "hours"
 
-#: templates/reports/index.html:112 templates/timesheet/partner_tig.html:64
-#: timesheet/views.py:429
+#: templates/reports/index.html:114 templates/timesheet/partner_tig.html:64
+#: timesheet/views.py:456
 msgid "Dolgozó"
 msgstr "Employee"
 
-#: templates/reports/index.html:113 timesheet/views.py:429
+#: templates/reports/index.html:115 timesheet/views.py:456
 msgid "Dátum"
 msgstr "Date"
 
-#: templates/reports/index.html:116 templates/timesheet/partner_tig.html:91
-#: timesheet/models.py:34 timesheet/views.py:429
+#: templates/reports/index.html:118 templates/timesheet/partner_tig.html:91
+#: timesheet/models.py:34 timesheet/views.py:456
 msgid "Óra"
 msgstr "Hours"
 
-#: templates/reports/index.html:137
+#: templates/reports/index.html:140
+#, fuzzy
+#| msgid "szerkesztése"
+msgid "Összesen:"
+msgstr "edit"
+
+#: templates/reports/index.html:147
 msgid "Nincs adat"
 msgstr "No data"
 
-#: templates/reports/index.html:151
+#: templates/reports/index.html:162
 msgid "Szabadságok mutatása"
 msgstr "Show leaves"
 
-#: templates/reports/index.html:155
+#: templates/reports/index.html:166
+#, fuzzy
+#| msgid "Összesített munkaóra"
+msgid "Összesítő sorok mutatása"
+msgstr "Total logged hours"
+
+#: templates/reports/index.html:171
 #, fuzzy
 #| msgid "Exportálás (Hamarosan)"
 msgid "Exportálás"
 msgstr "Export"
 
-#: templates/reports/index.html:194
+#: templates/reports/index.html:210
 msgid "Táblázat Exportálása"
 msgstr "Export Table"
 
-#: templates/reports/index.html:199
+#: templates/reports/index.html:215
 msgid "Fájlformátum"
 msgstr "File Format"
 
-#: templates/reports/index.html:201
+#: templates/reports/index.html:217
 msgid "Egyszerű szöveges állomány, vesszővel tagolva"
 msgstr "Simple text file, separated by commas"
 
-#: templates/reports/index.html:202
+#: templates/reports/index.html:218
 msgid "Modern Excel formátum"
 msgstr "Modern Excel format"
 
-#: templates/reports/index.html:203
+#: templates/reports/index.html:219
 msgid "Régebbi Excel formátum (97-2003)"
 msgstr "Older Excel format (97-2003)"
 
-#: templates/reports/index.html:213
+#: templates/reports/index.html:229
 msgid "Munkalapokra bontás dolgozónként"
 msgstr "Split to worksheets by employee"
 
-#: templates/reports/index.html:214
+#: templates/reports/index.html:230
 msgid ""
 "Minden kiválasztott dolgozó külön munkalapra (fülre) kerül az Excel fájlban."
 msgstr ""
 "Each selected employee will be on a separate worksheet (tab) in the Excel "
 "file."
 
-#: templates/reports/index.html:223
+#: templates/reports/index.html:239
 msgid "Letöltés"
 msgstr "Download"
 
-#: templates/reports/index.html:226 templates/users/user_form.html:84
+#: templates/reports/index.html:242 templates/users/user_form.html:84
 msgid "Mégsem"
 msgstr "Cancel"
 
@@ -801,7 +1016,7 @@ msgstr "Role"
 msgid "Adminisztrátor"
 msgstr "Administrator"
 
-#: templates/users/user_list.html:64 users/models.py:7
+#: templates/users/user_list.html:64
 msgid "Lekérdező"
 msgstr "Reporter"
 
@@ -841,11 +1056,11 @@ msgstr "Unit"
 msgid "Partner TIG-ek"
 msgstr "Clients"
 
-#: timesheet/views.py:396
+#: timesheet/views.py:423
 msgid "Szabadság"
 msgstr "Leaves"
 
-#: timesheet/views.py:413
+#: timesheet/views.py:440
 msgid "Nincs jogosultságod ehhez a felülethez."
 msgstr ""
 
@@ -905,34 +1120,48 @@ msgstr ""
 msgid "A két jelszó nem egyezik meg! Kérlek, próbáld újra."
 msgstr "Incorrect username or password. Please try again."
 
-#: users/models.py:9
-msgid "Designates whether the user can access reports but not admin features."
+#: users/models.py:7
+msgid "Cégvezető / Admin"
 msgstr ""
 
-#: users/views.py:58
+#: users/models.py:9
+msgid ""
+"A felületen minden funkcióhoz hozzáfér (Projektek, Partnerek, Felhasználók "
+"stb.), de nem Django site admin."
+msgstr ""
+
+#: users/models.py:12
+#, fuzzy
+#| msgid "Lekérdező (Könyvelő/Asszisztens)"
+msgid "Lekérdező (Könyvelő)"
+msgstr "Reporter (Accountant/Assistant)"
+
+#: users/models.py:14
+msgid "Csak a riportokhoz fér hozzá."
+msgstr ""
+
+#: users/views.py:59
 msgid "Saját magadat nem deaktiválhatod!"
 msgstr ""
 
-#: users/views.py:67
+#: users/views.py:68
 #, python-format
 msgid "%(username)s fiókja deaktiválva lett és lekerült az aktív projektekről."
 msgstr ""
+
+#~ msgid "Felhasználási feltételek"
+#~ msgstr "Terms of Service"
+
+#~ msgid "Felhasználási feltételek (ÁSZF)"
+#~ msgstr "Terms and Conditions (T&C)"
 
 #~ msgid "Partner TIG (Teljesítés Igazolás)"
 #~ msgstr "Client Timesheet (Certificate of Performance)"
 
 #, fuzzy
-#~| msgid "szerkesztése"
-#~ msgid "Összes Mentése"
-#~ msgstr "edit"
-
-#, fuzzy
 #~| msgid "Partner törlése"
 #~ msgid "Partner Értéke"
 #~ msgstr "Clients"
-
-#~ msgid "Szűrés"
-#~ msgstr "Filter"
 
 #~ msgid "Riportok (Fejlesztés alatt)"
 #~ msgstr "Reports (Under Development)"

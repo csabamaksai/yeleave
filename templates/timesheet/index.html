@@ -79,7 +79,7 @@
                                     data-project="{{ hs.project_id }}" 
                                     data-date="{{ day.date|date:'Y-m-d' }}"
                                     data-original="{{ hs.hours_formatted }}"
-                                    {% if day.is_leave %}disabled placeholder="L"{% endif %}
+                                    {% if day.is_leave %}disabled placeholder="{% trans 'Sz' %}"{% endif %}
                                 >
                             </td>
                         {% endfor %}
@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (isChecked) {
                 if (input.classList.contains('ts-input')) {
                     input.classList.add('cursor-not-allowed', 'text-red-500', 'placeholder-red-300');
-                    input.placeholder = "L";
+                    input.placeholder = "{% trans 'Sz' %}";
                     input.value = ""; // Vizuálisan ürítjük ha rákattint, backend a mentéskor dobja
                 } else {
                     input.classList.add('cursor-not-allowed', 'text-gray-400');

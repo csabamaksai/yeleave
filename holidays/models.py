@@ -2,7 +2,18 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class Holiday(models.Model):
-    date = models.DateField(unique=True, verbose_name=_("Dátum"))
+    CALENDAR_CHOICES = [
+        ('hu', _('Magyar')),
+        ('at', _('Osztrák')),
+    ]
+    
+    calendar = models.CharField(
+        max_length=2, 
+        choices=CALENDAR_CHOICES, 
+        default='hu', 
+        verbose_name=_('Naptár / Ország')
+    )
+    date = models.DateField(verbose_name=_("Dátum"))
     description = models.CharField(max_length=200, verbose_name=_("Leírás"))
     is_working_day = models.BooleanField(
         default=False, 
@@ -14,7 +25,8 @@ class Holiday(models.Model):
         verbose_name = _("Ünnepnap / Pihenőnap")
         verbose_name_plural = _("Ünnepnapok / Pihenőnapok")
         ordering = ['date']
+        unique_together = ('calendar', 'date')
 
     def __str__(self):
-        return f"{self.date} - {self.description}"
+        return f"[{self.get_calendar_display()}] {self.date} - {self.description}"
 

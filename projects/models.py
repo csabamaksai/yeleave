@@ -4,8 +4,22 @@ from clients.models import Client
 from django.utils.translation import gettext_lazy as _
 
 class Project(models.Model):
+    CALENDAR_CHOICES = [
+        ('hu', _('Magyar')),
+        ('at', _('Osztrák')),
+    ]
+    
     name = models.CharField(max_length=255, verbose_name=_('Projekt Név'))
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='projects', verbose_name=_('Partner'))
+    
+    calendar = models.CharField(
+        max_length=2, 
+        choices=CALENDAR_CHOICES, 
+        default='hu', 
+        verbose_name=_('Naptár / Ország'),
+        help_text=_('A projekt munkaszüneti napjait és munkarendjét határozza meg.')
+    )
+    
     max_daily_hours = models.IntegerField(default=8, verbose_name=_('Max napi könyvelhető óraszám'))
     description = models.TextField(blank=True, null=True, verbose_name=_('Leírás'))
     

@@ -3,15 +3,15 @@ from django.utils.translation import gettext_lazy as _
 
 class Holiday(models.Model):
     CALENDAR_CHOICES = [
-        ('hu', _('Magyar')),
-        ('at', _('Osztrák')),
+        ('hu', _('Magyarország')),
+        ('at', _('Ausztria')),
     ]
     
     calendar = models.CharField(
         max_length=2, 
         choices=CALENDAR_CHOICES, 
         default='hu', 
-        verbose_name=_('Naptár / Ország')
+        verbose_name=_('Naptár')
     )
     date = models.DateField(verbose_name=_("Dátum"))
     description = models.CharField(max_length=200, verbose_name=_("Leírás"))

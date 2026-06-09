@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 class Project(models.Model):
     CALENDAR_CHOICES = [
-        ('hu', _('Magyar')),
-        ('at', _('Osztrák')),
+        ('hu', _('Magyarország')),
+        ('at', _('Ausztria')),
     ]
     
     name = models.CharField(max_length=255, verbose_name=_('Projekt Név'))
@@ -16,7 +16,7 @@ class Project(models.Model):
         max_length=2, 
         choices=CALENDAR_CHOICES, 
         default='hu', 
-        verbose_name=_('Naptár / Ország'),
+        verbose_name=_('Naptár'),
         help_text=_('A projekt munkaszüneti napjait és munkarendjét határozza meg.')
     )
     

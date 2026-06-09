@@ -11,7 +11,7 @@ class ProjectForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
             'client': forms.Select(attrs={'class': 'tom-select'}),
-            'calendar': forms.Select(attrs={'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-brand focus:border-brand sm:text-sm rounded-md'}),
+            'calendar': forms.Select(attrs={'class': 'tom-select'}),
             'assigned_users': forms.SelectMultiple(attrs={'class': 'tom-select-multiple'}),
         }
 

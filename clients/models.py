@@ -10,7 +10,7 @@ class Client(models.Model):
     contract_number = models.CharField(max_length=100, blank=True, null=True, verbose_name=_('Szerződésszám'))
     
     contact_name = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('Kapcsolattartó neve'))
-    contact_phone = models.CharField(max_length=50, blank=True, null=True, verbose_name=_('Kapcsolattartó telefonja'))
+    contact_phone = models.CharField(max_length=50, blank=True, null=True, verbose_name=_('Kapcsolattartó telefonszáma'))
     
     is_active = models.BooleanField(default=True, verbose_name=_('Aktív'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Létrehozva'))

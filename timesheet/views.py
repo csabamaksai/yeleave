@@ -18,11 +18,13 @@ def format_hours(decimal_hours):
         return ""
     h = int(decimal_hours)
     m = int(round((float(decimal_hours) - h) * 60))
+    o = _("ó")
+    p = _("p")
     if m == 0:
-        return f"{h}ó"
+        return f"{h}{o}"
     elif h == 0:
-        return f"{m}p"
-    return f"{h}ó {m}p"
+        return f"{m}{p}"
+    return f"{h}{o} {m}{p}"
 
 def parse_hours(val_str):
     val = val_str.strip().lower()
@@ -77,7 +79,7 @@ def timesheet_view(request):
     prev_month, next_month = get_prev_and_next_month(year, month)
 
     # Naptári napok kiszámítása az adott hónapban
-    _, num_days = monthrange(year, month)
+    first_weekday, num_days = monthrange(year, month)
     days_in_month = []
     
     # Keresünk szabadságot a felhasználónak, ami érinti ezt a hónapot
@@ -86,20 +88,21 @@ def timesheet_view(request):
         start_date__lte=date(year, month, num_days),
         end_date__gte=date(year, month, 1)
     )
+    # Felhasználóhoz rendelt projektek lekérdezése
+    projects = list(request.user.assigned_projects.filter(is_active=True, client__is_active=True).select_related('client'))
+
     # Keresünk ünnepeket erre a hónapra
     holidays = Holiday.objects.filter(
         date__year=year,
         date__month=month
     )
-    holiday_dict = {h.date: h for h in holidays}
+    holiday_dict = {(h.date, h.calendar): h for h in holidays}
     
     # Létrehozunk egy set-et a gyors dátum kereséshez
     leave_dates = set()
     for l in leaves:
         curr = l.start_date
         while curr <= l.end_date:
-            # Csak akkor számít szabadságnak vizuálisan a Timesheet-en, ha ez nem hétvége/ünnep, 
-            # de ezt a logikát lejjebb oldjuk meg, vagy csak nem rakjuk be a leave_dates be.
             leave_dates.add(curr)
             curr += timedelta(days=1)
             
@@ -107,19 +110,26 @@ def timesheet_view(request):
         day_date = date(year, month, day)
         date_str = str(day_date)
         
-        # Alapértelmezetten hétvége-e
         is_calendar_weekend = day_date.weekday() >= 5
         
-        is_weekend_behavior = is_calendar_weekend
-        # Ha ünnepnap, akkor
-        if day_date in holiday_dict:
-            holiday_obj = holiday_dict[day_date]
-            if holiday_obj.is_working_day:
-                # Áthelyezett munkanap (pl szombat)
-                is_weekend_behavior = False
-            else:
-                # Normál ünnepnap (hétköznap is lehet)
-                is_weekend_behavior = True
+        project_holidays_status = {}
+        for p in projects:
+            cal = p.calendar
+            status = is_calendar_weekend
+            if (day_date, cal) in holiday_dict:
+                if holiday_dict[(day_date, cal)].is_working_day:
+                    status = False
+                else:
+                    status = True
+            project_holidays_status[p.id] = status
+            
+        if projects:
+            # Csak akkor "globális" hétvége/ünnepnap, ha az ÖSSZES projekten az
+            is_weekend_behavior = all(project_holidays_status.values())
+        else:
+            is_weekend_behavior = is_calendar_weekend
+            if (day_date, 'hu') in holiday_dict:
+                is_weekend_behavior = not holiday_dict[(day_date, 'hu')].is_working_day
         
         # Olyan nap ami igazi szabadság (nem esik hétvégére vagy ünnepnapra)
         is_leave_behavior = (day_date in leave_dates) and not is_weekend_behavior
@@ -128,12 +138,10 @@ def timesheet_view(request):
             'date': day_date,
             'day': day,
             'is_weekend': is_weekend_behavior, 
-            'weekday_name': ['Hé', 'Ke', 'Sze', 'Cs', 'Pé', 'Szo', 'Va'][day_date.weekday()], 
-            'is_leave': is_leave_behavior 
+                        'weekday_name': str([_('Hé'), _('Ke'), _('Sze'), _('Cs'), _('Pé'), _('Szo'), _('Va')][day_date.weekday()]), 
+            'is_leave': is_leave_behavior,
+            'project_holidays_status': project_holidays_status
         })
-
-    # Felhasználóhoz rendelt projektek lekérdezése
-    projects = list(request.user.assigned_projects.filter(is_active=True, client__is_active=True).select_related('client'))
     
     # E havi mentett bejegyzések
     entries = TimeEntry.objects.filter(
@@ -165,7 +173,8 @@ def timesheet_view(request):
             project_hours.append({
                 'project_id': project.id,
                 'hours_formatted': hours_formatted,
-                'hours_decimal': hours_decimal
+                'hours_decimal': hours_decimal,
+                'is_weekend': d['project_holidays_status'].get(project.id, False)
             })
             
         d['project_hours'] = project_hours
@@ -401,20 +410,32 @@ def get_filtered_report_entries(request):
             date__year=year,
             date__month=month
         )
-        holiday_dict = {h.date: h for h in holidays}
+        holiday_dict = {(h.date, h.calendar): h for h in holidays}
         
         for l in leaves:
+            user_projects = list(l.user.assigned_projects.filter(is_active=True, client__is_active=True))
             curr = l.start_date
             while curr <= l.end_date:
                 if curr >= start_of_month and curr <= end_of_month:
                     is_calendar_weekend = curr.weekday() >= 5
-                    is_weekend_behavior = is_calendar_weekend
-                    if curr in holiday_dict:
-                        holiday_obj = holiday_dict[curr]
-                        if holiday_obj.is_working_day:
-                            is_weekend_behavior = False
-                        else:
-                            is_weekend_behavior = True
+                    
+                    if user_projects:
+                        is_weekend_behavior = True
+                        for p in user_projects:
+                            cal = p.calendar
+                            status = is_calendar_weekend
+                            if (curr, cal) in holiday_dict:
+                                if holiday_dict[(curr, cal)].is_working_day:
+                                    status = False
+                                else:
+                                    status = True
+                            if not status:
+                                is_weekend_behavior = False
+                                break
+                    else:
+                        is_weekend_behavior = is_calendar_weekend
+                        if (curr, 'hu') in holiday_dict:
+                            is_weekend_behavior = not holiday_dict[(curr, 'hu')].is_working_day
                             
                     if not is_weekend_behavior:
                         entries.append({

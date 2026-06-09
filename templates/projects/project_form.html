@@ -60,7 +60,7 @@
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <input type="number" step="1" min="1" name="{{ field.name }}" id="{{ field.id_for_label }}" class="focus:ring-brand focus:border-brand block w-full pr-10 sm:text-sm border-gray-300 rounded-md border p-2" value="{{ field.value|default:8 }}">
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-500 sm:text-sm">ó</span>
+                                    <span class="text-gray-500 sm:text-sm">{% trans "ó" %}</span>
                                 </div>
                             </div>
                         {% else %}
@@ -177,21 +177,27 @@
         let skipModalConfirm = false;
         let assignedUsersSelect = null;
 
-        // Inicializáljuk a kliens keresős legördülőt
-        new TomSelect(".tom-select", {
-            create: false,
-            sortField: {
-                field: "text",
-                direction: "asc"
-            },
-            placeholder: "Válassz partnert..."
+        // Inicializáljuk az összes sima keresős legördülőt (Partner, Naptár)
+        document.querySelectorAll('.tom-select').forEach((el) => {
+            let ph = "{% trans 'Válassz...' %}";
+            if (el.name === 'client') ph = "{% trans 'Válassz partnert...' %}";
+            else if (el.name === 'calendar') ph = "{% trans 'Válassz naptárat...' %}";
+            
+            new TomSelect(el, {
+                create: false,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                },
+                placeholder: ph
+            });
         });
 
         // Inicializáljuk a tanácsadók többes keresős legördülőjét
         assignedUsersSelect = new TomSelect(".tom-select-multiple", {
             create: false,
             plugins: ['remove_button'],
-            placeholder: "Tanácsadók menedzselése...",
+            placeholder: "{% trans 'Tanácsadók menedzselése...' %}",
             onDelete: function(values) {
                 // Ha már leokézták a modalt, engedjük a törlést
                 if (skipModalConfirm) return true;
